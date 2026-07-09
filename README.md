@@ -51,6 +51,12 @@ All the artwork — the hero landscape, six city vignettes (Tokyo Tower, Fuji ov
 
 Details that matter on a real trip: hash routing so iOS edge-swipe back and pull-to-refresh behave like a native app (days are deep-linkable, too), safe-area-aware layout for the notch and home indicator, frosted-glass tab bar, spring-press animations, `prefers-reduced-motion` respected, and a service worker that caches the whole app — because the moment you need the allergy card is not the moment to have signal.
 
+## Where it goes next
+
+The full unconstrained vision — from a sound-and-haptics pass to an AI ink-fox companion, printed heirloom
+scrolls, and an e-ink tamagotchi pendant — lives in **[ROADMAP.md](ROADMAP.md)**: ~117 ideas from an
+eight-lens brainstorm, deduplicated, tiered, and sequenced from v2.1 to v5.
+
 ## Run it
 
 ```bash
