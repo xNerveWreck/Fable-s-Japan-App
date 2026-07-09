@@ -57,6 +57,10 @@ The full unconstrained vision — from a sound-and-haptics pass to an AI ink-fox
 scrolls, and an e-ink tamagotchi pendant — lives in **[ROADMAP.md](ROADMAP.md)**: ~117 ideas from an
 eight-lens brainstorm, deduplicated, tiered, and sequenced from v2.1 to v5.
 
+The working method that produced both the app and its roadmap — build inside one declared constraint, then
+deliberately dissolve it — is written up in **[PROCESS.md](PROCESS.md)**, with the six questions to ask on
+the next project.
+
 ## Run it
 
 ```bash
