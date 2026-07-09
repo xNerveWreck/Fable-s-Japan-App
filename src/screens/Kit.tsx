@@ -25,9 +25,9 @@ export function Kit() {
 
 function Converter() {
   const [rate, setRate] = useStored<number>('fx-rate', 155)
-  const [yen, setYen] = useState<string>('1000')
-  const [usd, setUsd] = useState<string>((1000 / 155).toFixed(2))
   const safeRate = rate > 0 ? rate : 155
+  const [yen, setYen] = useState<string>('1000')
+  const [usd, setUsd] = useState<string>(() => (1000 / safeRate).toFixed(2))
 
   const fromYen = (v: string) => {
     setYen(v)
