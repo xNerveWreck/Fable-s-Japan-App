@@ -1,3 +1,16 @@
+import { seedDemo } from './lib/demo'
+
+// ?demo=1 — open on a lived-in Day-7 trip instead of an empty state
+try {
+  const params = new URLSearchParams(location.search)
+  if (params.get('demo') === '1') {
+    seedDemo()
+    history.replaceState(null, '', location.pathname + location.hash)
+  }
+} catch {
+  /* demo is a convenience, never a blocker */
+}
+
 // migrate v1 boolean check-offs to tri-state moments before anything renders
 try {
   const old = localStorage.getItem('tabi:checked')

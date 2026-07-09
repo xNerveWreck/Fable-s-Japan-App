@@ -2,7 +2,9 @@ import { useMemo, useState } from 'react'
 import { guideSections } from '../data/guide'
 import { dishes, kidMeterLabel } from '../data/food'
 import { quizQuestions } from '../data/quiz'
+import { animalEmoji, type Traveler } from '../data/travelers'
 import { useStored } from '../hooks/useStored'
+import { play } from '../lib/sound'
 import { ChevronIcon } from '../art/icons'
 
 const tabs = [
@@ -79,6 +81,8 @@ function shuffle<T>(arr: T[]): T[] {
 
 function TrainQuiz() {
   const [best, setBest] = useStored<number>('quiz-best', 0)
+  const [travelers] = useStored<Traveler[]>('travelers', [])
+  const [scores, setScores] = useStored<Record<string, number>>('quiz-scores', {})
   const [round, setRound] = useState(0) // bump to reshuffle
   const questions = useMemo(() => shuffle(quizQuestions), [round])
   const [index, setIndex] = useState(0)
@@ -88,10 +92,20 @@ function TrainQuiz() {
   const q = questions[index]
   const finished = index >= questions.length
 
+  const claimScore = (travelerId: string) => {
+    setScores((s) => ({ ...s, [travelerId]: Math.max(s[travelerId] ?? 0, score) }))
+    play('stamp')
+  }
+
   const pick = (i: number) => {
     if (picked !== null) return
     setPicked(i)
-    if (i === q.answer) setScore((s) => s + 1)
+    if (i === q.answer) {
+      setScore((s) => s + 1)
+      play('right')
+    } else {
+      play('wrong')
+    }
   }
 
   const next = () => {
@@ -122,6 +136,19 @@ function TrainQuiz() {
           <p className="t-soft" style={{ fontSize: 13, marginTop: 8 }}>
             Family best: {Math.max(best, score)}
           </p>
+          {travelers.length > 0 && (
+            <div style={{ marginTop: 14 }}>
+              <div className="t-kicker">Who played? Claim the score</div>
+              <div className="quick-refs" style={{ justifyContent: 'center', marginTop: 8 }}>
+                {travelers.map((t) => (
+                  <button key={t.id} className="chip chip-sakura" onClick={() => claimScore(t.id)}>
+                    {animalEmoji(t.animal)} {t.name}
+                    {scores[t.id] !== undefined && ` · best ${scores[t.id]}`}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <button
             className="show-card-btn pressable"
             onClick={() => {
@@ -150,6 +177,19 @@ function TrainQuiz() {
         <span className="chip chip-gold">Score {score}</span>
         {best > 0 && <span className="chip chip-sakura">Best {best}</span>}
       </div>
+      {travelers.some((t) => scores[t.id] !== undefined) && (
+        <div className="quick-refs" style={{ marginBottom: 10 }}>
+          {travelers
+            .filter((t) => scores[t.id] !== undefined)
+            .sort((a, b) => (scores[b.id] ?? 0) - (scores[a.id] ?? 0))
+            .map((t, i) => (
+              <span key={t.id} className={`chip ${i === 0 ? 'chip-gold' : 'chip-indigo'}`}>
+                {i === 0 && '👑 '}
+                {animalEmoji(t.animal)} {t.name} {scores[t.id]}
+              </span>
+            ))}
+        </div>
+      )}
       <div className="card quiz-card">
         <h3>{q.q}</h3>
         <div className="quiz-options">

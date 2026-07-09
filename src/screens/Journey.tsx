@@ -4,6 +4,11 @@ import { phraseCategories } from '../data/phrases'
 import { useStored } from '../hooks/useStored'
 import { useSpeech } from '../hooks/useSpeech'
 import type { Moment, Reservation } from '../lib/sync'
+import { daysBetween, jstToday, todayStr } from '../lib/dates'
+import { play } from '../lib/sound'
+import { journalDays } from '../lib/db'
+import { TravelersCard } from '../components/Travelers'
+import { Journal } from '../components/Journal'
 import { InkHero } from '../art/InkHero'
 import { Petals } from '../art/Petals'
 import { CityVignette } from '../art/Vignettes'
@@ -13,13 +18,16 @@ import { BackIcon, CheckIcon, ChevronIcon, HeartIcon, PlusIcon, SkipIcon, Speake
 
 type MomentMap = Record<string, Moment>
 
-/** Days from today (local, date-only) to the stored departure date. */
-function daysUntil(dateStr: string): number {
-  const [y, m, d] = dateStr.split('-').map(Number)
-  const dep = new Date(y, m - 1, d)
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  return Math.round((dep.getTime() - today.getTime()) / 86400000)
+/**
+ * The Japan clock: once the trip has begun, "which day is it" runs on
+ * Asia/Tokyo time so Day 3 flips at Japan's midnight, not the phone's.
+ * The pre-departure countdown stays on local time — you fly from home.
+ */
+function tripClock(departure: string) {
+  const until = daysBetween(todayStr(), departure)
+  const jstDelta = daysBetween(departure, jstToday())
+  const tripDay = jstDelta >= 0 ? jstDelta + 1 : null
+  return { until, tripDay }
 }
 
 const dayIsComplete = (day: Day, moments: MomentMap) =>
@@ -42,6 +50,17 @@ export function Journey({ route, nav }: { route: string[]; nav: (p: string, repl
       const next = { ...prev }
       if (m === null) delete next[key]
       else next[key] = m
+
+      // the sound grammar: per-action tone, and the hanko thunk when this
+      // action completes its whole day
+      if (m !== null) {
+        const dayId = Number(key.slice(1).split(':')[0])
+        const day = itinerary.find((d) => d.id === dayId)
+        const wasComplete = day ? dayIsComplete(day, prev) : false
+        const nowComplete = day ? dayIsComplete(day, next) : false
+        if (!wasComplete && nowComplete) play('stamp')
+        else play(m === 'loved' ? 'loved' : m === 'skipped' ? 'skip' : 'tap')
+      }
       return next
     })
 
@@ -77,25 +96,29 @@ function JourneyHome({
   const lovedKeys = Object.keys(moments).filter((k) => moments[k] === 'loved')
   const stampsEarned = itinerary.filter((d) => dayIsComplete(d, moments)).length
 
-  const until = departure ? daysUntil(departure) : null
-  const tripDay = until !== null && until <= 0 ? 1 - until : null
+  const [journaled, setJournaled] = useState<Set<number>>(new Set())
+  useEffect(() => {
+    journalDays().then(setJournaled).catch(() => {})
+  }, [])
+
+  const { until, tripDay } = departure ? tripClock(departure) : { until: null, tripDay: null }
   const onTrip = tripDay !== null && tripDay <= TRIP_LENGTH
-  const today = onTrip ? itinerary[tripDay - 1] : null
+  const today = onTrip && tripDay !== null ? itinerary[tripDay - 1] : null
 
   let countTitle: string
   let countSub: string
   if (until === null) {
     countTitle = 'When do you fly?'
     countSub = 'Set your departure day and Tabi keeps count with you.'
-  } else if (until > 0) {
-    countTitle = until === 1 ? 'Tomorrow. It’s tomorrow!' : `${until} days until Japan`
-    countSub = 'Passports, excitement, and one last packing check.'
   } else if (onTrip && today) {
     countTitle = `Day ${tripDay} — ${today.title}`
-    countSub = `${today.city} ${today.cityJp}`
-  } else {
+    countSub = `${today.city} ${today.cityJp} · running on Japan time`
+  } else if (tripDay !== null && tripDay > TRIP_LENGTH) {
     countTitle = 'Okaeri — welcome home'
     countSub = 'The trip lives in the stamps now. Start the "next time" list.'
+  } else {
+    countTitle = until === 1 ? 'Tomorrow. It’s tomorrow!' : `${until} days until Japan`
+    countSub = 'Passports, excitement, and one last packing check.'
   }
 
   // during the trip: surface the next unresolved moment of today
@@ -169,6 +192,8 @@ function JourneyHome({
           )}
         </div>
 
+        <TravelersCard />
+
         <div className="section-title">
           <h2>The road</h2>
           <span className="jp">道のり</span>
@@ -218,6 +243,7 @@ function JourneyHome({
                   <span className="theme">{day.theme}</span>
                   <span className="meta">
                     <span className="chip chip-indigo">{day.activities.length} stops</span>
+                    {journaled.has(day.id) && <span className="chip chip-gold">📓</span>}
                     {resolved > 0 && (
                       <span className="done-note">
                         {resolved === day.activities.length ? 'Stamped ✓' : `${resolved} resolved`}
@@ -353,6 +379,8 @@ function DayDetail({
       </header>
 
       <Pocket dayId={day.id} />
+
+      <Journal dayId={day.id} />
 
       <div className="timeline">
         {day.activities.map((act, i) => {

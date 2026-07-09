@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { allergens, budgetGuide, emergencyItems, packGroups } from '../data/kit'
 import { useStored } from '../hooks/useStored'
 import { shareUrl } from '../lib/sync'
+import { play, type SoundName } from '../lib/sound'
 import { CheckIcon, ChevronIcon, ShareIcon } from '../art/icons'
 
 export function Kit() {
@@ -16,10 +17,65 @@ export function Kit() {
       <Converter />
       <BudgetGuide />
       <Packing />
+      <SoundSettings />
       <AllergyCard />
       <FamilySync />
       <Emergency />
     </div>
+  )
+}
+
+/* ---------- sound & touch ---------- */
+
+function SoundSettings() {
+  const [enabled, setEnabled] = useStored<boolean>('sound', false)
+
+  const demoNames: { name: SoundName; label: string }[] = [
+    { name: 'tap', label: 'Did it' },
+    { name: 'loved', label: 'Loved' },
+    { name: 'stamp', label: 'Stamp' },
+    { name: 'bell', label: 'Bell' },
+  ]
+
+  return (
+    <section className="kit-section">
+      <div className="section-title">
+        <h2>Sound & touch</h2>
+        <span className="jp">音</span>
+      </div>
+      <div className="card sync-card">
+        <div className="row">
+          <div className="grow">
+            <div style={{ fontWeight: 600, fontSize: 15 }}>Quiet by default</div>
+            <p className="pocket-hint" style={{ marginTop: 2 }}>
+              Tiny synthesized tones and haptics for check-offs, loved moments, and landing stamps. Japan is the
+              main event; these are brush-tip whispers.
+            </p>
+          </div>
+          <button
+            role="switch"
+            aria-checked={enabled}
+            className={`sound-switch ${enabled ? 'on' : ''}`}
+            onClick={() => {
+              const next = !enabled
+              setEnabled(next)
+              if (next) setTimeout(() => play('loved'), 60)
+            }}
+          >
+            <span className="knob" />
+          </button>
+        </div>
+        {enabled && (
+          <div className="quick-refs" style={{ marginTop: 12 }}>
+            {demoNames.map((d) => (
+              <button key={d.name} className="chip chip-indigo" onClick={() => play(d.name)}>
+                ♪ {d.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
 
@@ -193,7 +249,11 @@ function Packing() {
   const [packed, setPacked] = useStored<Record<string, boolean>>('packed', {})
   const [open, setOpen] = useState<string | null>(packGroups[0].id)
 
-  const toggle = (id: string) => setPacked((p) => ({ ...p, [id]: !p[id] }))
+  const toggle = (id: string) =>
+    setPacked((p) => {
+      if (!p[id]) play('tap')
+      return { ...p, [id]: !p[id] }
+    })
 
   return (
     <section className="kit-section">
