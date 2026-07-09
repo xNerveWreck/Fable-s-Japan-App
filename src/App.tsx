@@ -1,32 +1,38 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useHashRoute } from './hooks/useHashRoute'
 import { Journey } from './screens/Journey'
 import { Discover } from './screens/Discover'
 import { Phrases } from './screens/Phrases'
 import { Kit } from './screens/Kit'
+import { SyncImport } from './screens/SyncImport'
 import { FanIcon, PackIcon, SpeechIcon, ToriiIcon } from './art/icons'
 
-type Tab = 'journey' | 'discover' | 'phrases' | 'kit'
-
-const tabs: { id: Tab; label: string; icon: (on: boolean) => JSX.Element }[] = [
-  { id: 'journey', label: 'Journey', icon: (on) => <ToriiIcon filled={on} /> },
-  { id: 'discover', label: 'Discover', icon: (on) => <FanIcon filled={on} /> },
-  { id: 'phrases', label: 'Speak', icon: (on) => <SpeechIcon filled={on} /> },
-  { id: 'kit', label: 'Kit', icon: (on) => <PackIcon filled={on} /> },
-]
+const tabs = [
+  { id: 'journey', label: 'Journey', icon: (on: boolean) => <ToriiIcon filled={on} /> },
+  { id: 'discover', label: 'Discover', icon: (on: boolean) => <FanIcon filled={on} /> },
+  { id: 'speak', label: 'Speak', icon: (on: boolean) => <SpeechIcon filled={on} /> },
+  { id: 'kit', label: 'Kit', icon: (on: boolean) => <PackIcon filled={on} /> },
+] as const
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>('journey')
+  const [route, nav] = useHashRoute()
+  const tab = route[0] || 'journey'
 
-  // stop any phrase mid-speech when leaving the tab
+  // stop any phrase mid-speech and reset scroll when the tab changes
   useEffect(() => {
-    return () => window.speechSynthesis?.cancel()
+    window.speechSynthesis?.cancel()
+    window.scrollTo(0, 0)
   }, [tab])
+
+  if (tab === 'sync') {
+    return <SyncImport payload={route[1] ?? ''} nav={nav} />
+  }
 
   return (
     <>
-      {tab === 'journey' && <Journey />}
+      {tab === 'journey' && <Journey route={route} nav={nav} />}
       {tab === 'discover' && <Discover />}
-      {tab === 'phrases' && <Phrases />}
+      {tab === 'speak' && <Phrases />}
       {tab === 'kit' && <Kit />}
 
       <nav className="tabbar" aria-label="Main">
@@ -35,10 +41,7 @@ export default function App() {
             key={t.id}
             className={tab === t.id ? 'on' : ''}
             aria-current={tab === t.id ? 'page' : undefined}
-            onClick={() => {
-              setTab(t.id)
-              window.scrollTo({ top: 0 })
-            }}
+            onClick={() => nav(t.id)}
           >
             {t.icon(tab === t.id)}
             {t.label}

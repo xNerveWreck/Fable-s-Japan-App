@@ -127,6 +127,42 @@ export function PlusIcon() {
   )
 }
 
+export function HeartIcon({ filled = false }: { filled?: boolean }) {
+  return (
+    <svg viewBox="0 0 26 26" aria-hidden="true">
+      <path
+        {...stroke}
+        fill={filled ? 'currentColor' : 'none'}
+        d="M13 21.5 C8 17.5 3.5 14 3.5 9.8 C3.5 6.8 5.8 4.8 8.3 4.8 C10.2 4.8 12 6 13 7.8 C14 6 15.8 4.8 17.7 4.8 C20.2 4.8 22.5 6.8 22.5 9.8 C22.5 14 18 17.5 13 21.5 Z"
+      />
+    </svg>
+  )
+}
+
+export function SkipIcon() {
+  return (
+    <svg viewBox="0 0 26 26" aria-hidden="true">
+      <g {...stroke}>
+        <path d="M5 13 Q5 6.5 12 6.5 H19" />
+        <path d="M15.5 2.5 L19.5 6.5 L15.5 10.5" />
+        <path d="M5 17.5 H14" opacity="0.5" />
+      </g>
+    </svg>
+  )
+}
+
+export function ShareIcon() {
+  return (
+    <svg viewBox="0 0 26 26" aria-hidden="true">
+      <g {...stroke}>
+        <path d="M13 3.5 V16" />
+        <path d="M8.5 7.5 L13 3 L17.5 7.5" />
+        <path d="M6 12 H5.5 Q4 12 4 13.5 V20.5 Q4 22 5.5 22 H20.5 Q22 22 22 20.5 V13.5 Q22 12 20.5 12 H20" />
+      </g>
+    </svg>
+  )
+}
+
 export function TrashIcon() {
   return (
     <svg viewBox="0 0 26 26" aria-hidden="true">

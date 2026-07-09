@@ -1,0 +1,115 @@
+/**
+ * Family sync — the whole trip state folded into a shareable link.
+ * One phone shares (AirDrop / iMessage), the other taps and merges.
+ * No servers: the link IS the data.
+ */
+
+export type Moment = 'done' | 'loved' | 'skipped'
+
+export interface Reservation {
+  id: string
+  label: string
+  code: string
+}
+
+export interface TripState {
+  v: 1
+  moments: Record<string, Moment>
+  packed: Record<string, boolean>
+  favs: string[]
+  allergies: string[]
+  departure: string
+  rate: number
+  reservations: Record<string, Reservation[]>
+}
+
+const K = {
+  moments: 'tabi:moments',
+  packed: 'tabi:packed',
+  favs: 'tabi:phrase-favs',
+  allergies: 'tabi:allergies',
+  departure: 'tabi:departure',
+  rate: 'tabi:fx-rate',
+  reservations: 'tabi:reservations',
+}
+
+function read<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key)
+    return raw !== null ? (JSON.parse(raw) as T) : fallback
+  } catch {
+    return fallback
+  }
+}
+
+export function collectState(): TripState {
+  return {
+    v: 1,
+    moments: read(K.moments, {}),
+    packed: read(K.packed, {}),
+    favs: read(K.favs, []),
+    allergies: read(K.allergies, []),
+    departure: read(K.departure, ''),
+    rate: read(K.rate, 155),
+    reservations: read(K.reservations, {}),
+  }
+}
+
+/* base64url so the payload survives every messenger */
+export function encodeState(state: TripState): string {
+  const json = JSON.stringify(state)
+  const b64 = btoa(String.fromCharCode(...new TextEncoder().encode(json)))
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+export function decodeState(payload: string): TripState | null {
+  try {
+    const b64 = payload.replace(/-/g, '+').replace(/_/g, '/')
+    const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0))
+    const state = JSON.parse(new TextDecoder().decode(bytes)) as TripState
+    if (state.v !== 1 || typeof state.moments !== 'object') return null
+    return state
+  } catch {
+    return null
+  }
+}
+
+export function shareUrl(): string {
+  return `${location.origin}${location.pathname}#/sync/${encodeState(collectState())}`
+}
+
+/**
+ * Merge another phone's state into this one. Progress is additive:
+ * loved beats done beats skipped, packed items stay packed, favorites
+ * and allergies are unions, and this phone's settings win where set.
+ */
+export function mergeState(incoming: TripState): void {
+  const rank: Record<Moment, number> = { skipped: 1, done: 2, loved: 3 }
+  const moments = read<Record<string, Moment>>(K.moments, {})
+  for (const [key, theirs] of Object.entries(incoming.moments)) {
+    const mine = moments[key]
+    if (!mine || rank[theirs] > rank[mine]) moments[key] = theirs
+  }
+
+  const packed = read<Record<string, boolean>>(K.packed, {})
+  for (const [key, val] of Object.entries(incoming.packed)) if (val) packed[key] = true
+
+  const favs = Array.from(new Set([...read<string[]>(K.favs, []), ...incoming.favs]))
+  const allergies = Array.from(new Set([...read<string[]>(K.allergies, []), ...incoming.allergies]))
+
+  const reservations = read<Record<string, Reservation[]>>(K.reservations, {})
+  for (const [day, list] of Object.entries(incoming.reservations)) {
+    const mine = reservations[day] ?? []
+    const seen = new Set(mine.map((r) => `${r.label}|${r.code}`))
+    reservations[day] = [...mine, ...list.filter((r) => !seen.has(`${r.label}|${r.code}`))]
+  }
+
+  const departure = read<string>(K.departure, '') || incoming.departure
+
+  localStorage.setItem(K.moments, JSON.stringify(moments))
+  localStorage.setItem(K.packed, JSON.stringify(packed))
+  localStorage.setItem(K.favs, JSON.stringify(favs))
+  localStorage.setItem(K.allergies, JSON.stringify(allergies))
+  localStorage.setItem(K.reservations, JSON.stringify(reservations))
+  localStorage.setItem(K.departure, JSON.stringify(departure))
+}
