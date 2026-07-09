@@ -1237,6 +1237,187 @@
 
 .sync-share svg { width: 20px; height: 20px; }
 
+/* ---------- travelers ---------- */
+
+.travelers-card { padding: 14px 16px; }
+
+.traveler-row-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.traveler-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: var(--paper-deep);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.traveler-chip .mascot { font-size: 17px; }
+.traveler-chip .x { color: var(--vermillion); font-size: 12px; margin-left: 2px; }
+
+.animal-picker {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.animal-opt {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--paper-deep);
+  font-size: 21px;
+  border: 2px solid transparent;
+  transition: all 0.25s var(--ease-spring);
+}
+
+.animal-opt.on {
+  border-color: var(--sakura);
+  background: var(--sakura-wash);
+  transform: scale(1.08);
+}
+
+.travelers-edit,
+.travelers-done {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--sakura);
+  padding: 4px 0;
+}
+
+.travelers-done { margin-top: 10px; }
+
+/* ---------- sound switch ---------- */
+
+.sound-switch {
+  width: 52px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--paper-deep);
+  border: 1px solid var(--hairline);
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.3s var(--ease-out);
+}
+
+.sound-switch .knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.sound-switch.on { background: var(--pine); }
+.sound-switch.on .knob { transform: translateX(20px); }
+
+/* ---------- kioku journal ---------- */
+
+.journal {
+  margin-top: 12px;
+  padding: 14px 16px;
+}
+
+.journal-text {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid var(--hairline);
+  background: var(--paper-deep);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  resize: vertical;
+  outline: none;
+}
+
+.journal-text::placeholder { color: var(--ink-faint); }
+
+.journal-authors { display: flex; gap: 5px; }
+
+.author-chip {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--paper-deep);
+  font-size: 15px;
+  border: 2px solid transparent;
+  opacity: 0.55;
+  transition: all 0.25s var(--ease-spring);
+}
+
+.author-chip.on {
+  border-color: var(--sakura);
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.journal-photos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.journal-photo {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  border: 1px solid var(--hairline);
+}
+
+.journal-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.4s ease;
+}
+
+/* the sumi-e look: drained color, inked contrast, a washi warmth */
+.journal-photo.ink img {
+  filter: grayscale(1) contrast(1.22) brightness(1.04) sepia(0.14);
+}
+
+.journal-photo .photo-del {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(20, 20, 28, 0.55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.journal-photo .photo-del svg { width: 14px; height: 14px; }
+
+.journal-add-photo {
+  margin-top: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--sakura);
+  padding: 4px 0;
+}
+
 /* empty states */
 .empty-note {
   text-align: center;

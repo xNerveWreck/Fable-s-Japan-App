@@ -12,6 +12,13 @@ export interface Reservation {
   code: string
 }
 
+export interface SyncTraveler {
+  id: string
+  name: string
+  animal: string
+  color: string
+}
+
 export interface TripState {
   v: 1
   moments: Record<string, Moment>
@@ -21,6 +28,9 @@ export interface TripState {
   departure: string
   rate: number
   reservations: Record<string, Reservation[]>
+  /* v2.1 — optional so older links still decode */
+  travelers?: SyncTraveler[]
+  quizScores?: Record<string, number>
 }
 
 const K = {
@@ -31,6 +41,8 @@ const K = {
   departure: 'tabi:departure',
   rate: 'tabi:fx-rate',
   reservations: 'tabi:reservations',
+  travelers: 'tabi:travelers',
+  quizScores: 'tabi:quiz-scores',
 }
 
 function read<T>(key: string, fallback: T): T {
@@ -52,6 +64,8 @@ export function collectState(): TripState {
     departure: read(K.departure, ''),
     rate: read(K.rate, 155),
     reservations: read(K.reservations, {}),
+    travelers: read(K.travelers, []),
+    quizScores: read(K.quizScores, {}),
   }
 }
 
@@ -106,6 +120,18 @@ export function mergeState(incoming: TripState): void {
 
   const departure = read<string>(K.departure, '') || incoming.departure
 
+  // travelers: union by id, this phone's edits win; quiz bests: max
+  const travelers = read<SyncTraveler[]>(K.travelers, [])
+  for (const theirs of incoming.travelers ?? []) {
+    if (!travelers.some((t) => t.id === theirs.id)) travelers.push(theirs)
+  }
+  const quizScores = read<Record<string, number>>(K.quizScores, {})
+  for (const [id, best] of Object.entries(incoming.quizScores ?? {})) {
+    quizScores[id] = Math.max(quizScores[id] ?? 0, best)
+  }
+
+  localStorage.setItem(K.travelers, JSON.stringify(travelers))
+  localStorage.setItem(K.quizScores, JSON.stringify(quizScores))
   localStorage.setItem(K.moments, JSON.stringify(moments))
   localStorage.setItem(K.packed, JSON.stringify(packed))
   localStorage.setItem(K.favs, JSON.stringify(favs))

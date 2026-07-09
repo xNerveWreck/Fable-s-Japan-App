@@ -25,6 +25,7 @@ Tabi (旅, *journey*) is a complete travel companion for a family's first two we
 |---|---|
 | ⛩️ **Journey** | The 14-day itinerary as a living record. Every day has a theme, a painted city vignette, a timeline of stops, honest family pacing, a rain plan, a **reservations pocket** for confirmation codes, and 🦊 *For the kids* tips on nearly every activity. Mark each stop **Did it / Loved it / Skipped** — loved moments collect into a treasures list. The home screen carries the countdown (then live *Up next today* during the trip), **The Road** — the route as one brushstroke, where a red hanko stamp lands on each completed city — a rotating phrase of the day, and the **stamp journal**: fourteen eki-stamp badges earned day by day. |
 | 🪭 **Discover** | A field guide to how Japan works: etiquette (onsen rules, chopstick taboos, the escalator-side rivalry), transit mastery (Suica, Shinkansen, luggage forwarding), practical magic (konbini, vending machines, gachapon), culture keys (shrine vs. temple, omamori) — plus a 20-dish food guide rated on a five-petal **kid-meter**, and the **Train Quiz**: sixteen questions to pass around the shinkansen, scored like an omikuji fortune. |
+| 📓 **Kioku Journal** *(v2.1)* | One entry per day — what actually happened — with photos stored on-device in IndexedDB and displayed through a **sumi-e ink filter** (tap any photo to flip between ink and original). **Four travelers** give the family names, animal mascots, and ink colors: journal entries carry their author, the Train Quiz keeps a family leaderboard, and the trip-day counter runs on **Japan time**. A synthesized **sound & haptic grammar** (off by default) gives check-offs a stone tap, loved moments a heartbeat, and completed days the deep thunk of a landing hanko. |
 | 💬 **Speak** | A 46-phrase family phrasebook with kana, romaji, and usage notes. Tap the speaker and the phone *says the phrase aloud* in Japanese (on-device speech synthesis, offline). Star your go-to phrases; search across everything. Includes a Kids' Corner — *sugoi!*, *yatta!*, *janken pon!* |
 | 🎒 **Kit** | Yen ⇄ USD converter with adjustable rate · daily budget guide · five persistent packing checklists · a tap-to-build **allergy card** that renders full-screen in written Japanese to show restaurant staff · **Family Sync** — fold the whole trip state into a link, AirDrop it to another phone, and merge additively (no servers; the link *is* the data) · emergency numbers as one-tap calls. |
 
@@ -72,9 +73,14 @@ npm run preview    # serve the build
 
 Open on an iPhone (or any browser at iPhone width), then **Share → Add to Home Screen** for the full standalone experience.
 
+**Deploying:** a GitHub Pages workflow ships with the repo — enable it once under *Settings → Pages →
+Source: GitHub Actions*, and every push to `main` deploys automatically. Append **`?demo=1`** to any
+Tabi URL to open a lived-in trip (Day 7, six stamps earned, travelers named) instead of an empty state —
+empty states hide magic.
+
 ## Stack
 
-React 18 + TypeScript + Vite. No UI libraries, no CSS frameworks, no runtime dependencies beyond React — the entire app is ~87 KB gzipped. Verified with a 22-check Playwright suite at iPhone viewport in both color schemes, including a full two-phone Family Sync roundtrip.
+React 18 + TypeScript + Vite. No UI libraries, no CSS frameworks, no runtime dependencies beyond React — the entire app is ~92 KB gzipped, MIT licensed. Verified with a 37-check Playwright suite at iPhone viewport in both color schemes, including a full two-phone Family Sync roundtrip and IndexedDB journal persistence.
 
 ---
 
