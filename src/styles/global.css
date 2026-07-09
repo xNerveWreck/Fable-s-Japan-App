@@ -1,0 +1,399 @@
+/* ============================================================
+   旅 TABI — design system
+   Day: sumi-e ink on washi paper, sakura & vermillion accents.
+   Night: indigo snow-night (after Tsuchiya Koitsu), lantern gold.
+   ============================================================ */
+
+:root {
+  /* washi day */
+  --paper: #f6f1e7;
+  --paper-deep: #efe8d9;
+  --card: #fdfaf3;
+  --ink: #262331;
+  --ink-soft: #6b6577;
+  --ink-faint: #a49dae;
+  --hairline: rgba(38, 35, 49, 0.12);
+  --sakura: #d9536f;
+  --sakura-soft: #f2c7d0;
+  --sakura-wash: rgba(217, 83, 111, 0.1);
+  --vermillion: #c43d33;
+  --pine: #46705c;
+  --pine-wash: rgba(70, 112, 92, 0.12);
+  --gold: #b07d2f;
+  --gold-wash: rgba(176, 125, 47, 0.13);
+  --indigo: #2b3a5c;
+  --indigo-wash: rgba(43, 58, 92, 0.1);
+  --shadow: 0 2px 10px rgba(38, 35, 49, 0.06), 0 12px 32px rgba(38, 35, 49, 0.07);
+  --shadow-lift: 0 4px 14px rgba(38, 35, 49, 0.1), 0 18px 44px rgba(38, 35, 49, 0.12);
+  --blur-bg: rgba(246, 241, 231, 0.82);
+  --hero-sky-a: #f9f3e6;
+  --hero-sky-b: #f3e3d3;
+
+  /* artwork palette — day: ink & sakura */
+  --art-sun-a: #e8506a;
+  --art-sun-b: #cf3950;
+  --art-mtn-far: #ded3c0;
+  --art-mtn-near: #c9bca3;
+  --art-blossom-a: #eeb5c2;
+  --art-blossom-b: #dd8ba0;
+  --art-silhouette: #2b2836;
+  --art-water: #eae2d0;
+  --art-lantern: #e8b04b;
+
+  --font-display: ui-serif, 'New York', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Hiragino Sans', 'Helvetica Neue', sans-serif;
+
+  --radius: 18px;
+  --radius-lg: 26px;
+
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #111726;
+    --paper-deep: #0c111d;
+    --card: #1a2133;
+    --ink: #e9ecf4;
+    --ink-soft: #9aa4bc;
+    --ink-faint: #5f6a85;
+    --hairline: rgba(233, 236, 244, 0.14);
+    --sakura: #e8798f;
+    --sakura-soft: #7c3c4d;
+    --sakura-wash: rgba(232, 121, 143, 0.14);
+    --vermillion: #e05a48;
+    --pine: #6fae91;
+    --pine-wash: rgba(111, 174, 145, 0.15);
+    --gold: #e2ac52;
+    --gold-wash: rgba(226, 172, 82, 0.14);
+    --indigo: #8fa3cf;
+    --indigo-wash: rgba(143, 163, 207, 0.12);
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+    --shadow-lift: 0 4px 14px rgba(0, 0, 0, 0.4), 0 18px 44px rgba(0, 0, 0, 0.45);
+    --blur-bg: rgba(17, 23, 38, 0.82);
+    --hero-sky-a: #16203a;
+    --hero-sky-b: #101626;
+
+    /* artwork palette — night: indigo snow, pale moon, lantern glow */
+    --art-sun-a: #f4ecdc;
+    --art-sun-b: #ddd2ba;
+    --art-mtn-far: #1c2640;
+    --art-mtn-near: #273450;
+    --art-blossom-a: #c7d3e8;
+    --art-blossom-b: #9fb2d4;
+    --art-silhouette: #0a0e18;
+    --art-water: #182136;
+    --art-lantern: #f0b653;
+  }
+}
+
+/* ---------- base ---------- */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100dvh;
+  max-width: 560px;
+  margin: 0 auto;
+  position: relative;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--sakura-soft);
+}
+
+/* ---------- typography ---------- */
+
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.t-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sakura);
+}
+
+.t-soft {
+  color: var(--ink-soft);
+}
+
+/* ---------- screen scaffold ---------- */
+
+.screen {
+  padding: 0 20px calc(96px + env(safe-area-inset-bottom));
+  animation: screen-in 0.45s var(--ease-out);
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.screen-head {
+  padding: calc(18px + env(safe-area-inset-top)) 0 6px;
+}
+
+.screen-head h1 {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.screen-head .sub {
+  color: var(--ink-soft);
+  font-size: 15px;
+  margin-top: 4px;
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 28px 0 12px;
+}
+
+.section-title h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.section-title .jp {
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: 0.08em;
+}
+
+/* ---------- cards & chips ---------- */
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.pressable {
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease-spring);
+}
+
+.pressable:active {
+  transform: scale(0.97);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.chip-sakura { background: var(--sakura-wash); color: var(--sakura); }
+.chip-pine { background: var(--pine-wash); color: var(--pine); }
+.chip-gold { background: var(--gold-wash); color: var(--gold); }
+.chip-indigo { background: var(--indigo-wash); color: var(--indigo); }
+
+.hanko {
+  /* red seal stamp */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vermillion);
+  color: #fdfaf3;
+  font-family: var(--font-display);
+  font-weight: 700;
+  border-radius: 8px;
+  transform: rotate(-3deg);
+}
+
+/* ---------- segmented control (iOS style) ---------- */
+
+.seg {
+  display: flex;
+  background: var(--paper-deep);
+  border-radius: 14px;
+  padding: 3px;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.seg::-webkit-scrollbar { display: none; }
+
+.seg button {
+  flex: 1;
+  min-width: max-content;
+  padding: 8px 14px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  transition: all 0.3s var(--ease-out);
+}
+
+.seg button.on {
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- tab bar ---------- */
+
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 560px;
+  padding: 8px 14px calc(10px + env(safe-area-inset-bottom));
+  background: var(--blur-bg);
+  -webkit-backdrop-filter: saturate(1.4) blur(22px);
+  backdrop-filter: saturate(1.4) blur(22px);
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  z-index: 100;
+}
+
+.tabbar button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 0;
+  color: var(--ink-faint);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: color 0.25s ease, transform 0.35s var(--ease-spring);
+}
+
+.tabbar button.on {
+  color: var(--sakura);
+}
+
+.tabbar button:active {
+  transform: scale(0.92);
+}
+
+.tabbar svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* ---------- petals ---------- */
+
+.petals {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.petal {
+  position: absolute;
+  top: -20px;
+  border-radius: 60% 0 60% 60%;
+  background: var(--sakura-soft);
+  opacity: 0.9;
+  animation: petal-fall linear infinite;
+}
+
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, -4vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(-9vw, 108vh, 0) rotate(320deg);
+    opacity: 0.15;
+  }
+}
+
+/* dark mode: petals become snow, like the Koitsu print */
+@media (prefers-color-scheme: dark) {
+  .petal {
+    border-radius: 50%;
+    background: #dfe6f2;
+    opacity: 0.75;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .petals { display: none; }
+  .screen { animation: none; }
+}
+
+/* ---------- misc ---------- */
+
+.hr-ink {
+  border: none;
+  height: 1px;
+  background: var(--hairline);
+  margin: 16px 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.grow { flex: 1; min-width: 0; }
