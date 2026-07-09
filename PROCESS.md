@@ -95,6 +95,11 @@ Smaller than the kata, learned the hard way, worth carrying to any project.
 10. **Seed the demo.** Screenshots and demos ran on a lived-in trip — day 7, six stamps earned, a reservation
     filed — because empty states hide magic. Craft the demo state as deliberately as the feature.
 
+> Field note 8 is now executable: the multi-lens brainstorm ships as a reusable skill at
+> [`.claude/skills/brainstorm/SKILL.md`](.claude/skills/brainstorm/SKILL.md) — invoke `/brainstorm <subject>`
+> in any Claude Code session in this repo, or copy the folder into another project (or `~/.claude/skills/`)
+> to take it with you.
+
 ## Three prompts that changed the project (the owner's side)
 
 The human half of the collaboration had its own technique. Three prompts did disproportionate work:
