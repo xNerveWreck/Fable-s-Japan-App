@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8506a"/>
+      <stop offset="1" stop-color="#d13a4e"/>
+    </linearGradient>
+    <clipPath id="squircle">
+      <rect x="0" y="0" width="180" height="180" rx="40"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#squircle)">
+    <rect width="180" height="180" fill="#f7f2e9"/>
+    <!-- distant mist band -->
+    <rect x="0" y="118" width="180" height="62" fill="#e9e1d2"/>
+    <!-- red sun -->
+    <circle cx="118" cy="62" r="34" fill="url(#sun)"/>
+    <!-- mountain wash -->
+    <path d="M-10 132 L38 78 L66 110 L92 84 L132 132 Z" fill="#d8cdb9" opacity="0.85"/>
+    <!-- pagoda silhouette -->
+    <g fill="#26232b">
+      <rect x="60" y="34" width="4" height="14"/>
+      <circle cx="62" cy="32" r="3"/>
+      <path d="M62 44 L34 62 Q62 54 90 62 Z"/>
+      <rect x="52" y="60" width="20" height="10"/>
+      <path d="M62 66 L28 88 Q62 78 96 88 Z"/>
+      <rect x="50" y="86" width="24" height="12"/>
+      <path d="M62 94 L22 118 Q62 106 102 118 Z"/>
+      <rect x="47" y="116" width="30" height="16"/>
+    </g>
+    <!-- ground ink stroke -->
+    <path d="M0 136 Q45 128 90 134 T180 132 L180 180 L0 180 Z" fill="#26232b"/>
+    <!-- birds -->
+    <g stroke="#26232b" stroke-width="2.4" fill="none" stroke-linecap="round">
+      <path d="M128 104 q5 -5 10 0 q5 -5 10 0"/>
+      <path d="M144 92 q4 -4 8 0 q4 -4 8 0"/>
+    </g>
+  </g>
+</svg>
