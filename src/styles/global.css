@@ -39,6 +39,7 @@
   --art-silhouette: #2b2836;
   --art-water: #eae2d0;
   --art-lantern: #e8b04b;
+  --art-snow: #f9f5ec;
 
   --font-display: ui-serif, 'New York', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Hiragino Sans', 'Helvetica Neue', sans-serif;
@@ -87,6 +88,7 @@
     --art-silhouette: #0a0e18;
     --art-water: #182136;
     --art-lantern: #f0b653;
+    --art-snow: #e6ecf7;
   }
 }
 

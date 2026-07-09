@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { allergens, budgetGuide, emergencyItems, packGroups } from '../data/kit'
 import { useStored } from '../hooks/useStored'
-import { CheckIcon, ChevronIcon } from '../art/icons'
+import { shareUrl } from '../lib/sync'
+import { CheckIcon, ChevronIcon, ShareIcon } from '../art/icons'
 
 export function Kit() {
   return (
@@ -16,8 +17,70 @@ export function Kit() {
       <BudgetGuide />
       <Packing />
       <AllergyCard />
+      <FamilySync />
       <Emergency />
     </div>
+  )
+}
+
+/* ---------- family sync ---------- */
+
+function FamilySync() {
+  const [status, setStatus] = useState<'idle' | 'shared' | 'copied'>('idle')
+  const [pasted, setPasted] = useState('')
+
+  const share = async () => {
+    const url = shareUrl()
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'Tabi — our Japan trip', url })
+        setStatus('shared')
+        return
+      } catch {
+        /* user cancelled the share sheet — fall through to copy */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url)
+      setStatus('copied')
+    } catch {
+      prompt('Copy this sync link:', url)
+    }
+    setTimeout(() => setStatus('idle'), 2500)
+  }
+
+  const importPasted = () => {
+    const match = pasted.match(/#\/sync\/([A-Za-z0-9_-]+)/) ?? pasted.match(/^([A-Za-z0-9_-]{20,})$/)
+    if (match) location.hash = `#/sync/${match[1]}`
+  }
+
+  return (
+    <section className="kit-section">
+      <div className="section-title">
+        <h2>Family sync</h2>
+        <span className="jp">同期</span>
+      </div>
+      <div className="card sync-card">
+        <p className="pocket-hint" style={{ marginTop: 0 }}>
+          Four phones, one journey. Share this phone’s trip — check-offs, loved moments, packing, reservations — as
+          a link. AirDrop or message it; the other phone taps it and merges. No servers, the link <i>is</i> the data.
+        </p>
+        <button className="show-card-btn pressable sync-share" onClick={share}>
+          <ShareIcon />
+          {status === 'copied' ? 'Link copied!' : status === 'shared' ? 'Shared 🌸' : 'Share this phone’s trip'}
+        </button>
+        <div className="pocket-add" style={{ marginTop: 12 }}>
+          <input
+            placeholder="…or paste a sync link from another phone"
+            value={pasted}
+            onChange={(e) => setPasted(e.target.value)}
+          />
+          <button className="icon-btn" aria-label="Import pasted sync link" onClick={importPasted}>
+            <CheckIcon />
+          </button>
+        </div>
+      </div>
+    </section>
   )
 }
 
