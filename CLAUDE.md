@@ -10,7 +10,7 @@ before starting substantive work.
 ```bash
 npm run dev        # local dev server
 npm run build      # typecheck + production build → dist/
-npm run check      # the story suite: 33 Playwright checks at iPhone viewport (build first)
+npm run check      # the story suite: Playwright checks at iPhone viewport (build first)
 ```
 
 ## The full wrap-up (required before ending any work session)
