@@ -49,14 +49,17 @@ quest finds — the whole side-quest loop live).
   quest state had to be lifted into `DayDetail` so a find repaints the vignette
   live (executor caught this against the plan's sketch).
 
-**Pick up here:** Owner merges `claude/trip-pack` (PR link in the session report).
-After merge: (1) tag the release — `git tag -a v3.1.0 -m "Living paintings + the
-trip pack"` + push tag + GitHub Release with `dist/` zipped as the asset (first
-tag ever on this repo; see AGENTS.md versioning note); (2) owner opens the app
-once on each phone on Wi-Fi so the service worker caches it before the 2026-07-12
-flight; (3) on a real iPhone: tap a painting (motion permission), record one
-phrase (mic permission), log one Denshadex card. Next build candidates are in
-IMPLEMENTATION_PLAN.md.
+**Shipped:** owner merged PR #13 the same day; tagged **v3.1.0** (the repo's
+first tag) and published the GitHub Release with `dist/` zipped as the asset:
+https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.1.0 — main
+verified 79/79 green at the merge commit before tagging.
+
+**Pick up here:** (1) owner opens the app once on each phone on Wi-Fi so the
+service worker caches v3.1.0 before the 2026-07-12 flight; (2) on a real iPhone:
+tap a painting (motion permission), record one phrase (mic permission), log one
+Denshadex card — report anything that feels off (tilt amplitude is a two-number
+CSS tune). Next build candidates are in IMPLEMENTATION_PLAN.md; nothing is
+mid-flight.
 
 ---
 
