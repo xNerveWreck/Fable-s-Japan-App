@@ -147,7 +147,9 @@ export function DeerDojo() {
       <p className="dd-note">{note}</p>
 
       <div className="dd-status">
-        <span className="dd-count">{exchanges} exchanges</span>
+        <span className="dd-count">
+          {exchanges} exchange{exchanges === 1 ? '' : 's'}
+        </span>
         <span className="dd-rank">{rank ? rank.name : 'No rank yet'}</span>
       </div>
       {nextAt != null && <p className="dd-hint">{nextAt - exchanges} more for the next rank</p>}
