@@ -41,6 +41,60 @@
   background: var(--hero-sky-a);
 }
 
+/* 七十二候 — the microseason, brushed vertically down the hero's right edge */
+.hero-sekki {
+  position: absolute;
+  top: calc(16px + env(safe-area-inset-top));
+  right: 18px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.hero-sekki .sekki-kanji {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ink-soft);
+  text-shadow: 0 1px 10px var(--paper);
+}
+
+.hero-sekki .sekki-seal {
+  width: 17px;
+  height: 17px;
+  margin-top: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vermillion);
+  color: #fdfaf3;
+  font-size: 10px;
+  line-height: 1;
+  font-family: var(--font-display);
+  border-radius: 4px;
+  transform: rotate(-4deg);
+  opacity: 0.9;
+}
+
+.hero-season-note {
+  text-shadow: 0 1px 10px var(--paper);
+}
+
+.hero-season-note {
+  position: absolute;
+  right: 18px;
+  bottom: 40px;
+  z-index: 2;
+  max-width: 44%;
+  text-align: right;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
 /* ---------- Journey: countdown ---------- */
 
 .countdown {
@@ -72,6 +126,28 @@
   margin-top: 2px;
 }
 
+.countdown .sub-sky {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.depart-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.depart-row .depart-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
 .countdown input[type='date'] {
   border: 1px solid var(--hairline);
   background: var(--paper-deep);
@@ -80,6 +156,16 @@
   font-size: 14px;
   color: var(--ink);
   -webkit-appearance: none;
+  /* an empty date input renders blank on iOS — keep it an obvious tap target */
+  min-width: 136px;
+  min-height: 36px;
+  font-family: inherit;
+}
+
+/* iOS renders the picked value invisibly short without an explicit line box */
+.countdown input[type='date']::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.3em;
 }
 
 /* trip progress */
@@ -230,10 +316,44 @@
   font-size: 17px;
   flex: 1;
   text-align: center;
-  padding-right: 64px; /* balance the back button */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.day-steps {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.day-steps .step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper-deep);
+  color: var(--ink-soft);
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.day-steps .step:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.day-steps .step:disabled {
+  opacity: 0.35;
+}
+
+.day-steps .step svg {
+  width: 16px;
+  height: 16px;
+}
+
+.day-steps .step-prev svg {
+  transform: rotate(180deg);
 }
 
 .detail-hero {
@@ -284,6 +404,51 @@
   margin-top: 20px;
   position: relative;
   padding-left: 24px;
+}
+
+/* prev/next day — flip through the trip like pages of a scroll */
+.day-pager {
+  display: flex;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.day-pager > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.pager-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.pager-card.pager-next {
+  text-align: right;
+}
+
+.pager-card .pager-dir {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sakura);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pager-card .pager-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .timeline::before {

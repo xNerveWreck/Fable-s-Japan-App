@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
 import { useHashRoute } from './hooks/useHashRoute'
+import { useSolarClock } from './hooks/useSolarClock'
 import { Journey } from './screens/Journey'
 import { Discover } from './screens/Discover'
 import { Phrases } from './screens/Phrases'
 import { Kit } from './screens/Kit'
 import { SyncImport } from './screens/SyncImport'
 import { FanIcon, PackIcon, SpeechIcon, ToriiIcon } from './art/icons'
+import { InkFilters } from './art/InkFilters'
 
 const tabs = [
   { id: 'journey', label: 'Journey', icon: (on: boolean) => <ToriiIcon filled={on} /> },
@@ -17,6 +19,7 @@ const tabs = [
 export default function App() {
   const [route, nav] = useHashRoute()
   const tab = route[0] || 'journey'
+  useSolarClock()
 
   // stop any phrase mid-speech and reset scroll when the tab changes
   useEffect(() => {
@@ -30,6 +33,7 @@ export default function App() {
 
   return (
     <>
+      <InkFilters />
       {tab === 'journey' && <Journey route={route} nav={nav} />}
       {tab === 'discover' && <Discover />}
       {tab === 'speak' && <Phrases />}

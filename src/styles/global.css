@@ -164,17 +164,58 @@ input {
 
 .screen {
   padding: 0 20px calc(96px + env(safe-area-inset-bottom));
-  animation: screen-in 0.45s var(--ease-out);
+  animation: screen-in 0.5s var(--ease-out);
 }
 
+/* nijimi: screens arrive as one wet brushstroke wiping left to right.
+   The mask exists only inside the keyframes, so it costs nothing at rest. */
 @keyframes screen-in {
   from {
-    opacity: 0;
-    transform: translateY(10px);
+    opacity: 0.2;
+    transform: translateY(8px);
+    -webkit-mask-image: linear-gradient(105deg, #000 52%, rgba(0, 0, 0, 0) 72%);
+    -webkit-mask-size: 320% 100%;
+    -webkit-mask-position: 100% 0;
+    mask-image: linear-gradient(105deg, #000 52%, rgba(0, 0, 0, 0) 72%);
+    mask-size: 320% 100%;
+    mask-position: 100% 0;
   }
   to {
     opacity: 1;
     transform: none;
+    -webkit-mask-image: linear-gradient(105deg, #000 52%, rgba(0, 0, 0, 0) 72%);
+    -webkit-mask-size: 320% 100%;
+    -webkit-mask-position: 0% 0;
+    mask-image: linear-gradient(105deg, #000 52%, rgba(0, 0, 0, 0) 72%);
+    mask-size: 320% 100%;
+    mask-position: 0% 0;
+  }
+}
+
+/* nijimi: a tap blooms like wet ink on washi */
+.ink-bloom {
+  position: fixed;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border-radius: 58% 42% 55% 45% / 50% 58% 42% 50%;
+  pointer-events: none;
+  filter: url(#nijimi) blur(1px);
+  animation: ink-bloom 0.7s var(--ease-out) forwards;
+}
+
+@keyframes ink-bloom {
+  from {
+    transform: scale(0.25) rotate(8deg);
+    opacity: 0.5;
+  }
+  60% {
+    opacity: 0.26;
+  }
+  to {
+    transform: scale(2) rotate(-6deg);
+    opacity: 0;
   }
 }
 
@@ -369,13 +410,41 @@ input {
   }
 }
 
-/* dark mode: petals become snow, like the Koitsu print */
+/* At night the petals become snow, like the Koitsu print. The solar clock
+   owns this via data-phase; the media query only covers the pre-JS frame. */
 @media (prefers-color-scheme: dark) {
   .petal {
     border-radius: 50%;
     background: #dfe6f2;
     opacity: 0.75;
   }
+}
+
+:root[data-phase] .petal {
+  border-radius: 60% 0 60% 60%;
+  background: var(--sakura-soft);
+  opacity: 0.9;
+}
+
+:root[data-phase='night'] .petal,
+:root[data-phase='lantern'] .petal {
+  border-radius: 50%;
+  background: #dfe6f2;
+  opacity: 0.75;
+}
+
+/* shadows are discrete per mood — heavy ink at night, feather-light by day */
+:root[data-phase='day'],
+:root[data-phase='dawn'],
+:root[data-phase='dusk'] {
+  --shadow: 0 2px 10px rgba(38, 35, 49, 0.06), 0 12px 32px rgba(38, 35, 49, 0.07);
+  --shadow-lift: 0 4px 14px rgba(38, 35, 49, 0.1), 0 18px 44px rgba(38, 35, 49, 0.12);
+}
+
+:root[data-phase='lantern'],
+:root[data-phase='night'] {
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadow-lift: 0 4px 14px rgba(0, 0, 0, 0.4), 0 18px 44px rgba(0, 0, 0, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {

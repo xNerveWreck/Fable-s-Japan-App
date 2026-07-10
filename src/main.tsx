@@ -1,14 +1,23 @@
 import { seedDemo } from './lib/demo'
+import { applySolarPalette } from './lib/solar'
 
 // ?demo=1 — open on a lived-in Day-7 trip instead of an empty state
 try {
   const params = new URLSearchParams(location.search)
   if (params.get('demo') === '1') {
     seedDemo()
-    history.replaceState(null, '', location.pathname + location.hash)
+    const clock = params.get('clock')
+    history.replaceState(null, '', location.pathname + (clock ? `?clock=${clock}` : '') + location.hash)
   }
 } catch {
   /* demo is a convenience, never a blocker */
+}
+
+// paint today's sky before the first frame — no theme flash
+try {
+  applySolarPalette()
+} catch {
+  /* the static washi palette in CSS remains a fine default */
 }
 
 // migrate v1 boolean check-offs to tri-state moments before anything renders

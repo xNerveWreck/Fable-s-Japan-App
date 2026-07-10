@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 import { itinerary, kindMeta, TRIP_LENGTH, type Day } from '../data/itinerary'
 import { phraseCategories } from '../data/phrases'
 import { useStored } from '../hooks/useStored'
@@ -6,6 +6,9 @@ import { useSpeech } from '../hooks/useSpeech'
 import type { Moment, Reservation } from '../lib/sync'
 import { daysBetween, jstToday, todayStr } from '../lib/dates'
 import { play } from '../lib/sound'
+import { inkBloom } from '../lib/ink'
+import { currentSolar, PHASE_LABEL } from '../lib/solar'
+import { microseasonFor } from '../data/sekki'
 import { journalDays } from '../lib/db'
 import { TravelersCard } from '../components/Travelers'
 import { Journal } from '../components/Journal'
@@ -65,7 +68,15 @@ export function Journey({ route, nav }: { route: string[]; nav: (p: string, repl
     })
 
   if (openDay) {
-    return <DayDetail day={openDay} moments={moments} onSet={setMoment} onBack={() => nav('journey')} />
+    return (
+      <DayDetail
+        day={openDay}
+        moments={moments}
+        onSet={setMoment}
+        onBack={() => nav('journey')}
+        openDay={(id) => nav(`journey/${id}`)}
+      />
+    )
   }
 
   return (
@@ -105,6 +116,10 @@ function JourneyHome({
   const onTrip = tripDay !== null && tripDay <= TRIP_LENGTH
   const today = onTrip && tripDay !== null ? itinerary[tripDay - 1] : null
 
+  // Japan's calendar and sky, both computed on-device
+  const season = microseasonFor(jstToday())
+  const { phase } = currentSolar()
+
   let countTitle: string
   let countSub: string
   if (until === null) {
@@ -138,6 +153,15 @@ function JourneyHome({
           <div className="jp-big">た び</div>
           <h1>Tabi</h1>
         </div>
+        <div className="hero-sekki" role="img" aria-label={`Microseason: ${season.en}`}>
+          {/* stacked spans, not writing-mode: vertical-rl collapses inside
+              flex/abs-pos overlays in both Chromium and WebKit */}
+          {[...season.kanji].map((ch, i) => (
+            <span key={i} className="sekki-kanji">{ch}</span>
+          ))}
+          <span className="sekki-seal" aria-hidden>候</span>
+        </div>
+        <div className="hero-season-note">{season.en}</div>
       </div>
 
       <div style={{ padding: '0 20px' }}>
@@ -146,15 +170,19 @@ function JourneyHome({
           <div className="grow">
             <h2>{countTitle}</h2>
             <div className="sub">{countSub}</div>
-            {until === null && (
-              <div style={{ marginTop: 8 }}>
-                <input
-                  type="date"
-                  aria-label="Departure date"
-                  onChange={(e) => e.target.value && setDeparture(e.target.value)}
-                />
-              </div>
-            )}
+            {!onTrip && <div className="sub sub-sky">The sky over Japan: {PHASE_LABEL[phase]}</div>}
+            {/* Always mounted and controlled: the iOS wheel picker fires `change`
+                on every tick, so unmounting on first change dismisses it mid-pick.
+                Staying mounted also keeps a mistyped date correctable. */}
+            <label className="depart-row">
+              <span className="depart-label">{departure ? 'Departure · 出発' : 'Pick the day · 出発日'}</span>
+              <input
+                type="date"
+                aria-label="Departure date"
+                value={departure}
+                onChange={(e) => e.target.value && setDeparture(e.target.value)}
+              />
+            </label>
           </div>
         </div>
 
@@ -339,12 +367,23 @@ function DayDetail({
   moments,
   onSet,
   onBack,
+  openDay,
 }: {
   day: Day
   moments: MomentMap
   onSet: (key: string, m: Moment | null) => void
   onBack: () => void
+  openDay: (id: number) => void
 }) {
+  const prevDay = itinerary.find((d) => d.id === day.id - 1)
+  const nextDay = itinerary.find((d) => d.id === day.id + 1)
+
+  // wet ink blooms where the finger landed; keyboard taps bloom at the button
+  const bloomAt = (e: MouseEvent<HTMLElement>, color: string) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    inkBloom(e.clientX || rect.left + rect.width / 2, e.clientY || rect.top + rect.height / 2, color)
+  }
+
   return (
     <div className="screen">
       <div className="detail-top">
@@ -354,6 +393,24 @@ function DayDetail({
         </button>
         <div className="title">
           Day {day.id} · {day.city}
+        </div>
+        <div className="day-steps">
+          <button
+            className="step step-prev"
+            disabled={!prevDay}
+            aria-label={prevDay ? `Day ${prevDay.id} · ${prevDay.city}` : 'This is the first day'}
+            onClick={() => prevDay && openDay(prevDay.id)}
+          >
+            <ChevronIcon />
+          </button>
+          <button
+            className="step"
+            disabled={!nextDay}
+            aria-label={nextDay ? `Day ${nextDay.id} · ${nextDay.city}` : 'This is the last day'}
+            onClick={() => nextDay && openDay(nextDay.id)}
+          >
+            <ChevronIcon />
+          </button>
         </div>
       </div>
 
@@ -410,19 +467,28 @@ function DayDetail({
                 <div className="state-row" role="group" aria-label={`Mark "${act.title}"`}>
                   <button
                     className={`state-btn sb-done ${state === 'done' ? 'on' : ''}`}
-                    onClick={() => onSet(key, state === 'done' ? null : 'done')}
+                    onClick={(e) => {
+                      if (state !== 'done') bloomAt(e, 'var(--pine)')
+                      onSet(key, state === 'done' ? null : 'done')
+                    }}
                   >
                     <CheckIcon /> Did it
                   </button>
                   <button
                     className={`state-btn sb-loved ${state === 'loved' ? 'on' : ''}`}
-                    onClick={() => onSet(key, state === 'loved' ? null : 'loved')}
+                    onClick={(e) => {
+                      if (state !== 'loved') bloomAt(e, 'var(--sakura)')
+                      onSet(key, state === 'loved' ? null : 'loved')
+                    }}
                   >
                     <HeartIcon filled={state === 'loved'} /> Loved it
                   </button>
                   <button
                     className={`state-btn sb-skip ${state === 'skipped' ? 'on' : ''}`}
-                    onClick={() => onSet(key, state === 'skipped' ? null : 'skipped')}
+                    onClick={(e) => {
+                      if (state !== 'skipped') bloomAt(e, 'var(--ink-faint)')
+                      onSet(key, state === 'skipped' ? null : 'skipped')
+                    }}
                   >
                     <SkipIcon /> Skipped
                   </button>
@@ -432,6 +498,25 @@ function DayDetail({
           )
         })}
       </div>
+
+      <nav className="day-pager" aria-label="Nearby days">
+        {prevDay ? (
+          <button className="card pager-card pressable" onClick={() => openDay(prevDay.id)}>
+            <span className="pager-dir">← Day {prevDay.id} · {prevDay.city}</span>
+            <span className="pager-title">{prevDay.title}</span>
+          </button>
+        ) : (
+          <span />
+        )}
+        {nextDay ? (
+          <button className="card pager-card pager-next pressable" onClick={() => openDay(nextDay.id)}>
+            <span className="pager-dir">Day {nextDay.id} · {nextDay.city} →</span>
+            <span className="pager-title">{nextDay.title}</span>
+          </button>
+        ) : (
+          <span />
+        )}
+      </nav>
     </div>
   )
 }
