@@ -4,6 +4,11 @@ import { applySolarPalette } from './lib/solar'
 // ?demo=1 — open on a lived-in Day-7 trip instead of an empty state
 try {
   const params = new URLSearchParams(location.search)
+  // ?vg=now (and demo mode) drop the vignette visitors' long waits — the
+  // heron is already mid-flight for screenshots, demos, and the story suite
+  if (params.get('demo') === '1' || params.get('vg') === 'now') {
+    document.documentElement.dataset.vg = 'now'
+  }
   if (params.get('demo') === '1') {
     seedDemo()
     const clock = params.get('clock')
