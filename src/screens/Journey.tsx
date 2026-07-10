@@ -13,6 +13,7 @@ import { microseasonFor } from '../data/sekki'
 import { journalDays } from '../lib/db'
 import { TravelersCard } from '../components/Travelers'
 import { Journal } from '../components/Journal'
+import { FujiWindow } from '../components/FujiWindow'
 import { InkHero } from '../art/InkHero'
 import { Petals } from '../art/Petals'
 import { CityVignette } from '../art/Vignettes'
@@ -424,6 +425,8 @@ function DayDetail({
       <div className="vignette card" ref={tiltRef} onClick={armTilt}>
         <CityVignette city={day.city} />
       </div>
+
+      {day.fujiWindow && <FujiWindow />}
 
       <header className="detail-hero">
         <div className={`day-no text-${day.color}`}>
