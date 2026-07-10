@@ -261,8 +261,9 @@ try {
   const gondola = await page.locator('.vg-gondola').evaluate((el) => getComputedStyle(el).animationName)
   check('the gondola inches along its cable', gondola.includes('vg-gondola'), gondola)
 
-  const lanternClock = jstTimeAtAltitude(-7, false)
-  await page.goto(`${BASE}/?clock=${lanternClock}&vg=now#journey/12`) // Osaka at lantern hour
+  // 00:30 is night in every trip city — the solar clock follows the current
+  // city's sun mid-trip, so a Tokyo lantern-minute here would be too early
+  await page.goto(`${BASE}/?clock=00:30&vg=now#journey/12`) // Osaka after dark
   await page.waitForTimeout(600)
   const neonNight = await page.locator('.vg-neon').first().evaluate((el) => getComputedStyle(el).animationName)
   check('osaka neon flickers after sunset', neonNight.includes('vg-neon'), neonNight)
