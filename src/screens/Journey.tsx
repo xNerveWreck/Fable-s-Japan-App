@@ -15,6 +15,8 @@ import { TravelersCard } from '../components/Travelers'
 import { Journal } from '../components/Journal'
 import { FujiWindow } from '../components/FujiWindow'
 import { DeerDojo } from '../components/DeerDojo'
+import { SideQuests } from '../components/SideQuests'
+import { quests } from '../data/quests'
 import { InkHero } from '../art/InkHero'
 import { Petals } from '../art/Petals'
 import { CityVignette } from '../art/Vignettes'
@@ -387,6 +389,11 @@ function DayDetail({
   const nextDay = itinerary.find((d) => d.id === day.id + 1)
   const { ref: tiltRef, arm: armTilt } = useTilt<HTMLDivElement>()
 
+  // side quests: state lives here (not inside SideQuests) so a find can
+  // repaint the vignette's bonus detail live, without a reload
+  const [foundQuests, setFoundQuests] = useStored<Record<string, number>>('quests', {})
+  const completedInCity = quests.filter((q) => q.city === day.city && foundQuests[q.id] != null).length
+
   // wet ink blooms where the finger landed; keyboard taps bloom at the button
   const bloomAt = (e: MouseEvent<HTMLElement>, color: string) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -423,13 +430,22 @@ function DayDetail({
         </div>
       </div>
 
-      <div className="vignette card" ref={tiltRef} onClick={armTilt}>
+      <div
+        className="vignette card"
+        data-quests={String(Math.min(completedInCity, 3))}
+        ref={tiltRef}
+        onClick={armTilt}
+      >
         <CityVignette city={day.city} />
       </div>
 
       {day.fujiWindow && <FujiWindow />}
 
       {day.deerDojo && <DeerDojo />}
+
+      {quests.some((q) => q.city === day.city) && (
+        <SideQuests city={day.city} found={foundQuests} setFound={setFoundQuests} />
+      )}
 
       <header className="detail-hero">
         <div className={`day-no text-${day.color}`}>

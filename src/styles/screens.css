@@ -2114,3 +2114,129 @@
   .dd-head { transition: none; }
   .dd-wobble { animation: none; }
 }
+
+/* ---------- side quests ---------- */
+
+.side-quests {
+  margin-top: 14px;
+  padding: 14px 16px 16px;
+}
+
+.sq-title {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sq-title-jp {
+  margin-left: 6px;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+
+.sq-locked {
+  margin-top: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+.sq-count {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.sq-quest {
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.sq-quest + .sq-quest {
+  border-top: 1px solid var(--hairline);
+}
+
+.sq-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sq-quest-title {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.sq-quest.sq-done .sq-quest-title {
+  color: var(--ink-faint);
+}
+
+.sq-quest-jp {
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.sq-hanko {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--vermillion);
+  color: var(--art-snow);
+  font-size: 10px;
+  line-height: 1;
+  flex: none;
+}
+
+.sq-expand {
+  margin-top: 8px;
+}
+
+.sq-hint {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.sq-found {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--vermillion);
+}
+
+.sq-look {
+  margin-top: 10px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-faint);
+}
+
+.vq-bonus {
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+.vignette[data-quests='2'] .vq-bonus,
+.vignette[data-quests='3'] .vq-bonus {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vq-bonus { transition: none; }
+}
