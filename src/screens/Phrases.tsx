@@ -3,6 +3,7 @@ import { phraseCategories, type Phrase } from '../data/phrases'
 import { useSpeech } from '../hooks/useSpeech'
 import { useStored } from '../hooks/useStored'
 import { SpeakerIcon, StarIcon } from '../art/icons'
+import { VoiceButton } from '../components/VoiceButton'
 
 export function Phrases() {
   const { speak, speakingId, supported } = useSpeech()
@@ -52,6 +53,7 @@ export function Phrases() {
           <SpeakerIcon />
         </button>
       )}
+      <VoiceButton phraseId={p.id} />
     </div>
   )
 

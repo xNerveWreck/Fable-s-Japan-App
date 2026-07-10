@@ -1,7 +1,9 @@
 /**
  * IndexedDB for the Kioku journal — entries and photos are too big and too
- * precious for localStorage. Two stores: 'journal' keyed by dayId, 'photos'
- * keyed by photo id (Blobs).
+ * precious for localStorage. Stores: 'journal' keyed by dayId, 'photos'
+ * keyed by photo id (Blobs), 'voices' keyed by phrase id (Blobs) — the
+ * family's own recordings of each phrase. Deliberately not in Family Sync;
+ * audio stays on the phone that recorded it.
  */
 
 export interface JournalPhoto {
@@ -18,7 +20,7 @@ export interface JournalEntry {
 }
 
 const DB_NAME = 'tabi-kioku'
-const DB_VERSION = 1
+const DB_VERSION = 2
 
 let dbPromise: Promise<IDBDatabase> | null = null
 
@@ -29,6 +31,7 @@ function open(): Promise<IDBDatabase> {
       const db = req.result
       if (!db.objectStoreNames.contains('journal')) db.createObjectStore('journal', { keyPath: 'dayId' })
       if (!db.objectStoreNames.contains('photos')) db.createObjectStore('photos')
+      if (!db.objectStoreNames.contains('voices')) db.createObjectStore('voices')
     }
     req.onsuccess = () => resolve(req.result)
     req.onerror = () => reject(req.error)
@@ -84,6 +87,22 @@ export async function getPhoto(id: string): Promise<Blob | undefined> {
   const db = await open()
   return new Promise((resolve, reject) => {
     const req = db.transaction('photos').objectStore('photos').get(id)
+    req.onsuccess = () => resolve(req.result as Blob | undefined)
+    req.onerror = () => reject(req.error)
+  })
+}
+
+export async function putVoice(id: string, blob: Blob): Promise<void> {
+  const db = await open()
+  const tx = db.transaction('voices', 'readwrite')
+  tx.objectStore('voices').put(blob, id)
+  return txDone(tx)
+}
+
+export async function getVoice(id: string): Promise<Blob | undefined> {
+  const db = await open()
+  return new Promise((resolve, reject) => {
+    const req = db.transaction('voices').objectStore('voices').get(id)
     req.onsuccess = () => resolve(req.result as Blob | undefined)
     req.onerror = () => reject(req.error)
   })

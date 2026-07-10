@@ -1840,3 +1840,48 @@
   padding: 32px 20px;
   line-height: 1.6;
 }
+
+/* ---------- voice phrasebook ---------- */
+
+.voice-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.voice-btn,
+.voice-play {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1.4px solid var(--hairline);
+  transition: all 0.3s var(--ease-spring);
+}
+
+.voice-btn svg,
+.voice-play svg { width: 14px; height: 14px; }
+
+.voice-btn:active,
+.voice-play:active { transform: scale(0.88); }
+
+.voice-btn.vb-recording {
+  background: var(--vermillion);
+  border-color: var(--vermillion);
+  color: #fff;
+  animation: vb-pulse 1.2s ease infinite;
+}
+
+@keyframes vb-pulse {
+  50% { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-btn.vb-recording { animation: none; }
+}
