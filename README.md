@@ -17,12 +17,11 @@ Fourteen days, hand-crafted. Built for iPhone, works offline, beautiful in dayli
 
 ## Current state
 
-**As of 2026-07-10 — v3.1.0 pending merge.** `main` carries v2.1 *Kioku* plus the
-v3 *Ikiteiru* core (solar clock, microseasons, nijimi, living vignettes, Fuji
-Window) and auto-deploys via the GitHub Pages workflow. Branch `claude/trip-pack`
-(the family voice phrasebook, Denshadex, Deer Diplomacy, Side Quests v1 — 79-check
-suite green) awaits the owner's merge; on merge it becomes the repo's first tag,
-**v3.1.0**, with a GitHub Release. **Source of truth:** GitHub
+**As of 2026-07-10 — [v3.1.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.1.0) shipped** (the repo's first tagged release, built app attached).
+`main` carries v2.1 *Kioku*, the v3 *Ikiteiru* core (solar clock, microseasons,
+nijimi, living vignettes, Fuji Window), and the trip pack (family voice
+phrasebook, Denshadex, Deer Diplomacy, Side Quests v1) — 79-check suite green —
+and auto-deploys via the GitHub Pages workflow. **Source of truth:** GitHub
 `xNerveWreck/Fable-s-Japan-App`, branch `main`; agents `git fetch` before working
 (the owner edits from claude.ai cloud sessions too). **Verify a checkout:**
 `npm install`, `npx playwright install chromium`, `npm run build`, `npm run check`
