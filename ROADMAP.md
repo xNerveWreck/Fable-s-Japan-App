@@ -16,19 +16,19 @@
 
 The four items below are agreed and specced in spirit. They deepen what exists without changing its soul.
 
-1. **Kioku Journal** `M · offline` — One entry per day: free text plus photos, stored in IndexedDB (localStorage
+1. **Kioku Journal** ✅ `M · offline` — One entry per day: free text plus photos, stored in IndexedDB (localStorage
    graduates with it). Loved moments auto-seed the entry. A WebGL ink-wash filter renders each photo as sumi-e
    so real memories live inside the app's art style instead of clashing with it. The treasures list becomes an
    illustrated diary the kids scroll on the flight home.
-2. **Sound & haptic grammar** `S · offline` — A synthesized Web Audio layer (no samples, ~0 KB): a stone *tap*
+2. **Sound & haptic grammar** ✅ `S · offline` — A synthesized Web Audio layer (no samples, ~0 KB): a stone *tap*
    for did-it, a soft double heartbeat for loved-it, a brush *sweep* for skipped, the deep hanko *thunk* when an
    eki-stamp lands, a temple bell when a day completes. Paired vibration patterns. Off by default; one
    brush-icon tap to enable; always ducked under speech synthesis.
-3. **Four travelers** `M · offline` — Each family member picks a name, an animal mascot (fox, deer, crane,
+3. **Four travelers** ✅ `M · offline` — Each family member picks a name, an animal mascot (fox, deer, crane,
    crab…), and an ink color. Packing lists become *theirs*, quiz scores become a family leaderboard, loved
    moments carry whose heart it was, and Family Sync merges say "Dad's phone brought 12 moments." The data
    model barely changes; the ownership changes everything.
-4. **The Japan clock** `S · offline` — Trip-day math pinned to JST so "Day 3 in Kyoto" flips at the right
+4. **The Japan clock** ✅ `S · offline` — Trip-day math pinned to JST so "Day 3 in Kyoto" flips at the right
    midnight for a jet-lagged family, plus groundwork for the solar palette (below): the app should know when
    the sun rises where *they* are.
 
@@ -122,10 +122,10 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 - **Living Sky Engine** `M · net` — Real weather piped straight into the `--art-*` variables: rain in Hakone
   becomes diagonal sumi rain-streaks, humidity softens ink contrast, wind drives the petals' drift. The kids
   look at the app, then out the ryokan window — and they match.
-- **Solar palette clock** `M · offline` — Replace binary day/night with continuous interpolation from real
+- **Solar palette clock** ✅ `M · offline` — Replace binary day/night with continuous interpolation from real
   sunrise/sunset math (pure on-device astronomy): asayake pink at dawn, washi cream at noon, a vermillion
   yūyake wash at dusk, a warm lantern hour, then indigo night. The app breathes on the country's clock.
-- **72 Microseasons** `M · offline` — Japan's classical calendar of five-day seasons ("First lotus blossoms,"
+- **72 Microseasons** ✅ `M · offline` — Japan's classical calendar of five-day seasons ("First lotus blossoms,"
   "Cool winds arrive") — computable offline — retunes the accent palette and writes the season's name in
   vertical calligraphy on the Journey header. The family learns Japan has 72 seasons, not four.
 - **Opening cinematic** `L · offline` — A skippable 20-second title: an unseen brush lays the route stroke in
@@ -138,10 +138,10 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 - **Generative soundscape** `L · offline` — Procedural Web Audio, synthesized not sampled: suikinkutsu water
   drops in Kyoto temples, cicada shimmer in summer, a furin chime whose ring rate follows the wind, the real
   5 p.m. gojī-no-chaimu melody the kids will recognize from the street.
-- **Living vignettes** `L · offline` — The city paintings become inhabited: tilt-parallax planes like an
+- **Living vignettes** ✅ `L · offline` — The city paintings become inhabited: tilt-parallax planes like an
   unrolling emakimono, a heron crossing the Kamo every few minutes, the ropeway gondola inching along its
   cable, Osaka's lanterns flickering after sunset.
-- **Nijimi ink physics** `M · offline` — Wet ink as the universal feedback: taps bloom small ink blots,
+- **Nijimi ink physics** ✅ `M · offline` — Wet ink as the universal feedback: taps bloom small ink blots,
   transitions are a loaded brush wiping across, pull-to-refresh drags a wet stroke that snaps back. One shared
   SVG filter primitive powers all of it.
 - **Generative kamon** `M · offline` — Each family member picks a motif and the app composes a proper enclosed
@@ -150,7 +150,7 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 - **Hiroshige forecast** `L · net` — Tomorrow's weather as a woodblock print: rain over Kyoto drawn as driving
   diagonal lines across a bridge, heat as shimmer above Osaka rooftops. Checking the weather becomes the most
   beautiful thing you do each morning.
-- **Fuji Window** `L · offline` — On the Tokyo→Kyoto leg, on-device GPS scrolls a painted Tōkaidō emakimono
+- **Fuji Window** ✅ `L · offline` — On the Tokyo→Kyoto leg, on-device GPS scrolls a painted Tōkaidō emakimono
   past the hero at the train's real speed — and pings "Fuji on the right in 3 minutes" at the exact geometric
   moment, blooming the mountain across the screen as it appears outside. The single most Japan-specific magic
   trick this app could perform.

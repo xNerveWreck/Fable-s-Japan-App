@@ -52,6 +52,10 @@ The visual language is drawn from sumi-e ink-wash painting and shin-hanga woodbl
 - **Fuji Window** *(v3)* — on the bullet-train day the app unrolls a painted Tōkaidō emakimono: tap *Begin the watch* as you board and on-device GPS walks a hanko-red train dot down the scroll, past Odawara and the Hakone hills, counting down to the real geometric moment — *"Fuji on the right in ~4 min"* — then **いまだ — LOOK RIGHT** as the mountain blooms across the painting in three washes, exactly as it fills the actual window (Fuji rides on the right heading west). Tunnels that eat the signal get their own patient status; no GPS at all leaves a painted map of the route. Fully offline — position needs no network. Preview the ride with `?ride=0.28`.
 
 <p align="center">
+  <img src="docs/screens/fuji-window-bloom.png" width="55%" alt="The Fuji Window at the LOOK RIGHT moment — the mountain blooming over the Tōkaidō scroll" />
+</p>
+
+<p align="center">
   <img src="docs/screens/v3-dawn.png" width="23%" alt="Journey home at asayake dawn" />
   <img src="docs/screens/v3-dusk.png" width="23%" alt="Journey home in the vermillion dusk wash" />
   <img src="docs/screens/v3-night.png" width="23%" alt="Journey home at indigo night with the microseason calligraphy" />
