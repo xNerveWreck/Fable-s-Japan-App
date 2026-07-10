@@ -398,6 +398,47 @@ try {
   await page.reload()
   await page.waitForTimeout(600)
   check('diplomacy is remembered', ((await page.textContent('.dd-count')) ?? '').includes('1'))
+
+  /* ---- 13. Side Quests: the city unlocks its secrets ---- */
+  const qCtx = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2,
+    isMobile: true,
+    hasTouch: true,
+  })
+  const qPage = await qCtx.newPage()
+  await qPage.goto(`${BASE}/#journey/2`)
+  await qPage.waitForTimeout(400)
+  await qPage.evaluate(() => localStorage.removeItem('tabi:departure'))
+  await qPage.reload()
+  await qPage.waitForTimeout(500)
+  check('quests locked before the trip', (await qPage.locator('.side-quests .sq-locked').count()) === 1)
+  // travel to day 2: departure was yesterday → today is the Tokyo day
+  await qPage.evaluate(() => {
+    const d = new Date()
+    d.setDate(d.getDate() - 1)
+    localStorage.setItem('tabi:departure', JSON.stringify(d.toLocaleDateString('en-CA')))
+  })
+  await qPage.reload()
+  await qPage.waitForTimeout(500)
+  check('being there unlocks the hunt', (await qPage.locator('.side-quests .sq-quest').count()) === 3)
+  await qPage.locator('.sq-quest').first().click()
+  await qPage.waitForTimeout(300)
+  await qPage.locator('.sq-found').click()
+  await qPage.waitForTimeout(400)
+  check('a find is inked', (await qPage.locator('.sq-quest.sq-done').count()) === 1)
+  await qPage.locator('.sq-quest').nth(1).click()
+  await qPage.waitForTimeout(300)
+  await qPage.locator('.sq-found').click()
+  await qPage.waitForTimeout(600)
+  check('two finds reward the painting', (await qPage.locator('.vignette[data-quests="2"]').count()) === 1)
+  await qPage.waitForTimeout(2200) // the reveal is a 2s ink transition — let it finish
+  const bonus = await qPage.locator('.vq-bonus').evaluate((el) => getComputedStyle(el).opacity)
+  check('the vignette gains its secret detail', Number(bonus) > 0.5, bonus)
+  await qPage.reload()
+  await qPage.waitForTimeout(500)
+  check('finds are remembered', (await qPage.locator('.sq-quest.sq-done').count()) === 2)
+  await qCtx.close()
 } finally {
   await browser.close()
   server.kill()
