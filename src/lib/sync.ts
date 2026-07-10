@@ -31,6 +31,8 @@ export interface TripState {
   /* v2.1 — optional so older links still decode */
   travelers?: SyncTraveler[]
   quizScores?: Record<string, number>
+  /* v3 — the Kit notes pad */
+  notes?: string
 }
 
 const K = {
@@ -43,6 +45,7 @@ const K = {
   reservations: 'tabi:reservations',
   travelers: 'tabi:travelers',
   quizScores: 'tabi:quiz-scores',
+  notes: 'tabi:notes',
 }
 
 function read<T>(key: string, fallback: T): T {
@@ -66,6 +69,7 @@ export function collectState(): TripState {
     reservations: read(K.reservations, {}),
     travelers: read(K.travelers, []),
     quizScores: read(K.quizScores, {}),
+    notes: read(K.notes, ''),
   }
 }
 
@@ -128,6 +132,13 @@ export function mergeState(incoming: TripState): void {
   const quizScores = read<Record<string, number>>(K.quizScores, {})
   for (const [id, best] of Object.entries(incoming.quizScores ?? {})) {
     quizScores[id] = Math.max(quizScores[id] ?? 0, best)
+  }
+
+  // notes: keep mine, append anything of theirs I don't already have
+  const myNotes = read<string>(K.notes, '')
+  const theirNotes = (incoming.notes ?? '').trim()
+  if (theirNotes && !myNotes.includes(theirNotes)) {
+    localStorage.setItem(K.notes, JSON.stringify(myNotes ? `${myNotes}\n⸻\n${theirNotes}` : theirNotes))
   }
 
   localStorage.setItem(K.travelers, JSON.stringify(travelers))

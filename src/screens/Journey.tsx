@@ -102,6 +102,11 @@ function JourneyHome({
   moments: MomentMap
   openDay: (id: number) => void
 }) {
+  // The date prompt lives here only until a departure exists. It must stay
+  // mounted through the whole picking interaction — iOS fires `change` on
+  // every wheel tick — so it retires on blur, not on first change.
+  // Afterwards the date is edited from Kit → Settings.
+  const [showDepartPrompt, setShowDepartPrompt] = useState(() => !departure)
   const totalActivities = useMemo(() => itinerary.reduce((n, d) => n + d.activities.length, 0), [])
   const doneCount = Object.values(moments).filter((m) => m === 'done' || m === 'loved').length
   const lovedKeys = Object.keys(moments).filter((k) => moments[k] === 'loved')
@@ -171,18 +176,18 @@ function JourneyHome({
             <h2>{countTitle}</h2>
             <div className="sub">{countSub}</div>
             {!onTrip && <div className="sub sub-sky">The sky over Japan: {PHASE_LABEL[phase]}</div>}
-            {/* Always mounted and controlled: the iOS wheel picker fires `change`
-                on every tick, so unmounting on first change dismisses it mid-pick.
-                Staying mounted also keeps a mistyped date correctable. */}
-            <label className="depart-row">
-              <span className="depart-label">{departure ? 'Departure · 出発' : 'Pick the day · 出発日'}</span>
-              <input
-                type="date"
-                aria-label="Departure date"
-                value={departure}
-                onChange={(e) => e.target.value && setDeparture(e.target.value)}
-              />
-            </label>
+            {showDepartPrompt && (
+              <label className="depart-row">
+                <span className="depart-label">{departure ? 'Departure · 出発' : 'Pick the day · 出発日'}</span>
+                <input
+                  type="date"
+                  aria-label="Departure date"
+                  value={departure}
+                  onChange={(e) => e.target.value && setDeparture(e.target.value)}
+                  onBlur={() => departure && setShowDepartPrompt(false)}
+                />
+              </label>
+            )}
           </div>
         </div>
 
