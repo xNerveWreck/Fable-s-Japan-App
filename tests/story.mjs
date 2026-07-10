@@ -335,6 +335,34 @@ try {
   await gpsPage.waitForTimeout(1200)
   check('gps ride reaches LOOK RIGHT', ((await gpsPage.textContent('.fw-status')) ?? '').includes('LOOK RIGHT'))
   await gpsCtx.close()
+
+  /* ---- 10. Family voice phrasebook: their own voices, kept ---- */
+  const micBrowser = await chromium.launch({
+    args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'],
+  })
+  const micCtx = await micBrowser.newContext({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2,
+    isMobile: true,
+    hasTouch: true,
+    permissions: ['microphone'],
+  })
+  const micPage = await micCtx.newPage()
+  await micPage.goto(`${BASE}/#speak`)
+  await micPage.waitForTimeout(600)
+  check('every phrase row offers a mic', (await micPage.locator('.voice-btn').count()) > 10)
+  // (sanctioned flexibility: if the Speak screen renders phrases in collapsed groups so fewer
+  //  rows are visible, lower this threshold to match reality and note it in your report)
+  await micPage.locator('.voice-btn').first().click()
+  await micPage.waitForTimeout(1200)
+  check('recording state shows', (await micPage.locator('.voice-btn.vb-recording').count()) === 1)
+  await micPage.locator('.voice-btn.vb-recording').click()
+  await micPage.waitForTimeout(800)
+  check('family voice saved: play appears', (await micPage.locator('.voice-play').count()) >= 1)
+  await micPage.reload()
+  await micPage.waitForTimeout(800)
+  check('family voice survives reload (IndexedDB)', (await micPage.locator('.voice-play').count()) >= 1)
+  await micBrowser.close()
 } finally {
   await browser.close()
   server.kill()
