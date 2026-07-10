@@ -11,6 +11,12 @@ Fresh web sessions arrive ready: a SessionStart hook (`.claude/hooks/session-sta
 installs dependencies and builds before the first turn. Type `/pickup` (or just say
 "continue") to audit where the project stands and get a proposed next increment.
 
+**Desktop / local** — one-time setup after cloning: `npm install`, then
+`npx playwright install chromium` (so `npm run check` can drive a browser).
+The same CLAUDE.md, hooks, and `/pickup` load from the project files. `/pickup`
+begins by syncing with origin, so web and desktop sessions interleave safely —
+the repo is the only memory shared between surfaces; never end a session unwrapped.
+
 ## Commands
 
 ```bash
