@@ -1282,6 +1282,99 @@
   }
 }
 
+/* ---------- fuji window — the Day-7 Tōkaidō scroll ---------- */
+
+.fuji-window {
+  margin-top: 14px;
+  padding: 14px 0 12px;
+  overflow: hidden;
+}
+
+.fw-head {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 0 16px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vermillion);
+}
+
+.fw-head-jp {
+  letter-spacing: 0.02em;
+  color: var(--ink-faint);
+}
+
+.fw-speed {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.fw-viewport {
+  overflow: hidden;
+  height: 120px;
+}
+
+.fw-strip {
+  transition: transform 1.8s ease-out;
+  will-change: transform;
+}
+
+.fw-status {
+  margin: 10px 16px 0;
+  font-family: var(--font-display);
+  font-size: 16.5px;
+  color: var(--ink);
+}
+
+.fw-status.fw-look {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--vermillion);
+}
+
+.fw-begin {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 12px 16px 2px;
+  padding: 11px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  color: var(--ink);
+}
+
+/* the three washes: modest until the window, then Fuji arrives */
+.fw-wash-body,
+.fw-wash-snow {
+  opacity: 0.5;
+}
+
+.fw-wash-halo {
+  opacity: 0;
+}
+
+.fuji-window.fw-bloom .fw-wash-halo { animation: fw-halo 2.8s ease-out forwards; }
+.fuji-window.fw-bloom .fw-wash-body { animation: fw-wash-in 1.6s ease-out forwards; }
+.fuji-window.fw-bloom .fw-wash-snow { animation: fw-wash-in 2.2s ease-out 0.6s forwards; }
+
+@keyframes fw-halo { to { opacity: 0.55; } }
+@keyframes fw-wash-in { from { opacity: 0.5; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-strip { transition: none; }
+  .fuji-window.fw-bloom .fw-wash-halo { animation: none; opacity: 0.55; }
+  .fuji-window.fw-bloom .fw-wash-body,
+  .fuji-window.fw-bloom .fw-wash-snow { animation: none; opacity: 1; }
+}
+
 /* ---------- today / up next ---------- */
 
 .today-next {
