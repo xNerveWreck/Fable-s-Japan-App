@@ -1,0 +1,210 @@
+/**
+ * The story suite — tests the narrative of use, not the functions
+ * (PROCESS.md, field note 4). Serves the production build, drives it in a
+ * phone-sized Chromium, and walks the stories that have bitten us before:
+ * set a departure date and correct it, flip between days, watch the sun
+ * move the palette, tap a moment and see the ink bloom.
+ *
+ * Run with `npm run check` (builds are not triggered — run `npm run build`
+ * first). Set SHOT_DIR=/some/dir to also capture screenshots.
+ */
+import { chromium } from 'playwright'
+import { spawn } from 'child_process'
+import { existsSync, mkdirSync } from 'fs'
+
+const PORT = 4174
+const BASE = `http://localhost:${PORT}`
+const SHOT_DIR = process.env.SHOT_DIR
+if (SHOT_DIR) mkdirSync(SHOT_DIR, { recursive: true })
+
+/* ---------- date + solar helpers (mirroring src/lib/dates.ts, solar.ts) ---------- */
+
+const jstToday = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Tokyo' })
+const localToday = () => new Date().toLocaleDateString('en-CA')
+
+function shiftDate(date, delta) {
+  const [y, m, d] = date.split('-').map(Number)
+  return new Date(Date.UTC(y, m - 1, d + delta)).toISOString().slice(0, 10)
+}
+
+const RAD = Math.PI / 180
+function sunAltitude(at, lat, lon) {
+  const d = (at.getTime() - Date.UTC(2000, 0, 1, 12)) / 86400000
+  const L = (280.46 + 0.9856474 * d) % 360
+  const g = ((357.528 + 0.9856003 * d) % 360) * RAD
+  const lambda = (L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) * RAD
+  const epsilon = 23.439 * RAD
+  const decl = Math.asin(Math.sin(epsilon) * Math.sin(lambda))
+  const ra = Math.atan2(Math.cos(epsilon) * Math.sin(lambda), Math.cos(lambda))
+  const gmst = (18.697374558 + 24.06570982441908 * d) % 24
+  const h = (gmst * 15 + lon) * RAD - ra
+  return Math.asin(Math.sin(lat * RAD) * Math.sin(decl) + Math.cos(lat * RAD) * Math.cos(decl) * Math.cos(h)) / RAD
+}
+
+/** Find the JST clock time (HH:MM) today when Tokyo's sun is nearest `target`
+ *  degrees, rising or falling — so the phase checks hold in any season. */
+function jstTimeAtAltitude(target, rising) {
+  const [y, m, d] = jstToday().split('-').map(Number)
+  let best = null
+  for (let min = 0; min < 1440; min += 2) {
+    const at = new Date(Date.UTC(y, m - 1, d, -9, min)) // JST midnight + min
+    const alt = sunAltitude(at, 35.68, 139.77)
+    const later = sunAltitude(new Date(at.getTime() + 300000), 35.68, 139.77)
+    if (later > alt !== rising) continue
+    const err = Math.abs(alt - target)
+    if (!best || err < best.err) best = { err, min }
+  }
+  const hh = String(Math.floor(best.min / 60)).padStart(2, '0')
+  const mm = String(best.min % 60).padStart(2, '0')
+  return `${hh}:${mm}`
+}
+
+/* ---------- harness ---------- */
+
+const results = []
+const check = (name, ok, extra = '') =>
+  results.push(`${ok ? 'PASS' : 'FAIL'}  ${name}${extra ? ' — ' + extra : ''}`)
+const shot = (page, name) => (SHOT_DIR ? page.screenshot({ path: `${SHOT_DIR}/${name}.png` }) : Promise.resolve())
+
+const server = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], {
+  stdio: 'ignore',
+})
+for (let i = 0; i < 50; i++) {
+  try {
+    await fetch(BASE)
+    break
+  } catch {
+    await new Promise((r) => setTimeout(r, 200))
+  }
+}
+
+// prefer a system-provided chromium (e.g. sandboxed dev containers);
+// otherwise use whatever `npx playwright install chromium` put in place
+const SYSTEM_CHROMIUM = '/opt/pw-browsers/chromium'
+const browser = await chromium.launch(existsSync(SYSTEM_CHROMIUM) ? { executablePath: SYSTEM_CHROMIUM } : {})
+const ctx = await browser.newContext({
+  viewport: { width: 390, height: 844 },
+  deviceScaleFactor: 2,
+  isMobile: true,
+  hasTouch: true,
+})
+const page = await ctx.newPage()
+
+try {
+  /* ---- 1. The departure-date story: set, survive, correct ---- */
+  await page.goto(`${BASE}/`)
+  await page.waitForTimeout(700)
+  const dateInput = page.locator('input[type="date"]')
+  check('date input visible on fresh open', await dateInput.isVisible())
+  await dateInput.fill(shiftDate(jstToday(), -6)) // today becomes trip day 7
+  await page.waitForTimeout(400)
+  check('date input still mounted after set (iOS picker survives)', await dateInput.isVisible())
+  check(
+    'countdown flipped to trip day 7',
+    (await page.textContent('.countdown h2'))?.includes('Day 7') ?? false,
+    (await page.textContent('.countdown h2')) ?? ''
+  )
+  await dateInput.fill(shiftDate(localToday(), 10)) // correcting a mistake
+  await page.waitForTimeout(400)
+  const h2 = await page.textContent('.countdown h2')
+  check('date is correctable after being set', h2?.includes('10 days until Japan') ?? false, h2 ?? '')
+  const persisted = await page.evaluate(() => localStorage.getItem('tabi:departure'))
+  check('departure persisted', persisted === JSON.stringify(shiftDate(localToday(), 10)), persisted ?? 'null')
+
+  /* ---- 2. The day-pager story: flip through the trip like scroll pages ---- */
+  await page.goto(`${BASE}/#journey/7`)
+  await page.waitForTimeout(600)
+  check('header day-steps present', (await page.locator('.day-steps .step').count()) === 2)
+  check('footer pager shows both neighbours on day 7', (await page.locator('.pager-card').count()) === 2)
+  await page.locator('.pager-card.pager-next').click()
+  await page.waitForTimeout(500)
+  check('pager-next lands on day 8', (await page.textContent('.detail-top .title'))?.includes('Day 8') ?? false)
+  await page.locator('.day-steps .step-prev').click()
+  await page.waitForTimeout(500)
+  check('header prev returns to day 7', (await page.textContent('.detail-top .title'))?.includes('Day 7') ?? false)
+  await page.goto(`${BASE}/#journey/1`)
+  await page.waitForTimeout(400)
+  check('day 1 has no prev card, one next', (await page.locator('.pager-card').count()) === 1)
+  check('day 1 prev step disabled', await page.locator('.day-steps .step-prev').isDisabled())
+  await shot(page, 'day-detail-pager')
+  await page.goto(`${BASE}/#journey/14`)
+  await page.waitForTimeout(400)
+  check('day 14 next step disabled', await page.locator('.day-steps .step').last().isDisabled())
+
+  /* ---- 3. The solar clock: the palette follows Tokyo's real sun ---- */
+  await page.evaluate(() => localStorage.removeItem('tabi:departure')) // Tokyo fallback
+  const phases = [
+    [jstTimeAtAltitude(-8, true), 'dawn'],
+    ['12:00', 'day'],
+    [jstTimeAtAltitude(1, false), 'dusk'],
+    [jstTimeAtAltitude(-7, false), 'lantern'],
+    ['00:30', 'night'],
+  ]
+  for (const [clock, expect] of phases) {
+    await page.goto(`${BASE}/?clock=${clock}#journey`)
+    await page.waitForTimeout(700)
+    const phase = await page.evaluate(() => document.documentElement.dataset.phase)
+    const paper = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--paper'))
+    check(`clock ${clock} → phase ${expect}`, phase === expect, `got ${phase}, paper ${paper.trim()}`)
+    const themeColor = await page.evaluate(
+      () => document.querySelector('meta[name="theme-color"]')?.getAttribute('content') ?? ''
+    )
+    check(`browser chrome follows the sun at ${clock}`, themeColor.trim() === paper.trim(), themeColor)
+    await shot(page, `solar-${expect}`)
+  }
+  // the reading surface must never be twilight mud: paper and ink stay apart
+  for (const [clock] of phases) {
+    await page.goto(`${BASE}/?clock=${clock}#journey`)
+    await page.waitForTimeout(500)
+    const gap = await page.evaluate(() => {
+      const readCh = (name) =>
+        getComputedStyle(document.documentElement).getPropertyValue(name).match(/\d+/g).slice(0, 3).map(Number)
+      const [pr, pg, pb] = readCh('--paper')
+      const [ir, ig, ib] = readCh('--ink')
+      return Math.abs(pr - ir) + Math.abs(pg - ig) + Math.abs(pb - ib)
+    })
+    check(`paper/ink contrast holds at ${clock}`, gap > 300, `Σ|Δrgb| = ${gap}`)
+  }
+
+  /* ---- 4. The microseason calligraphy renders with real height ---- */
+  await page.goto(`${BASE}/#journey`)
+  await page.waitForTimeout(600)
+  const kanji = (await page.locator('.hero-sekki .sekki-kanji').allTextContents()).join('')
+  const box = await page.locator('.hero-sekki').boundingBox()
+  check('microseason kanji present (3–4 glyphs)', kanji.length >= 3 && kanji.length <= 4, kanji)
+  check('microseason column has real height', (box?.height ?? 0) > 60, `h=${box?.height}`)
+  check('season note present', ((await page.textContent('.hero-season-note')) ?? '').length > 3)
+
+  /* ---- 5. Nijimi: a tri-state tap blooms and cleans up ---- */
+  await page.goto(`${BASE}/#journey/7`)
+  await page.waitForTimeout(500)
+  await page.locator('.state-btn.sb-loved').first().click()
+  check('ink bloom spawns on loved tap', (await page.locator('.ink-bloom').count()) >= 1)
+  await page.waitForTimeout(1400)
+  check('ink bloom cleans itself up', (await page.locator('.ink-bloom').count()) === 0)
+
+  /* ---- 6. Regression sweep: all tabs render ---- */
+  for (const tab of ['journey', 'discover', 'speak', 'kit']) {
+    await page.goto(`${BASE}/#${tab}`)
+    await page.waitForTimeout(400)
+    check(`tab ${tab} renders`, (await page.locator('.screen').count()) > 0)
+  }
+
+  /* ---- 7. Demo mode seeds day 7 and ?clock survives its replaceState ---- */
+  const p2 = await ctx.newPage()
+  await p2.goto(`${BASE}/?demo=1&clock=00:30#journey`)
+  await p2.waitForTimeout(800)
+  check('demo seeds day 7', (await p2.textContent('.countdown h2'))?.includes('Day 7') ?? false)
+  check(
+    '?clock survives demo replaceState',
+    (await p2.evaluate(() => document.documentElement.dataset.phase)) === 'night'
+  )
+} finally {
+  await browser.close()
+  server.kill()
+}
+
+console.log(results.join('\n'))
+const fails = results.filter((r) => r.startsWith('FAIL')).length
+console.log(`\n${results.length - fails}/${results.length} checks green`)
+process.exit(fails ? 1 : 0)
