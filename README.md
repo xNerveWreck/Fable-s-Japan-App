@@ -15,6 +15,19 @@ Fourteen days, hand-crafted. Built for iPhone, works offline, beautiful in dayli
   <img src="docs/screens/day-detail-light.png" width="30%" alt="Day 8 detail — Fushimi Inari timeline" />
 </p>
 
+## Current state
+
+**As of 2026-07-10 — v3.1.0 pending merge.** `main` carries v2.1 *Kioku* plus the
+v3 *Ikiteiru* core (solar clock, microseasons, nijimi, living vignettes, Fuji
+Window) and auto-deploys via the GitHub Pages workflow. Branch `claude/trip-pack`
+(the family voice phrasebook, Denshadex, Deer Diplomacy, Side Quests v1 — 79-check
+suite green) awaits the owner's merge; on merge it becomes the repo's first tag,
+**v3.1.0**, with a GitHub Release. **Source of truth:** GitHub
+`xNerveWreck/Fable-s-Japan-App`, branch `main`; agents `git fetch` before working
+(the owner edits from claude.ai cloud sessions too). **Verify a checkout:**
+`npm install`, `npx playwright install chromium`, `npm run build`, `npm run check`
+— every check green, no exceptions. Session log: [SESSION_NOTES.md](SESSION_NOTES.md).
+
 ## What this is
 
 Tabi (旅, *journey*) is a complete travel companion for a family's first two weeks in Japan — Tokyo → Hakone → Kyoto → Nara → Osaka. It's a React PWA designed exclusively for the iPhone in your pocket on a Kyoto street corner: installable to the Home Screen, fully offline once loaded, no accounts, no servers, no tracking. Everything lives on the device.
