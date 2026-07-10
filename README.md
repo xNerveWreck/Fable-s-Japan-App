@@ -89,7 +89,7 @@ empty states hide magic.
 
 ## Stack
 
-React 18 + TypeScript + Vite. No UI libraries, no CSS frameworks, no runtime dependencies beyond React — the entire app is ~99 KB gzipped, MIT licensed. Verified with the committed story suite ([`tests/story.mjs`](tests/story.mjs), `npm run check`): 33 checks at iPhone viewport that walk the real narratives — set a departure date and correct it, flip between days, watch the palette cross five solar phases without ever losing paper/ink contrast, bloom ink on a loved moment.
+React 18 + TypeScript + Vite. No UI libraries, no CSS frameworks, no runtime dependencies beyond React — the entire app is ~99 KB gzipped, MIT licensed. Verified with the committed story suite ([`tests/story.mjs`](tests/story.mjs), `npm run check`): 38 checks at iPhone viewport that walk the real narratives — set a departure date and correct it, flip between days, watch the palette cross five solar phases without ever losing paper/ink contrast, bloom ink on a loved moment.
 
 ---
 
