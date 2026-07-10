@@ -295,6 +295,46 @@ try {
     .evaluate((el) => ({ anim: getComputedStyle(el).animationName, o: getComputedStyle(el).opacity }))
   check('reduce-motion neon stays lit at night', rmNeon.anim === 'none' && Number(rmNeon.o) > 0.5, `${rmNeon.anim} @ ${rmNeon.o}`)
   await rmCtx.close()
+
+  /* ---- 9. Fuji Window: the Tōkaidō scroll keeps the appointment ---- */
+  await page.goto(`${BASE}/#journey/6`)
+  await page.waitForTimeout(400)
+  check('no fuji window on other days', (await page.locator('.fuji-window').count()) === 0)
+  await page.goto(`${BASE}/#journey/7`)
+  await page.waitForTimeout(500)
+  check('fuji window card on the bullet-train day', (await page.locator('.fuji-window').count()) === 1)
+  check('the watch awaits a tap', (await page.locator('.fw-begin').count()) === 1)
+  await page.goto(`${BASE}/?ride=0.15#journey/7`)
+  await page.waitForTimeout(500)
+  check('countdown before the window', ((await page.textContent('.fw-status')) ?? '').includes('Fuji on the right in'))
+  await page.goto(`${BASE}/?ride=0.28#journey/7`)
+  await page.waitForTimeout(500)
+  check('LOOK RIGHT inside the window', ((await page.textContent('.fw-status')) ?? '').includes('LOOK RIGHT'))
+  check('fuji blooms', (await page.locator('.fuji-window.fw-bloom').count()) === 1)
+  await page.goto(`${BASE}/?ride=0.6#journey/7`)
+  await page.waitForTimeout(500)
+  check('fuji behind you', ((await page.textContent('.fw-status')) ?? '').includes('behind you'))
+
+  // the real GPS path: grant geolocation, ride Shin-Yokohama → Shin-Fuji
+  const gpsCtx = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2,
+    isMobile: true,
+    hasTouch: true,
+    geolocation: { latitude: 35.507, longitude: 139.617 },
+    permissions: ['geolocation'],
+  })
+  const gpsPage = await gpsCtx.newPage()
+  await gpsPage.goto(`${BASE}/#journey/7`)
+  await gpsPage.waitForTimeout(500)
+  await gpsPage.locator('.fw-begin').click()
+  await gpsPage.waitForTimeout(800)
+  const early = (await gpsPage.textContent('.fw-status')) ?? ''
+  check('gps fix places the train early on the scroll', early.includes('Rolling') || early.includes('Fuji on the right'), early)
+  await gpsCtx.setGeolocation({ latitude: 35.142, longitude: 138.663 })
+  await gpsPage.waitForTimeout(1200)
+  check('gps ride reaches LOOK RIGHT', ((await gpsPage.textContent('.fw-status')) ?? '').includes('LOOK RIGHT'))
+  await gpsCtx.close()
 } finally {
   await browser.close()
   server.kill()
