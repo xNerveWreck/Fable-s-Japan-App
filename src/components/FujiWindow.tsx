@@ -5,8 +5,8 @@ const STRIP_W = 1560
 const X = (km: number) => (km / ROUTE_KM) * STRIP_W
 const xSta = (name: string) => X(CUM_KM[STATIONS.findIndex((s) => s.name === name)])
 
-function line(st: RideStatus | null): string {
-  if (!st) return 'Board, then begin the watch — the scroll knows the way'
+function line(st: RideStatus | null, searching: boolean): string {
+  if (!st) return searching ? 'Finding the train — the first fix can take a minute' : 'Board, then begin the watch — the scroll knows the way'
   switch (st.kind) {
     case 'rolling':
       return 'Rolling southwest — the scroll unrolls'
@@ -174,7 +174,15 @@ export function FujiWindow() {
         last.current = { km, at: now }
         setFix({ km, speed, at: now })
       },
-      () => setWatching(false), // denied or unavailable — the painting remains
+      (err) => {
+        // only a real denial stops the watch (the painting remains);
+        // tunnel timeouts stay armed — staleness paints the waiting state
+        if (err.code === err.PERMISSION_DENIED) {
+          if (watchId.current != null) navigator.geolocation.clearWatch(watchId.current)
+          watchId.current = null
+          setWatching(false)
+        }
+      },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
     )
   }
@@ -205,7 +213,7 @@ export function FujiWindow() {
         </div>
       </div>
       <p className={`fw-status${status?.kind === 'look' ? ' fw-look' : ''}`} role="status" aria-live="polite">
-        {line(status)}
+        {line(status, watching && !fix)}
       </p>
       {!watching && (
         <button className="fw-begin" onClick={begin}>
