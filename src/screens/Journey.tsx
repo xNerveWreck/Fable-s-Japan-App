@@ -3,6 +3,7 @@ import { itinerary, kindMeta, TRIP_LENGTH, type Day } from '../data/itinerary'
 import { phraseCategories } from '../data/phrases'
 import { useStored } from '../hooks/useStored'
 import { useSpeech } from '../hooks/useSpeech'
+import { useTilt } from '../hooks/useTilt'
 import type { Moment, Reservation } from '../lib/sync'
 import { daysBetween, jstToday, todayStr } from '../lib/dates'
 import { play } from '../lib/sound'
@@ -382,6 +383,7 @@ function DayDetail({
 }) {
   const prevDay = itinerary.find((d) => d.id === day.id - 1)
   const nextDay = itinerary.find((d) => d.id === day.id + 1)
+  const { ref: tiltRef, arm: armTilt } = useTilt<HTMLDivElement>()
 
   // wet ink blooms where the finger landed; keyboard taps bloom at the button
   const bloomAt = (e: MouseEvent<HTMLElement>, color: string) => {
@@ -419,7 +421,7 @@ function DayDetail({
         </div>
       </div>
 
-      <div className="vignette card">
+      <div className="vignette card" ref={tiltRef} onClick={armTilt}>
         <CityVignette city={day.city} />
       </div>
 

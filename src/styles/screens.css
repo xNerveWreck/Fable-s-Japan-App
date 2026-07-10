@@ -1155,6 +1155,133 @@
   overflow: hidden;
 }
 
+/* The paintings live: depth planes (tilt or drift), one ambient motion,
+   one timed visitor, one after-dark detail per scene. All browser-native
+   animation; reduced motion stills everything at the bottom. */
+
+.vg-far, .vg-mid, .vg-near,
+.vg-ship, .vg-mist, .vg-blossom, .vg-grass, .vg-deer-head, .vg-heron,
+.vg-heron-flap, .vg-gondola, .vg-claw, .vg-blink, .vg-clouds, .vg-waves,
+.vg-plane-ride, .vg-birds {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* depth: baked scale hides the edges parallax would reveal */
+.vignette:not([data-tilt='on']) .vg-far  { animation: vg-drift-far 44s ease-in-out infinite alternate; }
+.vignette:not([data-tilt='on']) .vg-mid  { animation: vg-drift-mid 34s ease-in-out infinite alternate; }
+.vignette:not([data-tilt='on']) .vg-near { animation: vg-drift-near 26s ease-in-out infinite alternate; }
+
+@keyframes vg-drift-far  { from { transform: translateX(-2px) scale(1.04); } to { transform: translateX(2px)  scale(1.04); } }
+@keyframes vg-drift-mid  { from { transform: translateX(3px)  scale(1.06); } to { transform: translateX(-3px) scale(1.06); } }
+@keyframes vg-drift-near { from { transform: translateX(-4px) scale(1.08); } to { transform: translateX(4px)  scale(1.08); } }
+
+.vignette[data-tilt='on'] .vg-far  { transform: translate(calc(var(--vg-x, 0) * -3px), calc(var(--vg-y, 0) * -1.5px)) scale(1.04); }
+.vignette[data-tilt='on'] .vg-mid  { transform: translate(calc(var(--vg-x, 0) * 5px),  calc(var(--vg-y, 0) * 2.5px))  scale(1.06); }
+.vignette[data-tilt='on'] .vg-near { transform: translate(calc(var(--vg-x, 0) * 9px),  calc(var(--vg-y, 0) * 4px))    scale(1.08); }
+
+/* ambient — always on, slow and small */
+.vg-birds   { animation: vg-birds-cross 76s linear infinite; }
+.vg-ship    { animation: vg-bob 9s ease-in-out infinite alternate; }
+.vg-mist    { animation: vg-mist-drift 47s ease-in-out infinite alternate; }
+.vg-blossom { animation: vg-sway 13s ease-in-out infinite alternate; }
+.vg-grass   { animation: vg-sway 6s ease-in-out infinite alternate; transform-origin: center bottom; }
+.vg-blink   { animation: vg-blink 9s linear infinite; }
+.vg-clouds  { animation: vg-mist-drift 53s ease-in-out infinite alternate; }
+.vg-waves   { animation: vg-bob 11s ease-in-out infinite alternate; }
+.vg-plane-ride { animation: vg-ride 12s ease-in-out infinite alternate; }
+
+@keyframes vg-birds-cross {
+  0%   { transform: translateX(-170px); opacity: 0; }
+  6%   { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateX(240px); opacity: 0; }
+}
+@keyframes vg-bob        { from { transform: translateY(-1.5px) rotate(-0.6deg); } to { transform: translateY(1.5px) rotate(0.6deg); } }
+@keyframes vg-mist-drift { from { transform: translateX(-14px); } to { transform: translateX(14px); } }
+@keyframes vg-sway       { from { transform: rotate(-1.4deg); } to { transform: rotate(1.4deg); } }
+@keyframes vg-blink      { 0%, 96.5%, 100% { transform: scaleY(1); } 98% { transform: scaleY(0.12); } }
+@keyframes vg-ride       { from { transform: translateY(-2px) rotate(-0.5deg); } to { transform: translateY(2px) rotate(0.5deg); } }
+
+/* timed visitors — long cycles, active only in the opening seconds,
+   staggered starts so no two cities share a rhythm */
+.vg-heron     { animation: vg-heron-fly 165s linear 20s infinite; }
+.vg-heron-flap{ animation: vg-flap 0.9s ease-in-out infinite; transform-origin: center bottom; }
+.vg-gondola   { animation: vg-gondola-run 150s linear 35s infinite; }
+.vg-deer-head { animation: vg-bow 140s ease-in-out 60s infinite; transform-origin: left bottom; }
+.vg-claw      { animation: vg-claw-wave 155s ease-in-out 50s infinite; transform-origin: left bottom; }
+
+@keyframes vg-heron-fly {
+  0%      { transform: translate(0, 6px); }
+  6%      { transform: translate(255px, -6px); }
+  12%     { transform: translate(500px, 2px); }
+  12.01%, 100% { transform: translate(0, 6px); }
+}
+@keyframes vg-flap { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-0.55); } }
+@keyframes vg-gondola-run {
+  0%      { transform: translate(0, 0); }
+  16%     { transform: translate(122px, -27px); }
+  16.01%, 100% { transform: translate(0, 0); }
+}
+@keyframes vg-bow {
+  0%, 3%  { transform: rotate(0deg); }
+  6%      { transform: rotate(15deg); }
+  9%      { transform: rotate(13deg); }
+  12%     { transform: rotate(0deg); }
+  100%    { transform: rotate(0deg); }
+}
+@keyframes vg-claw-wave {
+  0%, 2%  { transform: rotate(0deg); }
+  4%      { transform: rotate(-14deg); }
+  6%      { transform: rotate(-2deg); }
+  8%      { transform: rotate(-14deg); }
+  10%     { transform: rotate(0deg); }
+  100%    { transform: rotate(0deg); }
+}
+
+/* after dark — gated on the solar clock, so the paintings keep Tokyo time */
+.vg-neon { opacity: 0.16; }
+:root[data-phase='lantern'] .vg-win,
+:root[data-phase='night'] .vg-win { animation: vg-twinkle 6s ease-in-out infinite; }
+.vg-win:nth-of-type(2) { animation-delay: -1.7s; }
+.vg-win:nth-of-type(3) { animation-delay: -3.1s; }
+.vg-win:nth-of-type(4) { animation-delay: -4.3s; }
+.vg-win:nth-of-type(5) { animation-delay: -5.2s; }
+:root[data-phase='lantern'] .vg-neon,
+:root[data-phase='night'] .vg-neon { animation: vg-neon-flicker 7s linear infinite; }
+:root[data-phase='lantern'] .vg-neon:nth-of-type(2),
+:root[data-phase='night'] .vg-neon:nth-of-type(2) { animation-delay: -2.3s; }
+:root[data-phase='lantern'] .vg-neon:nth-of-type(3),
+:root[data-phase='night'] .vg-neon:nth-of-type(3) { animation-delay: -4.6s; }
+:root[data-phase='lantern'] .vg-flame,
+:root[data-phase='night'] .vg-flame { animation: vg-flame 1.8s linear infinite; }
+
+@keyframes vg-twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.9; } }
+@keyframes vg-neon-flicker {
+  0% { opacity: 0.16; } 3% { opacity: 0.75; } 4% { opacity: 0.3; } 6% { opacity: 0.8; }
+  50% { opacity: 0.7; } 52% { opacity: 0.45; } 54% { opacity: 0.78; } 100% { opacity: 0.72; }
+}
+@keyframes vg-flame { 0%, 100% { opacity: 0.9; } 30% { opacity: 0.55; } 60% { opacity: 0.8; } 80% { opacity: 0.6; } }
+
+/* demos, screenshots, and the story suite: visitors are already mid-scene */
+:root[data-vg='now'] .vg-heron     { animation-delay: -8s; }
+:root[data-vg='now'] .vg-gondola   { animation-delay: -10s; }
+:root[data-vg='now'] .vg-deer-head { animation-delay: -6s; }
+:root[data-vg='now'] .vg-claw      { animation-delay: -4s; }
+
+/* accessibility: a still painting is still a painting — same scene, no motion.
+   Neon keeps its lit night state statically; it just doesn't flicker. */
+@media (prefers-reduced-motion: reduce) {
+  .vignette [class^='vg-'],
+  .vignette [class*=' vg-'] {
+    animation: none !important;
+  }
+  :root[data-phase='lantern'] .vg-neon,
+  :root[data-phase='night'] .vg-neon {
+    opacity: 0.72;
+  }
+}
+
 /* ---------- today / up next ---------- */
 
 .today-next {
