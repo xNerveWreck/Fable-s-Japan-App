@@ -286,6 +286,14 @@ try {
   const rmHeron = await rmPage.locator('.vg-heron').evaluate((el) => getComputedStyle(el).animationName)
   const rmPlane = await rmPage.locator('.vignette .vg-near').evaluate((el) => getComputedStyle(el).animationName)
   check('reduce-motion stills the painting', rmHeron === 'none' && rmPlane === 'none', `${rmHeron} / ${rmPlane}`)
+  // …but stillness must not change the scene: neon is lit at night, just not flickering
+  await rmPage.goto(`${BASE}/?clock=00:30#journey/12`)
+  await rmPage.waitForTimeout(600)
+  const rmNeon = await rmPage
+    .locator('.vg-neon')
+    .first()
+    .evaluate((el) => ({ anim: getComputedStyle(el).animationName, o: getComputedStyle(el).opacity }))
+  check('reduce-motion neon stays lit at night', rmNeon.anim === 'none' && Number(rmNeon.o) > 0.5, `${rmNeon.anim} @ ${rmNeon.o}`)
   await rmCtx.close()
 } finally {
   await browser.close()

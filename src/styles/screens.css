@@ -1269,11 +1269,16 @@
 :root[data-vg='now'] .vg-deer-head { animation-delay: -6s; }
 :root[data-vg='now'] .vg-claw      { animation-delay: -4s; }
 
-/* accessibility: a still painting is still a painting */
+/* accessibility: a still painting is still a painting — same scene, no motion.
+   Neon keeps its lit night state statically; it just doesn't flicker. */
 @media (prefers-reduced-motion: reduce) {
   .vignette [class^='vg-'],
   .vignette [class*=' vg-'] {
     animation: none !important;
+  }
+  :root[data-phase='lantern'] .vg-neon,
+  :root[data-phase='night'] .vg-neon {
+    opacity: 0.72;
   }
 }
 
