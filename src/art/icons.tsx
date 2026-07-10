@@ -95,6 +95,18 @@ export function StarIcon({ filled = false }: { filled?: boolean }) {
   )
 }
 
+export function GearIcon() {
+  return (
+    <svg viewBox="0 0 26 26" aria-hidden="true">
+      <circle {...stroke} cx="13" cy="13" r="4.2" />
+      <path
+        {...stroke}
+        d="M13 3.6 V6.8 M13 19.2 V22.4 M3.6 13 H6.8 M19.2 13 H22.4 M6.4 6.4 L8.6 8.6 M17.4 17.4 L19.6 19.6 M19.6 6.4 L17.4 8.6 M8.6 17.4 L6.4 19.6"
+      />
+    </svg>
+  )
+}
+
 export function CheckIcon() {
   return (
     <svg viewBox="0 0 26 26" aria-hidden="true">

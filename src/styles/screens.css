@@ -148,7 +148,7 @@
   white-space: nowrap;
 }
 
-.countdown input[type='date'] {
+.depart-row input[type='date'] {
   border: 1px solid var(--hairline);
   background: var(--paper-deep);
   border-radius: 10px;
@@ -163,7 +163,7 @@
 }
 
 /* iOS renders the picked value invisibly short without an explicit line box */
-.countdown input[type='date']::-webkit-date-and-time-value {
+.depart-row input[type='date']::-webkit-date-and-time-value {
   text-align: left;
   min-height: 1.3em;
 }
@@ -928,6 +928,35 @@
 .quick-refs .chip { font-variant-numeric: tabular-nums; }
 
 /* packing */
+/* Kit header: title on the left, the settings gear opposite */
+.kit-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.kit-head .settings-btn {
+  margin-top: 22px;
+}
+
+.kit-head .settings-btn.on {
+  color: var(--sakura);
+  background: var(--sakura-wash);
+}
+
+.kit-head .settings-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.notes-body {
+  padding: 0 14px 14px;
+}
+
+.notes-body .journal-text {
+  margin-top: 0;
+}
+
 .pack-group { margin-top: 14px; }
 
 .pack-group .head {

@@ -110,6 +110,37 @@ try {
   check('date is correctable after being set', h2?.includes('10 days until Japan') ?? false, h2 ?? '')
   const persisted = await page.evaluate(() => localStorage.getItem('tabi:departure'))
   check('departure persisted', persisted === JSON.stringify(shiftDate(localToday(), 10)), persisted ?? 'null')
+  await dateInput.blur()
+  await page.waitForTimeout(300)
+  check('date prompt retires after the picker closes', (await page.locator('.depart-row').count()) === 0)
+
+  /* ---- 1b. Editing the date moves to Kit → Settings ---- */
+  await page.goto(`${BASE}/#kit`)
+  await page.waitForTimeout(500)
+  await page.locator('.settings-btn').click()
+  const kitDate = page.locator('[data-testid="kit-settings"] input[type="date"]')
+  check('Kit settings holds the departure date', await kitDate.isVisible())
+  await kitDate.fill(shiftDate(jstToday(), -6)) // back to trip day 7
+  await page.goto(`${BASE}/#journey`)
+  await page.waitForTimeout(500)
+  check(
+    'Kit-edited date drives the countdown',
+    (await page.textContent('.countdown h2'))?.includes('Day 7') ?? false
+  )
+
+  /* ---- 1c. Notes: write in the margin, survive a reload ---- */
+  await page.goto(`${BASE}/#kit`)
+  await page.waitForTimeout(500)
+  await page.locator('.pack-group .head', { hasText: 'Notes' }).click()
+  await page.locator('.notes-body textarea').fill('Coin locker B-24 at Kyoto Station')
+  await page.waitForTimeout(300)
+  await page.reload()
+  await page.waitForTimeout(600)
+  await page.locator('.pack-group .head', { hasText: 'Notes' }).click()
+  check(
+    'notes persist across reload',
+    (await page.locator('.notes-body textarea').inputValue()) === 'Coin locker B-24 at Kyoto Station'
+  )
 
   /* ---- 2. The day-pager story: flip through the trip like scroll pages ---- */
   await page.goto(`${BASE}/#journey/7`)

@@ -3,21 +3,34 @@ import { allergens, budgetGuide, emergencyItems, packGroups } from '../data/kit'
 import { useStored } from '../hooks/useStored'
 import { shareUrl } from '../lib/sync'
 import { play, type SoundName } from '../lib/sound'
-import { CheckIcon, ChevronIcon, ShareIcon } from '../art/icons'
+import { CheckIcon, ChevronIcon, GearIcon, ShareIcon } from '../art/icons'
 
 export function Kit() {
+  const [showSettings, setShowSettings] = useState(false)
+
   return (
     <div className="screen">
-      <header className="screen-head">
-        <div className="t-kicker">Travel kit · 道具</div>
-        <h1>Kit</h1>
-        <p className="sub">Money, packing, and the break-glass essentials.</p>
+      <header className="screen-head kit-head">
+        <div className="grow">
+          <div className="t-kicker">Travel kit · 道具</div>
+          <h1>Kit</h1>
+          <p className="sub">Money, packing, and the break-glass essentials.</p>
+        </div>
+        <button
+          className={`icon-btn settings-btn ${showSettings ? 'on' : ''}`}
+          aria-label="Settings"
+          aria-expanded={showSettings}
+          onClick={() => setShowSettings((s) => !s)}
+        >
+          <GearIcon />
+        </button>
       </header>
 
+      {showSettings && <KitSettings />}
       <Converter />
       <BudgetGuide />
       <Packing />
-      <SoundSettings />
+      <Notes />
       <AllergyCard />
       <FamilySync />
       <Emergency />
@@ -25,9 +38,10 @@ export function Kit() {
   )
 }
 
-/* ---------- sound & touch ---------- */
+/* ---------- settings: the trip's dials, out of the way ---------- */
 
-function SoundSettings() {
+function KitSettings() {
+  const [departure, setDeparture] = useStored<string>('departure', '')
   const [enabled, setEnabled] = useStored<boolean>('sound', false)
 
   const demoNames: { name: SoundName; label: string }[] = [
@@ -38,15 +52,30 @@ function SoundSettings() {
   ]
 
   return (
-    <section className="kit-section">
+    <section className="kit-section" data-testid="kit-settings">
       <div className="section-title">
-        <h2>Sound & touch</h2>
-        <span className="jp">音</span>
+        <h2>Settings</h2>
+        <span className="jp">設定</span>
       </div>
       <div className="card sync-card">
+        <label className="depart-row" style={{ marginTop: 0 }}>
+          <span className="depart-label">Departure · 出発</span>
+          <input
+            type="date"
+            aria-label="Departure date"
+            value={departure}
+            onChange={(e) => e.target.value && setDeparture(e.target.value)}
+          />
+        </label>
+        <p className="pocket-hint" style={{ marginTop: 6 }}>
+          The whole journey counts from this day — the countdown, “Day 3 in Kyoto”, the stamps.
+        </p>
+
+        <hr className="hr-ink" />
+
         <div className="row">
           <div className="grow">
-            <div style={{ fontWeight: 600, fontSize: 15 }}>Quiet by default</div>
+            <div style={{ fontWeight: 600, fontSize: 15 }}>Sound & touch · 音</div>
             <p className="pocket-hint" style={{ marginTop: 2 }}>
               Tiny synthesized tones and haptics for check-offs, loved moments, and landing stamps. Japan is the
               main event; these are brush-tip whispers.
@@ -72,6 +101,41 @@ function SoundSettings() {
                 ♪ {d.label}
               </button>
             ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- notes: the family's shared margin ---------- */
+
+function Notes() {
+  const [notes, setNotes] = useStored<string>('notes', '')
+  const [open, setOpen] = useState(false)
+
+  return (
+    <section className="kit-section">
+      <div className="card pack-group">
+        <button className="head" onClick={() => setOpen(!open)} aria-expanded={open}>
+          <span>📝</span>
+          <h3>Notes</h3>
+          <span className="count">{notes.trim() ? '…' : ''}</span>
+          <span className="twist" style={{ color: 'var(--ink-faint)', display: 'flex' }}>
+            <span style={{ width: 18, height: 18, display: 'flex', transform: `rotate(${open ? -90 : 90}deg)`, transition: 'transform .3s' }}>
+              <ChevronIcon />
+            </span>
+          </span>
+        </button>
+        {open && (
+          <div className="notes-body">
+            <textarea
+              className="journal-text"
+              rows={4}
+              placeholder="The trip's margin — locker numbers, a gate code, the ramen shop someone swore by, who owes who a gachapon…"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
           </div>
         )}
       </div>
