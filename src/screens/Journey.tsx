@@ -14,6 +14,7 @@ import { journalDays } from '../lib/db'
 import { TravelersCard } from '../components/Travelers'
 import { Journal } from '../components/Journal'
 import { FujiWindow } from '../components/FujiWindow'
+import { DeerDojo } from '../components/DeerDojo'
 import { InkHero } from '../art/InkHero'
 import { Petals } from '../art/Petals'
 import { CityVignette } from '../art/Vignettes'
@@ -427,6 +428,8 @@ function DayDetail({
       </div>
 
       {day.fujiWindow && <FujiWindow />}
+
+      {day.deerDojo && <DeerDojo />}
 
       <header className="detail-hero">
         <div className={`day-no text-${day.color}`}>

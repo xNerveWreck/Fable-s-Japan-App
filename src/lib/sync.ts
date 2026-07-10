@@ -35,6 +35,8 @@ export interface TripState {
   notes?: string
   /* v3.1 — Denshadex: train id -> first-ridden timestamp */
   densha?: Record<string, number>
+  /* v3.2 — Deer Diplomacy: total shika-senbei exchanges completed */
+  deer?: number
 }
 
 const K = {
@@ -49,6 +51,7 @@ const K = {
   quizScores: 'tabi:quiz-scores',
   notes: 'tabi:notes',
   densha: 'tabi:densha',
+  deer: 'tabi:deer',
 }
 
 function read<T>(key: string, fallback: T): T {
@@ -74,6 +77,7 @@ export function collectState(): TripState {
     quizScores: read(K.quizScores, {}),
     notes: read(K.notes, ''),
     densha: read(K.densha, {}),
+    deer: read(K.deer, 0),
   }
 }
 
@@ -151,7 +155,11 @@ export function mergeState(incoming: TripState): void {
     densha[id] = Math.min(densha[id] ?? Infinity, theirs)
   }
 
+  // deer diplomacy: keep the higher exchange count (most-practiced phone wins)
+  const deer = Math.max(read<number>(K.deer, 0), incoming.deer ?? 0)
+
   localStorage.setItem(K.densha, JSON.stringify(densha))
+  localStorage.setItem(K.deer, JSON.stringify(deer))
   localStorage.setItem(K.travelers, JSON.stringify(travelers))
   localStorage.setItem(K.quizScores, JSON.stringify(quizScores))
   localStorage.setItem(K.moments, JSON.stringify(moments))
