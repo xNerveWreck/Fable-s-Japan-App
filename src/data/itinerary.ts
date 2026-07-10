@@ -26,6 +26,8 @@ export interface Day {
   color: DayColor
   stay: string
   rainPlan?: string
+  /** The Tokyo→Kyoto shinkansen day: renders the Fuji Window scroll. */
+  fujiWindow?: boolean
   activities: Activity[]
 }
 
@@ -334,6 +336,7 @@ export const itinerary: Day[] = [
     color: 'indigo',
     stay: 'Machiya or hotel in Kyoto',
     rainPlan: 'Skip the shrine, linger in the onsen, catch an earlier train.',
+    fujiWindow: true,
     activities: [
       {
         time: '8:00',
