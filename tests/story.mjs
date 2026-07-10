@@ -66,7 +66,10 @@ const check = (name, ok, extra = '') =>
   results.push(`${ok ? 'PASS' : 'FAIL'}  ${name}${extra ? ' — ' + extra : ''}`)
 const shot = (page, name) => (SHOT_DIR ? page.screenshot({ path: `${SHOT_DIR}/${name}.png` }) : Promise.resolve())
 
-const server = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], {
+// spawn vite's JS entry with the current node binary — `npx` is a .cmd on
+// Windows, which spawn() can't execute without a shell (and a shell would
+// orphan the preview server on kill())
+const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'preview', '--port', String(PORT), '--strictPort'], {
   stdio: 'ignore',
 })
 for (let i = 0; i < 50; i++) {
