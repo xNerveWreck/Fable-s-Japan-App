@@ -381,6 +381,23 @@ try {
   await page.locator('.seg button', { hasText: 'Denshadex' }).click()
   await page.waitForTimeout(400)
   check('the ride is remembered', (await page.locator('.dx-card[data-train="n700s"].dx-logged').count()) === 1)
+
+  /* ---- 12. Deer Diplomacy: the protocol has three moves ---- */
+  await page.goto(`${BASE}/#journey/11`)
+  await page.waitForTimeout(500)
+  check('the dojo waits in Nara', (await page.locator('.deer-dojo').count()) === 1)
+  await page.locator('.dd-offer').click() // offering before bowing — rude!
+  await page.waitForTimeout(300)
+  check('skipping the bow is called out', ((await page.textContent('.dd-note')) ?? '').includes('bow'))
+  await page.locator('.dd-bow').click()
+  await page.locator('.dd-offer').click()
+  await page.locator('.dd-retreat').click()
+  await page.waitForTimeout(600)
+  check('a full exchange lands', ((await page.textContent('.dd-count')) ?? '').includes('1'))
+  check('first rank earned', ((await page.textContent('.dd-rank')) ?? '').includes('Nervous Envoy'))
+  await page.reload()
+  await page.waitForTimeout(600)
+  check('diplomacy is remembered', ((await page.textContent('.dd-count')) ?? '').includes('1'))
 } finally {
   await browser.close()
   server.kill()
