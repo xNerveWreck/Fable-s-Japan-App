@@ -233,6 +233,59 @@ try {
     '?clock survives demo replaceState',
     (await p2.evaluate(() => document.documentElement.dataset.phase)) === 'night'
   )
+
+  /* ---- 8. Living vignettes: the paintings breathe ---- */
+  await page.goto(`${BASE}/?vg=now#journey/7`) // Kyoto
+  await page.waitForTimeout(600)
+  check(
+    'kyoto painting has depth planes',
+    (await page.locator('.vignette .vg-far').count()) === 1 &&
+      (await page.locator('.vignette .vg-mid').count()) === 1 &&
+      (await page.locator('.vignette .vg-near').count()) === 1
+  )
+  const heron = await page.locator('.vg-heron').evaluate((el) => getComputedStyle(el).animationName)
+  check('the heron crosses the kyoto sky', heron.includes('vg-heron'), heron)
+  const drift = await page.locator('.vignette .vg-near').evaluate((el) => getComputedStyle(el).animationName)
+  check('planes drift when no tilt sensor', drift.includes('vg-drift'), drift)
+
+  // synthetic tilt readings wake the parallax (Chromium has no real sensor)
+  await page.evaluate(() => {
+    window.dispatchEvent(new DeviceOrientationEvent('deviceorientation', { beta: 45, gamma: 0 }))
+    window.dispatchEvent(new DeviceOrientationEvent('deviceorientation', { beta: 45, gamma: 12 }))
+  })
+  await page.waitForTimeout(200)
+  check('tilt readings wake the parallax', (await page.locator('.vignette[data-tilt="on"]').count()) === 1)
+
+  await page.goto(`${BASE}/?vg=now#journey/6`) // Hakone
+  await page.waitForTimeout(500)
+  const gondola = await page.locator('.vg-gondola').evaluate((el) => getComputedStyle(el).animationName)
+  check('the gondola inches along its cable', gondola.includes('vg-gondola'), gondola)
+
+  const lanternClock = jstTimeAtAltitude(-7, false)
+  await page.goto(`${BASE}/?clock=${lanternClock}&vg=now#journey/12`) // Osaka at lantern hour
+  await page.waitForTimeout(600)
+  const neonNight = await page.locator('.vg-neon').first().evaluate((el) => getComputedStyle(el).animationName)
+  check('osaka neon flickers after sunset', neonNight.includes('vg-neon'), neonNight)
+  await page.goto(`${BASE}/?clock=12:00#journey/12`)
+  await page.waitForTimeout(500)
+  const neonDay = await page.locator('.vg-neon').first().evaluate((el) => getComputedStyle(el).animationName)
+  check('osaka neon rests at noon', neonDay === 'none', neonDay)
+
+  // reduce-motion: the painting holds perfectly still
+  const rmCtx = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2,
+    isMobile: true,
+    hasTouch: true,
+    reducedMotion: 'reduce',
+  })
+  const rmPage = await rmCtx.newPage()
+  await rmPage.goto(`${BASE}/?vg=now#journey/7`)
+  await rmPage.waitForTimeout(600)
+  const rmHeron = await rmPage.locator('.vg-heron').evaluate((el) => getComputedStyle(el).animationName)
+  const rmPlane = await rmPage.locator('.vignette .vg-near').evaluate((el) => getComputedStyle(el).animationName)
+  check('reduce-motion stills the painting', rmHeron === 'none' && rmPlane === 'none', `${rmHeron} / ${rmPlane}`)
+  await rmCtx.close()
 } finally {
   await browser.close()
   server.kill()
