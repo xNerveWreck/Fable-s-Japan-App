@@ -33,6 +33,8 @@ export interface TripState {
   quizScores?: Record<string, number>
   /* v3 — the Kit notes pad */
   notes?: string
+  /* v3.1 — Denshadex: train id -> first-ridden timestamp */
+  densha?: Record<string, number>
 }
 
 const K = {
@@ -46,6 +48,7 @@ const K = {
   travelers: 'tabi:travelers',
   quizScores: 'tabi:quiz-scores',
   notes: 'tabi:notes',
+  densha: 'tabi:densha',
 }
 
 function read<T>(key: string, fallback: T): T {
@@ -70,6 +73,7 @@ export function collectState(): TripState {
     travelers: read(K.travelers, []),
     quizScores: read(K.quizScores, {}),
     notes: read(K.notes, ''),
+    densha: read(K.densha, {}),
   }
 }
 
@@ -141,6 +145,13 @@ export function mergeState(incoming: TripState): void {
     localStorage.setItem(K.notes, JSON.stringify(myNotes ? `${myNotes}\n⸻\n${theirNotes}` : theirNotes))
   }
 
+  // denshadex: earliest ride timestamp wins (first phone to log it keeps the date)
+  const densha = read<Record<string, number>>(K.densha, {})
+  for (const [id, theirs] of Object.entries(incoming.densha ?? {})) {
+    densha[id] = Math.min(densha[id] ?? Infinity, theirs)
+  }
+
+  localStorage.setItem(K.densha, JSON.stringify(densha))
   localStorage.setItem(K.travelers, JSON.stringify(travelers))
   localStorage.setItem(K.quizScores, JSON.stringify(quizScores))
   localStorage.setItem(K.moments, JSON.stringify(moments))
