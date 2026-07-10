@@ -5,6 +5,12 @@ No backend, no external assets; state lives in localStorage/IndexedDB. Read **RO
 sequenced v2.1 → v5) and **PROCESS.md** (how this project works: constraint-first method, ten field notes)
 before starting substantive work.
 
+## Picking up a session
+
+Fresh web sessions arrive ready: a SessionStart hook (`.claude/hooks/session-start.sh`)
+installs dependencies and builds before the first turn. Type `/pickup` (or just say
+"continue") to audit where the project stands and get a proposed next increment.
+
 ## Commands
 
 ```bash
