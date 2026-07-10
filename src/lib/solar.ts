@@ -325,4 +325,11 @@ export function applySolarPalette() {
   }
   root.dataset.phase = phase
   root.style.colorScheme = phase === 'night' || phase === 'lantern' ? 'dark' : 'light'
+
+  // the browser chrome (iOS status bar, PWA title bar) follows the sun too —
+  // the static media-scoped metas in index.html only cover the pre-JS frame
+  const paper = root.style.getPropertyValue('--paper')
+  document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((m) => {
+    m.content = paper
+  })
 }

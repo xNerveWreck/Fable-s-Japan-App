@@ -146,6 +146,10 @@ try {
     const phase = await page.evaluate(() => document.documentElement.dataset.phase)
     const paper = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--paper'))
     check(`clock ${clock} → phase ${expect}`, phase === expect, `got ${phase}, paper ${paper.trim()}`)
+    const themeColor = await page.evaluate(
+      () => document.querySelector('meta[name="theme-color"]')?.getAttribute('content') ?? ''
+    )
+    check(`browser chrome follows the sun at ${clock}`, themeColor.trim() === paper.trim(), themeColor)
     await shot(page, `solar-${expect}`)
   }
   // the reading surface must never be twilight mud: paper and ink stay apart

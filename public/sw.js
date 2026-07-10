@@ -1,5 +1,7 @@
-/* Tabi service worker — cache-first so the whole trip works offline in Japan. */
-const CACHE = 'tabi-v1'
+/* Tabi service worker — the whole trip works offline in Japan.
+   Navigations are network-first so updates actually reach installed apps;
+   hashed assets are cache-first (their names change when their bytes do). */
+const CACHE = 'tabi-v2'
 
 self.addEventListener('install', (event) => {
   self.skipWaiting()
@@ -19,6 +21,26 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return
+
+  // the app shell: try the network for freshness, fall back to cache offline
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((res) => {
+          if (res.ok) {
+            const copy = res.clone()
+            caches.open(CACHE).then((cache) => cache.put(event.request, copy))
+          }
+          return res
+        })
+        .catch(() =>
+          caches.match(event.request).then((hit) => hit || caches.match('./index.html'))
+        )
+    )
+    return
+  }
+
+  // everything else (hashed JS/CSS, icons): cache-first, backfill from network
   event.respondWith(
     caches.match(event.request).then(
       (hit) =>
