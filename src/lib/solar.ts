@@ -36,7 +36,7 @@ export function sunAltitude(at: Date, lat: number, lon: number): number {
 
 /* ---------- where the sun is looked up from ---------- */
 
-const CITY_COORDS: Record<string, [lat: number, lon: number]> = {
+export const CITY_COORDS: Record<string, [lat: number, lon: number]> = {
   Tokyo: [35.68, 139.77],
   Hakone: [35.19, 139.03],
   Kyoto: [35.01, 135.77],

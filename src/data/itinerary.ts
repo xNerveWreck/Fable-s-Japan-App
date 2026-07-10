@@ -28,6 +28,8 @@ export interface Day {
   rainPlan?: string
   /** The Tokyo→Kyoto shinkansen day: renders the Fuji Window scroll. */
   fujiWindow?: boolean
+  /** The Nara day: renders the Deer Diplomacy dojo. */
+  deerDojo?: boolean
   activities: Activity[]
 }
 
@@ -539,6 +541,7 @@ export const itinerary: Day[] = [
     color: 'sakura',
     stay: 'Machiya or hotel in Kyoto',
     rainPlan: 'Deer come out in rain anyway (they want the crackers). The Great Buddha is under the world’s biggest wooden roof.',
+    deerDojo: true,
     activities: [
       {
         time: '8:30',

@@ -175,6 +175,27 @@ export function ShareIcon() {
   )
 }
 
+export function MicIcon() {
+  return (
+    <svg viewBox="0 0 26 26" aria-hidden="true">
+      <g {...stroke}>
+        <rect x="9.5" y="3.5" width="7" height="12" rx="3.5" fill="currentColor" fillOpacity="0.15" />
+        <path d="M6 12 Q6 18.5 13 18.5 Q20 18.5 20 12" />
+        <path d="M13 18.5 V22.5" />
+        <path d="M9.5 22.5 H16.5" />
+      </g>
+    </svg>
+  )
+}
+
+export function PlaySmallIcon() {
+  return (
+    <svg viewBox="0 0 26 26" aria-hidden="true">
+      <path {...stroke} fill="currentColor" fillOpacity="0.9" d="M9 6.5 L20 13 L9 19.5 Z" />
+    </svg>
+  )
+}
+
 export function TrashIcon() {
   return (
     <svg viewBox="0 0 26 26" aria-hidden="true">

@@ -1840,3 +1840,403 @@
   padding: 32px 20px;
   line-height: 1.6;
 }
+
+/* ---------- voice phrasebook ---------- */
+
+.voice-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.voice-btn,
+.voice-play {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1.4px solid var(--hairline);
+  transition: all 0.3s var(--ease-spring);
+}
+
+.voice-btn svg,
+.voice-play svg { width: 14px; height: 14px; }
+
+.voice-btn:active,
+.voice-play:active { transform: scale(0.88); }
+
+.voice-btn.vb-recording {
+  background: var(--vermillion);
+  border-color: var(--vermillion);
+  color: #fff;
+  animation: vb-pulse 1.2s ease infinite;
+}
+
+@keyframes vb-pulse {
+  50% { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-btn.vb-recording { animation: none; }
+}
+
+/* ---------- denshadex ---------- */
+
+.dx-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.dx-card {
+  padding: 12px 12px 14px;
+  cursor: pointer;
+}
+
+.dx-art svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.dx-name {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.dx-jp {
+  font-size: 11.5px;
+  color: var(--ink-faint);
+}
+
+.dx-rarity {
+  display: inline-flex;
+  gap: 3px;
+  margin-top: 7px;
+}
+
+.dx-rarity i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--paper-deep);
+  border: 1px solid var(--hairline);
+}
+
+.dx-rarity i.on {
+  background: var(--vermillion);
+  border-color: var(--vermillion);
+}
+
+.dx-detail {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline);
+}
+
+.dx-line {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.dx-stats {
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.dx-blurb,
+.dx-kidfact {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin-top: 8px;
+}
+
+.dx-log {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--vermillion);
+}
+
+.dx-date {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+/* grey-until-logged: a plain rule on every svg shape always carries the
+   transition, so removing dx-locked (below) animates the flood back in —
+   CSS wins over the shapes' own SVG presentation attributes either way */
+.dx-card svg * {
+  transition: fill 0.8s ease, stroke 0.8s ease, opacity 0.8s ease;
+}
+
+.dx-locked svg * {
+  fill: var(--art-mtn-near);
+  stroke: var(--art-mtn-near);
+  opacity: 0.45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dx-card svg * { transition: none; }
+}
+
+/* ---------- deer diplomacy ---------- */
+
+.deer-dojo {
+  margin-top: 14px;
+  padding: 14px 16px 16px;
+}
+
+.dd-title {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.dd-title-jp {
+  margin-left: 6px;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+
+.dd-stage {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
+
+.dd-head {
+  transform-box: fill-box;
+  transform-origin: left bottom;
+  transition: transform 0.5s ease;
+}
+
+.dd-bowing .dd-head {
+  transform: rotate(18deg);
+}
+
+.dd-wobble {
+  animation: dd-shake 0.5s ease;
+}
+
+@keyframes dd-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+.dd-buttons {
+  display: flex;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.dd-bow,
+.dd-offer,
+.dd-retreat {
+  flex: 1;
+  padding: 9px 4px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  line-height: 1.25;
+  color: var(--ink);
+  text-align: center;
+}
+
+.dd-bow:active,
+.dd-offer:active,
+.dd-retreat:active {
+  transform: scale(0.96);
+}
+
+.dd-note {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+.dd-status {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.dd-count {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.dd-rank {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--vermillion);
+}
+
+.dd-hint {
+  margin-top: 4px;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dd-head { transition: none; }
+  .dd-wobble { animation: none; }
+}
+
+/* ---------- side quests ---------- */
+
+.side-quests {
+  margin-top: 14px;
+  padding: 14px 16px 16px;
+}
+
+.sq-title {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sq-title-jp {
+  margin-left: 6px;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+
+.sq-locked {
+  margin-top: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+.sq-count {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.sq-quest {
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.sq-quest + .sq-quest {
+  border-top: 1px solid var(--hairline);
+}
+
+.sq-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sq-quest-title {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.sq-quest.sq-done .sq-quest-title {
+  color: var(--ink-faint);
+}
+
+.sq-quest-jp {
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.sq-hanko {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--vermillion);
+  color: var(--art-snow);
+  font-size: 10px;
+  line-height: 1;
+  flex: none;
+}
+
+.sq-expand {
+  margin-top: 8px;
+}
+
+.sq-hint {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.sq-found {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--vermillion);
+}
+
+.sq-look {
+  margin-top: 10px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-faint);
+}
+
+.vq-bonus {
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+.vignette[data-quests='2'] .vq-bonus,
+.vignette[data-quests='3'] .vq-bonus {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vq-bonus { transition: none; }
+}

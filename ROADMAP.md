@@ -46,7 +46,7 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
   ink over the live feed; capture it by painting its sigil with a finger. Captured yōkai fill a bestiary with
   kid-readable folklore cards. GPS and camera are on-device; the art ships in the bundle — the whole haunting
   works offline.
-- **Denshadex** `M · offline` — The trip rides an absurd roster of iconic rolling stock (N700S, Yamanote E235,
+- **Denshadex** ✅ `M · offline` — The trip rides an absurd roster of iconic rolling stock (N700S, Yamanote E235,
   Hakone Tozan switchbacks, Romancecar, Randen tram, the Rapi:t rocket). Every one becomes a collectible card:
   grey silhouette until logged, then flooded with ink. Rarity tiers, top-trump stats, each card playing that
   line's real departure melody. The eki-stamp system, extended into the thing Japanese kids actually collect.
@@ -63,14 +63,14 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 - **Gacha-dex & the virtual gacha machine** `M · offline` — Photograph every real capsule-toy haul into a
   shared Gacha-dex; spend leftover koban in an in-app hand-cranked gacha that dispenses virtual omamori — the
   rare ones *modify the app itself* (petal storms, a golden route brush, secret dark-mode fireflies).
-- **Side Quests** `M · offline` — Three to five geofenced micro-hunts per city that only unlock on arrival:
+- **Side Quests** ✅ *(v1 — no photo proof yet)* `M · offline` — Three to five geofenced micro-hunts per city that only unlock on arrival:
   find the dragon fountain at Sensō-ji, spot the fox holding a key in its teeth, catch the Glico man from the
   classic angle. A photo proves the find and the day's painted vignette *gains a new hand-drawn detail* — the
   quest paints itself into the artwork. Parents can author custom quests the night before.
 - **Shinkansen Arcade** `M · offline` — A hidden tab that only unlocks when GPS reads bullet-train speed.
   Headliner: *Fuji Spotter*, which counts down to the exact timetable window Fuji appears and scores who sees
   the summit first. Kids beg for the train ride — the greatest trick a travel app can pull.
-- **Deer Diplomacy** `S · offline` — The night before Nara, an ink-drawn simulator teaches shika-senbei
+- **Deer Diplomacy** ✅ `S · offline` — The night before Nara, an ink-drawn simulator teaches shika-senbei
   protocol (bow, present, retreat; get it wrong and a cartoon deer eats your map). On the day it becomes a
   live log: bows exchanged, ranks earned, from *Nervous Envoy* to *Deer Whisperer*.
 - **Hyakumonogatari Night** `S · offline` — For the ryokan evening: a full-screen candle circle adapting the
@@ -242,7 +242,7 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 - **Sound postcards** `M · offline→physical` — A record button on every stop captures 30 seconds of ambience —
   the scramble, the departure melody, deer snorting for crackers. Clips pin to the route map; post-trip they
   can become NFC washi postcards that play their moment when tapped to a phone.
-- **Family voice phrasebook** `S · offline` — Next to every synthesized phrase, a record button for the family's
+- **Family voice phrasebook** ✅ `S · offline` — Next to every synthesized phrase, a record button for the family's
   own attempts. Ten years on, the phrasebook still plays their eight-year-old voices trying *oishii!* — an
   heirloom hiding inside a utility.
 - **Purikura booth** `M · offline` — An in-app photo-sticker booth with sumi-e frames per city, sparkle stamps,
@@ -381,7 +381,7 @@ The ideas that make no economic sense until they suddenly define the product. Ke
 | Version | Name | Theme | Contents |
 |---|---|---|---|
 | **v2.1** ✅ | 記憶 *Kioku* | Remember | The committed four: journal + photos, sound & haptics, four travelers, the Japan clock — *shipped July 2026* |
-| **v3** 🖌️ | 生きている *Ikiteiru* | The painting lives | **Shipped:** solar clock, microseasons, nijimi physics, living vignettes (tilt/drift depth planes, the heron, the gondola, the deer's bow, after-dark neon and windows), Fuji Window (the Day-7 GPS Tōkaidō scroll — "Fuji on the right in N minutes") (plus field fixes: the iOS departure-date picker, day-to-day paging, Windows story-suite spawn). **Remaining:** Sumi (mascot), opening cinematic, kids' game layer (yōkai camera, Denshadex, boss battles, side quests), geofenced stamps |
+| **v3** 🖌️ | 生きている *Ikiteiru* | The painting lives | **Shipped:** solar clock, microseasons, nijimi physics, living vignettes (tilt/drift depth planes, the heron, the gondola, the deer's bow, after-dark neon and windows), Fuji Window (the Day-7 GPS Tōkaidō scroll — "Fuji on the right in N minutes"), the trip pack (family voice phrasebook, Denshadex, Deer Diplomacy, Side Quests v1) (plus field fixes: the iOS departure-date picker, day-to-day paging, Windows story-suite spawn). **Remaining:** Sumi (mascot), opening cinematic, kids' game layer (yōkai camera, Denshadex, boss battles, side quests), geofenced stamps |
 | **v3.5** | 相棒 *Aibō* | The companion | Claude layer: Menu Lens, interpreter, concierge, journal weaver, bedtime stories, phrase dojo — every feature degrading gracefully offline |
 | **v4** | 一緒に *Issho ni* | Together | Backend: live Family Ink sync, grandparents' window, split-party days, reservation inbox, park mode, transit copilot, rain auto-replan |
 | **v4.5** | 手元に *Temoto ni* | In your hands | The physical pipeline: trip poster, goshuincho, photo book, postcards from 7-Eleven, furoshiki, omamori charms |

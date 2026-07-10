@@ -38,6 +38,12 @@ function TokyoVignette() {
   return (
     <Stage label="Tokyo skyline with Tokyo Tower at dusk">
       <circle cx="300" cy="38" r="24" fill="url(#v-sun)" />
+      {/* side quest bonus: a kite flown from somewhere off in the streets below */}
+      <g className="vq-bonus" aria-hidden="true">
+        <path d="M26 10 L34 18 L26 26 L18 18 Z" fill="var(--vermillion)" opacity="0.85" />
+        <path d="M26 10 V26 M18 18 H34" stroke="var(--art-snow)" strokeWidth="0.8" opacity="0.7" />
+        <path d="M26 26 Q23 32 27 36 Q23 40 27 44" stroke="var(--art-silhouette)" strokeWidth="1.1" fill="none" strokeLinecap="round" opacity="0.55" />
+      </g>
       {/* far skyline */}
       <g className="vg-far">
         <g fill="var(--art-mtn-near)" opacity="0.6">
@@ -133,6 +139,15 @@ function HakoneVignette() {
           <path d="M149 66 Q164 70 149 84 Z" />
           <path d="M118 54 l8 4 -8 4 z" fill="var(--vermillion)" />
         </g>
+        {/* side quest bonus: black eggs left on the near shore */}
+        <g className="vq-bonus" aria-hidden="true">
+          <ellipse cx="24" cy="110" rx="4.5" ry="5.5" fill="var(--art-silhouette)" />
+          <ellipse cx="34" cy="114" rx="4" ry="5" fill="var(--art-silhouette)" />
+          <ellipse cx="16" cy="115" rx="3.6" ry="4.4" fill="var(--art-silhouette)" />
+          <circle cx="22.5" cy="107.5" r="1" fill="var(--art-snow)" opacity="0.8" />
+          <circle cx="32.5" cy="111.5" r="0.9" fill="var(--art-snow)" opacity="0.8" />
+          <circle cx="14.8" cy="112.8" r="0.8" fill="var(--art-snow)" opacity="0.8" />
+        </g>
       </g>
     </Stage>
   )
@@ -185,6 +200,13 @@ function KyotoVignette() {
         {torii(GATES[0], 0)}
         {/* path */}
         <path d="M0 118 Q140 108 390 114 L390 120 L0 120 Z" fill="var(--art-mtn-near)" opacity="0.7" />
+        {/* side quest bonus: a fox sitting beside the big gate's left post */}
+        <g className="vq-bonus" aria-hidden="true" fill="var(--art-silhouette)">
+          <ellipse cx="48" cy="108" rx="9" ry="6" />
+          <path d="M42 103 L38 95 L45 100 Z" />
+          <path d="M50 101 L54 93 L55 101 Z" />
+          <path d="M56 110 Q64 108 62 100 Q58 104 55 108 Z" />
+        </g>
       </g>
       {/* blossom top-left */}
       <g className="vg-blossom">
@@ -257,6 +279,12 @@ function NaraVignette() {
           <circle cx="83" cy="26" r="3.5" />
         </g>
         <rect className="vg-flame" x="76" y="48" width="6" height="8" rx="1.5" fill="var(--art-lantern)" opacity="0.9" />
+        {/* side quest bonus: a leaning stack of senbei beside the lantern */}
+        <g className="vq-bonus" aria-hidden="true" fill="var(--art-lantern)">
+          <ellipse cx="112" cy="93" rx="9" ry="3" transform="rotate(-4 112 93)" />
+          <ellipse cx="113" cy="88.5" rx="8.3" ry="2.8" transform="rotate(-7 113 88.5)" />
+          <ellipse cx="114.5" cy="84.5" rx="7.6" ry="2.6" transform="rotate(-11 114.5 84.5)" />
+        </g>
       </g>
     </Stage>
   )
@@ -282,6 +310,13 @@ function OsakaVignette() {
           <path d="M74 58 H94" />
         </g>
         <path d="M80 46 q4 -5 8 0 l-4 4 z" fill="var(--art-lantern)" />
+        {/* side quest bonus: a paper lantern hung from the lowest eave */}
+        <g className="vq-bonus" aria-hidden="true">
+          <path d="M100 92 V96" stroke="var(--art-silhouette)" strokeWidth="1" opacity="0.6" fill="none" />
+          <rect x="97" y="96" width="6" height="1.6" rx="0.5" fill="var(--art-silhouette)" opacity="0.7" />
+          <ellipse cx="100" cy="103" rx="4.2" ry="5.6" fill="var(--art-lantern)" opacity="0.9" />
+          <rect x="97" y="108.2" width="6" height="1.6" rx="0.5" fill="var(--art-silhouette)" opacity="0.7" />
+        </g>
       </g>
       {/* neon circles — faint by day, flickering alive after sunset (CSS owns opacity) */}
       <g className="vg-mid">
@@ -329,6 +364,17 @@ function HomeVignette() {
         <g className="vg-clouds">
           <ellipse cx="250" cy="26" rx="34" ry="10" fill="var(--art-snow)" opacity="0.55" />
           <ellipse cx="300" cy="40" rx="24" ry="8" fill="var(--art-snow)" opacity="0.4" />
+        </g>
+        {/* side quest bonus: a tiny second plane far behind the first.
+            Day 14 (Home) has no quests, so this one never unlocks — deliberate
+            groundwork for a future quest pack, not an error. */}
+        <g className="vq-bonus" aria-hidden="true">
+          <g transform="translate(150 18) rotate(-10) scale(0.4)" fill="var(--art-mtn-far)" opacity="0.8">
+            <path d="M0 0 Q34 -6 64 -2 Q70 0 64 3 Q34 6 0 4 Q-6 2 0 0 Z" />
+            <path d="M26 0 L10 -16 L20 -16 L38 -2 Z" />
+            <path d="M28 3 L16 16 L25 16 L40 4 Z" />
+            <path d="M58 -2 L52 -12 L58 -12 L64 -3 Z" />
+          </g>
         </g>
       </g>
       <g className="vg-mid">

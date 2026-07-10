@@ -335,6 +335,110 @@ try {
   await gpsPage.waitForTimeout(1200)
   check('gps ride reaches LOOK RIGHT', ((await gpsPage.textContent('.fw-status')) ?? '').includes('LOOK RIGHT'))
   await gpsCtx.close()
+
+  /* ---- 10. Family voice phrasebook: their own voices, kept ---- */
+  const micBrowser = await chromium.launch({
+    args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'],
+  })
+  const micCtx = await micBrowser.newContext({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2,
+    isMobile: true,
+    hasTouch: true,
+    permissions: ['microphone'],
+  })
+  const micPage = await micCtx.newPage()
+  await micPage.goto(`${BASE}/#speak`)
+  await micPage.waitForTimeout(600)
+  check('every phrase row offers a mic', (await micPage.locator('.voice-btn').count()) > 10)
+  // (sanctioned flexibility: if the Speak screen renders phrases in collapsed groups so fewer
+  //  rows are visible, lower this threshold to match reality and note it in your report)
+  await micPage.locator('.voice-btn').first().click()
+  await micPage.waitForTimeout(1200)
+  check('recording state shows', (await micPage.locator('.voice-btn.vb-recording').count()) === 1)
+  await micPage.locator('.voice-btn.vb-recording').click()
+  await micPage.waitForTimeout(800)
+  check('family voice saved: play appears', (await micPage.locator('.voice-play').count()) >= 1)
+  await micPage.reload()
+  await micPage.waitForTimeout(800)
+  check('family voice survives reload (IndexedDB)', (await micPage.locator('.voice-play').count()) >= 1)
+  await micBrowser.close()
+
+  /* ---- 11. Denshadex: gotta ride them all ---- */
+  await page.goto(`${BASE}/#discover`)
+  await page.waitForTimeout(500)
+  await page.locator('.seg button', { hasText: 'Denshadex' }).click()
+  await page.waitForTimeout(400)
+  check('denshadex roster renders', (await page.locator('.dx-card').count()) >= 10)
+  check('cards start locked', (await page.locator('.dx-card.dx-locked').count()) >= 10)
+  await page.locator('.dx-card[data-train="n700s"]').click()
+  await page.waitForTimeout(300)
+  await page.locator('.dx-log').click()
+  await page.waitForTimeout(400)
+  check('logging floods the card with ink', (await page.locator('.dx-card[data-train="n700s"].dx-logged').count()) === 1)
+  await page.reload()
+  await page.waitForTimeout(600)
+  await page.locator('.seg button', { hasText: 'Denshadex' }).click()
+  await page.waitForTimeout(400)
+  check('the ride is remembered', (await page.locator('.dx-card[data-train="n700s"].dx-logged').count()) === 1)
+
+  /* ---- 12. Deer Diplomacy: the protocol has three moves ---- */
+  await page.goto(`${BASE}/#journey/11`)
+  await page.waitForTimeout(500)
+  check('the dojo waits in Nara', (await page.locator('.deer-dojo').count()) === 1)
+  await page.locator('.dd-offer').click() // offering before bowing — rude!
+  await page.waitForTimeout(300)
+  check('skipping the bow is called out', ((await page.textContent('.dd-note')) ?? '').includes('bow'))
+  await page.locator('.dd-bow').click()
+  await page.locator('.dd-offer').click()
+  await page.locator('.dd-retreat').click()
+  await page.waitForTimeout(600)
+  check('a full exchange lands', ((await page.textContent('.dd-count')) ?? '').includes('1'))
+  check('first rank earned', ((await page.textContent('.dd-rank')) ?? '').includes('Nervous Envoy'))
+  await page.reload()
+  await page.waitForTimeout(600)
+  check('diplomacy is remembered', ((await page.textContent('.dd-count')) ?? '').includes('1'))
+
+  /* ---- 13. Side Quests: the city unlocks its secrets ---- */
+  const qCtx = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2,
+    isMobile: true,
+    hasTouch: true,
+  })
+  const qPage = await qCtx.newPage()
+  await qPage.goto(`${BASE}/#journey/2`)
+  await qPage.waitForTimeout(400)
+  await qPage.evaluate(() => localStorage.removeItem('tabi:departure'))
+  await qPage.reload()
+  await qPage.waitForTimeout(500)
+  check('quests locked before the trip', (await qPage.locator('.side-quests .sq-locked').count()) === 1)
+  // travel to day 2: departure was yesterday → today is the Tokyo day
+  await qPage.evaluate(() => {
+    const d = new Date()
+    d.setDate(d.getDate() - 1)
+    localStorage.setItem('tabi:departure', JSON.stringify(d.toLocaleDateString('en-CA')))
+  })
+  await qPage.reload()
+  await qPage.waitForTimeout(500)
+  check('being there unlocks the hunt', (await qPage.locator('.side-quests .sq-quest').count()) === 3)
+  await qPage.locator('.sq-quest').first().click()
+  await qPage.waitForTimeout(300)
+  await qPage.locator('.sq-found').click()
+  await qPage.waitForTimeout(400)
+  check('a find is inked', (await qPage.locator('.sq-quest.sq-done').count()) === 1)
+  await qPage.locator('.sq-quest').nth(1).click()
+  await qPage.waitForTimeout(300)
+  await qPage.locator('.sq-found').click()
+  await qPage.waitForTimeout(600)
+  check('two finds reward the painting', (await qPage.locator('.vignette[data-quests="2"]').count()) === 1)
+  await qPage.waitForTimeout(2200) // the reveal is a 2s ink transition — let it finish
+  const bonus = await qPage.locator('.vq-bonus').evaluate((el) => getComputedStyle(el).opacity)
+  check('the vignette gains its secret detail', Number(bonus) > 0.5, bonus)
+  await qPage.reload()
+  await qPage.waitForTimeout(500)
+  check('finds are remembered', (await qPage.locator('.sq-quest.sq-done').count()) === 2)
+  await qCtx.close()
 } finally {
   await browser.close()
   server.kill()

@@ -15,6 +15,19 @@ Fourteen days, hand-crafted. Built for iPhone, works offline, beautiful in dayli
   <img src="docs/screens/day-detail-light.png" width="30%" alt="Day 8 detail — Fushimi Inari timeline" />
 </p>
 
+## Current state
+
+**As of 2026-07-10 — v3.1.0 pending merge.** `main` carries v2.1 *Kioku* plus the
+v3 *Ikiteiru* core (solar clock, microseasons, nijimi, living vignettes, Fuji
+Window) and auto-deploys via the GitHub Pages workflow. Branch `claude/trip-pack`
+(the family voice phrasebook, Denshadex, Deer Diplomacy, Side Quests v1 — 79-check
+suite green) awaits the owner's merge; on merge it becomes the repo's first tag,
+**v3.1.0**, with a GitHub Release. **Source of truth:** GitHub
+`xNerveWreck/Fable-s-Japan-App`, branch `main`; agents `git fetch` before working
+(the owner edits from claude.ai cloud sessions too). **Verify a checkout:**
+`npm install`, `npx playwright install chromium`, `npm run build`, `npm run check`
+— every check green, no exceptions. Session log: [SESSION_NOTES.md](SESSION_NOTES.md).
+
 ## What this is
 
 Tabi (旅, *journey*) is a complete travel companion for a family's first two weeks in Japan — Tokyo → Hakone → Kyoto → Nara → Osaka. It's a React PWA designed exclusively for the iPhone in your pocket on a Kyoto street corner: installable to the Home Screen, fully offline once loaded, no accounts, no servers, no tracking. Everything lives on the device.
@@ -23,10 +36,10 @@ Tabi (旅, *journey*) is a complete travel companion for a family's first two we
 
 | | |
 |---|---|
-| ⛩️ **Journey** | The 14-day itinerary as a living record. Every day has a theme, a painted city vignette, a timeline of stops, honest family pacing, a rain plan, a **reservations pocket** for confirmation codes, and 🦊 *For the kids* tips on nearly every activity. Mark each stop **Did it / Loved it / Skipped** — loved moments collect into a treasures list. The home screen carries the countdown (then live *Up next today* during the trip), **The Road** — the route as one brushstroke, where a red hanko stamp lands on each completed city — a rotating phrase of the day, and the **stamp journal**: fourteen eki-stamp badges earned day by day. From any day page, flip through the trip like pages of a scroll — chevrons in the header, painted next/previous cards at the foot. |
-| 🪭 **Discover** | A field guide to how Japan works: etiquette (onsen rules, chopstick taboos, the escalator-side rivalry), transit mastery (Suica, Shinkansen, luggage forwarding), practical magic (konbini, vending machines, gachapon), culture keys (shrine vs. temple, omamori) — plus a 20-dish food guide rated on a five-petal **kid-meter**, and the **Train Quiz**: sixteen questions to pass around the shinkansen, scored like an omikuji fortune. |
+| ⛩️ **Journey** | The 14-day itinerary as a living record. Every day has a theme, a painted city vignette, a timeline of stops, honest family pacing, a rain plan, a **reservations pocket** for confirmation codes, and 🦊 *For the kids* tips on nearly every activity. Mark each stop **Did it / Loved it / Skipped** — loved moments collect into a treasures list. The home screen carries the countdown (then live *Up next today* during the trip), **The Road** — the route as one brushstroke, where a red hanko stamp lands on each completed city — a rotating phrase of the day, and the **stamp journal**: fourteen eki-stamp badges earned day by day. From any day page, flip through the trip like pages of a scroll — chevrons in the header, painted next/previous cards at the foot. The bullet-train day opens the **Fuji Window** (below); Nara day runs the **Deer Dojo**, a practice round of shika-senbei protocol that becomes a live exchange log with ranks; and every city hides three **Side Quests** — find-it micro-hunts that unlock on arrival, where two finds paint a secret detail into that city's vignette forever. |
+| 🪭 **Discover** | A field guide to how Japan works: etiquette (onsen rules, chopstick taboos, the escalator-side rivalry), transit mastery (Suica, Shinkansen, luggage forwarding), practical magic (konbini, vending machines, gachapon), culture keys (shrine vs. temple, omamori) — plus a 20-dish food guide rated on a five-petal **kid-meter**, and the **Train Quiz**: sixteen questions to pass around the shinkansen, scored like an omikuji fortune. Plus the **Denshadex**: ten collectible cards for the rolling stock this exact trip rides — grey ink silhouettes until *乗った! I rode it!* floods them with ink, with rarity dots, spotter facts, and first-ridden dates that sync between the family's phones. |
 | 📓 **Kioku Journal** *(v2.1)* | One entry per day — what actually happened — with photos stored on-device in IndexedDB and displayed through a **sumi-e ink filter** (tap any photo to flip between ink and original). **Four travelers** give the family names, animal mascots, and ink colors: journal entries carry their author, the Train Quiz keeps a family leaderboard, and the trip-day counter runs on **Japan time**. A synthesized **sound & haptic grammar** (off by default) gives check-offs a stone tap, loved moments a heartbeat, and completed days the deep thunk of a landing hanko. |
-| 💬 **Speak** | A 46-phrase family phrasebook with kana, romaji, and usage notes. Tap the speaker and the phone *says the phrase aloud* in Japanese (on-device speech synthesis, offline). Star your go-to phrases; search across everything. Includes a Kids' Corner — *sugoi!*, *yatta!*, *janken pon!* |
+| 💬 **Speak** | A 46-phrase family phrasebook with kana, romaji, and usage notes. Tap the speaker and the phone *says the phrase aloud* in Japanese (on-device speech synthesis, offline). Star your go-to phrases; search across everything. Includes a Kids' Corner — *sugoi!*, *yatta!*, *janken pon!* A brush-red mic beside every speaker records the **family's own attempt** (kept on-device in IndexedDB) — ten years on, the phrasebook still plays their eight-year-old voices trying *oishii!* |
 | 🎒 **Kit** | Yen ⇄ USD converter with adjustable rate · daily budget guide · five persistent packing checklists · a **Notes** pad for the trip's margin (locker numbers, gate codes — synced with the family) · a ⚙️ **Settings** pocket behind the gear: departure date and the sound & haptics toggle · a tap-to-build **allergy card** that renders full-screen in written Japanese to show restaurant staff · **Family Sync** — fold the whole trip state into a link, AirDrop it to another phone, and merge additively (no servers; the link *is* the data) · emergency numbers as one-tap calls. |
 
 <p align="center">

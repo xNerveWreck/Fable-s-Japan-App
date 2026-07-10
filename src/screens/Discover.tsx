@@ -6,11 +6,13 @@ import { animalEmoji, type Traveler } from '../data/travelers'
 import { useStored } from '../hooks/useStored'
 import { play } from '../lib/sound'
 import { ChevronIcon } from '../art/icons'
+import { Denshadex } from '../components/Denshadex'
 
 const tabs = [
   ...guideSections.map((s) => ({ id: s.id, label: `${s.emoji} ${s.name}` })),
   { id: 'food', label: '🍜 Food' },
   { id: 'quiz', label: '🎌 Quiz' },
+  { id: 'densha', label: '🚃 Denshadex' },
 ]
 
 export function Discover() {
@@ -35,6 +37,8 @@ export function Discover() {
 
       {tab === 'quiz' ? (
         <TrainQuiz />
+      ) : tab === 'densha' ? (
+        <Denshadex />
       ) : section ? (
         <>
           <p className="guide-intro">{section.intro}</p>
