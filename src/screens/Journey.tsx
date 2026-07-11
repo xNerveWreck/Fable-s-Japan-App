@@ -246,7 +246,7 @@ function JourneyHome({
 
         <div className="section-title">
           <h2>Stamp journal</h2>
-          <span className="jp">判子帳 · {stampsEarned}/14</span>
+          <span className="jp">判子帳 · {stampsEarned}/{TRIP_LENGTH}</span>
         </div>
         <div className="card stamp-grid-wrap">
           <p className="stamp-hint">
