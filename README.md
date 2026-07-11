@@ -17,7 +17,7 @@ Fourteen days, hand-crafted. Built for iPhone, works offline, beautiful in dayli
 
 ## Current state
 
-**As of 2026-07-10 — [v3.1.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.1.0) shipped** (the repo's first tagged release, built app attached).
+**As of 2026-07-11 — [v3.2.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.2.0) shipped** (built app attached to the Release).
 `main` carries v2.1 *Kioku*, the v3 *Ikiteiru* core (solar clock, microseasons,
 nijimi, living vignettes, Fuji Window), the trip pack (family voice
 phrasebook, Denshadex, Deer Diplomacy, Side Quests v1), and the **Haiku

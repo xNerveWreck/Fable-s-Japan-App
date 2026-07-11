@@ -6,6 +6,24 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-11 — v3.2.0 tagged and released
+
+**What happened:** owner merged `claude/haiku-engraver` (PR #15); main verified
+**88/88 green at the merge commit**, then tagged **v3.2.0** and published the
+GitHub Release with `dist/` zipped as the asset:
+https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.2.0 — Pages
+deploy on the merge ran green (33s), so the live app carries the engraver.
+This entry rides the `claude/v3.2.0-docs` branch with the README current-state
+bump (the v3.1.0 precedent, PR #14).
+
+**Pick up here:** (1) owner merges this docs branch; (2) both phones open the
+app on Wi-Fi before the 2026-07-12 flight so the service worker caches v3.2.0;
+(3) the Sign & Etiquette Decoder builds on the owner's go — new branch
+`claude/sign-decoder`, follow `docs/superpowers/plans/2026-07-10-sign-decoder.md`
+top to bottom; nothing else is mid-flight.
+
+---
+
 ## 2026-07-10 (late) — The Haiku Engraver ships; the Sign Decoder is fully planned
 
 **What happened (desktop session, branch `claude/haiku-engraver` — awaiting owner merge):**
