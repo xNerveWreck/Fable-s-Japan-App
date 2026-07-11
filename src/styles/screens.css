@@ -2240,3 +2240,16 @@
 @media (prefers-reduced-motion: reduce) {
   .vq-bonus { transition: none; }
 }
+
+/* ================= v3.2 — the haiku engraver ================= */
+.treasure-row .t-haiku {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink-faint);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.treasure-row .t-haiku i {
+  display: block;
+  font-style: italic;
+}

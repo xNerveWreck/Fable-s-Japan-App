@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 import { itinerary, kindMeta, TRIP_LENGTH, type Day } from '../data/itinerary'
+import { haiku } from '../data/haiku'
 import { phraseCategories } from '../data/phrases'
 import { useStored } from '../hooks/useStored'
 import { useSpeech } from '../hooks/useSpeech'
@@ -359,6 +360,13 @@ function Treasures({ moments, openDay }: { moments: MomentMap; openDay: (id: num
               <span className="t-sub">
                 Day {day.id} · {day.city}
               </span>
+              {haiku[key] && (
+                <span className="t-haiku">
+                  {haiku[key].split('\n').map((line, li) => (
+                    <i key={li}>{line}</i>
+                  ))}
+                </span>
+              )}
             </span>
             <span className="chev" style={{ width: 18, height: 18, color: 'var(--ink-faint)' }}>
               <ChevronIcon />
