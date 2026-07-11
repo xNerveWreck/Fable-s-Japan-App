@@ -161,9 +161,9 @@ try {
   check('day 1 has no prev card, one next', (await page.locator('.pager-card').count()) === 1)
   check('day 1 prev step disabled', await page.locator('.day-steps .step-prev').isDisabled())
   await shot(page, 'day-detail-pager')
-  await page.goto(`${BASE}/#journey/14`)
+  await page.goto(`${BASE}/#journey/12`)
   await page.waitForTimeout(400)
-  check('day 14 next step disabled', await page.locator('.day-steps .step').last().isDisabled())
+  check('day 12 next step disabled', await page.locator('.day-steps .step').last().isDisabled())
 
   /* ---- 3. The solar clock: the palette follows Tokyo's real sun ---- */
   await page.evaluate(() => localStorage.removeItem('tabi:departure')) // Tokyo fallback
@@ -256,18 +256,18 @@ try {
   await page.waitForTimeout(200)
   check('tilt readings wake the parallax', (await page.locator('.vignette[data-tilt="on"]').count()) === 1)
 
-  await page.goto(`${BASE}/?vg=now#journey/6`) // Hakone
+  await page.goto(`${BASE}/?vg=now#journey/1`) // The Leap — the plane over the Pacific
   await page.waitForTimeout(500)
-  const gondola = await page.locator('.vg-gondola').evaluate((el) => getComputedStyle(el).animationName)
-  check('the gondola inches along its cable', gondola.includes('vg-gondola'), gondola)
+  const plane = await page.locator('.vg-plane-ride').evaluate((el) => getComputedStyle(el).animationName)
+  check('the plane climbs toward Japan', plane.includes('vg-ride'), plane)
 
   // 00:30 is night in every trip city — the solar clock follows the current
   // city's sun mid-trip, so a Tokyo lantern-minute here would be too early
-  await page.goto(`${BASE}/?clock=00:30&vg=now#journey/12`) // Osaka after dark
+  await page.goto(`${BASE}/?clock=00:30&vg=now#journey/9`) // Osaka after dark
   await page.waitForTimeout(600)
   const neonNight = await page.locator('.vg-neon').first().evaluate((el) => getComputedStyle(el).animationName)
   check('osaka neon flickers after sunset', neonNight.includes('vg-neon'), neonNight)
-  await page.goto(`${BASE}/?clock=12:00#journey/12`)
+  await page.goto(`${BASE}/?clock=12:00#journey/9`)
   await page.waitForTimeout(500)
   const neonDay = await page.locator('.vg-neon').first().evaluate((el) => getComputedStyle(el).animationName)
   check('osaka neon rests at noon', neonDay === 'none', neonDay)
@@ -287,7 +287,7 @@ try {
   const rmPlane = await rmPage.locator('.vignette .vg-near').evaluate((el) => getComputedStyle(el).animationName)
   check('reduce-motion stills the painting', rmHeron === 'none' && rmPlane === 'none', `${rmHeron} / ${rmPlane}`)
   // …but stillness must not change the scene: neon is lit at night, just not flickering
-  await rmPage.goto(`${BASE}/?clock=00:30#journey/12`)
+  await rmPage.goto(`${BASE}/?clock=00:30#journey/9`)
   await rmPage.waitForTimeout(600)
   const rmNeon = await rmPage
     .locator('.vg-neon')
@@ -300,18 +300,18 @@ try {
   await page.goto(`${BASE}/#journey/6`)
   await page.waitForTimeout(400)
   check('no fuji window on other days', (await page.locator('.fuji-window').count()) === 0)
-  await page.goto(`${BASE}/#journey/7`)
+  await page.goto(`${BASE}/#journey/5`)
   await page.waitForTimeout(500)
   check('fuji window card on the bullet-train day', (await page.locator('.fuji-window').count()) === 1)
   check('the watch awaits a tap', (await page.locator('.fw-begin').count()) === 1)
-  await page.goto(`${BASE}/?ride=0.15#journey/7`)
+  await page.goto(`${BASE}/?ride=0.15#journey/5`)
   await page.waitForTimeout(500)
   check('countdown before the window', ((await page.textContent('.fw-status')) ?? '').includes('Fuji on the right in'))
-  await page.goto(`${BASE}/?ride=0.28#journey/7`)
+  await page.goto(`${BASE}/?ride=0.28#journey/5`)
   await page.waitForTimeout(500)
   check('LOOK RIGHT inside the window', ((await page.textContent('.fw-status')) ?? '').includes('LOOK RIGHT'))
   check('fuji blooms', (await page.locator('.fuji-window.fw-bloom').count()) === 1)
-  await page.goto(`${BASE}/?ride=0.6#journey/7`)
+  await page.goto(`${BASE}/?ride=0.6#journey/5`)
   await page.waitForTimeout(500)
   check('fuji behind you', ((await page.textContent('.fw-status')) ?? '').includes('behind you'))
 
@@ -325,7 +325,7 @@ try {
     permissions: ['geolocation'],
   })
   const gpsPage = await gpsCtx.newPage()
-  await gpsPage.goto(`${BASE}/#journey/7`)
+  await gpsPage.goto(`${BASE}/#journey/5`)
   await gpsPage.waitForTimeout(500)
   await gpsPage.locator('.fw-begin').click()
   await gpsPage.waitForTimeout(800)
@@ -383,7 +383,7 @@ try {
   check('the ride is remembered', (await page.locator('.dx-card[data-train="n700s"].dx-logged').count()) === 1)
 
   /* ---- 12. Deer Diplomacy: the protocol has three moves ---- */
-  await page.goto(`${BASE}/#journey/11`)
+  await page.goto(`${BASE}/#journey/8`)
   await page.waitForTimeout(500)
   check('the dojo waits in Nara', (await page.locator('.deer-dojo').count()) === 1)
   await page.locator('.dd-offer').click() // offering before bowing — rude!
@@ -421,7 +421,7 @@ try {
   })
   await qPage.reload()
   await qPage.waitForTimeout(500)
-  check('being there unlocks the hunt', (await qPage.locator('.side-quests .sq-quest').count()) === 3)
+  check('being there unlocks the hunt', (await qPage.locator('.side-quests .sq-quest').count()) === 4)
   await qPage.locator('.sq-quest').first().click()
   await qPage.waitForTimeout(300)
   await qPage.locator('.sq-found').click()
