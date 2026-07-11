@@ -93,66 +93,6 @@ function TokyoVignette() {
   )
 }
 
-function HakoneVignette() {
-  return (
-    <Stage label="Mount Fuji over Lake Ashi with a pirate ship, torii, and ropeway">
-      <g className="vg-far">
-        {/* Fuji */}
-        <path d="M60 84 L150 16 L240 84 Z" fill="var(--art-mtn-near)" />
-        <path d="M124 36 L150 16 L176 36 Q163 46 150 40 Q137 46 124 36 Z" fill="var(--art-snow)" />
-        {/* ropeway: cable up the sky, gondola inching along it */}
-        <g className="vg-ropeway">
-          <path d="M252 44 L388 14" stroke="var(--art-silhouette)" strokeWidth="1.2" opacity="0.5" fill="none" />
-          <g className="vg-gondola">
-            <path d="M262 42 v5" stroke="var(--art-silhouette)" strokeWidth="1.4" />
-            <rect x="257" y="47" width="11" height="8" rx="2.5" fill="var(--art-silhouette)" />
-            <rect x="259.5" y="49" width="2.5" height="3" fill="var(--art-lantern)" opacity="0.9" />
-          </g>
-        </g>
-      </g>
-      <g className="vg-mid">
-        {/* mist — wider than the stage so its drift never bares an edge */}
-        <rect className="vg-mist" x="-20" y="70" width="430" height="10" fill="var(--art-snow)" opacity="0.5" />
-        {/* lake */}
-        <rect x="0" y="84" width="390" height="36" fill="var(--art-water)" />
-        <g stroke="var(--art-silhouette)" strokeWidth="1.3" opacity="0.3" strokeLinecap="round">
-          <path d="M40 100 h40" />
-          <path d="M150 108 h56" />
-          <path d="M300 98 h36" />
-        </g>
-        {/* torii in the water */}
-        <g stroke="var(--vermillion)" strokeWidth="4.5" fill="none" strokeLinecap="round">
-          <path d="M300 60 Q322 55 344 60" />
-          <path d="M306 72 H338" />
-          <path d="M310 64 V98" />
-          <path d="M334 64 V98" />
-        </g>
-        <ellipse cx="322" cy="102" rx="20" ry="3" fill="var(--art-silhouette)" opacity="0.25" />
-      </g>
-      {/* pirate ship, riding the lake */}
-      <g className="vg-near">
-        <g className="vg-ship" fill="var(--art-silhouette)">
-          <path d="M96 92 L172 92 L160 104 L108 104 Z" />
-          <rect x="118" y="58" width="3.5" height="34" />
-          <rect x="146" y="64" width="3" height="28" />
-          <path d="M121 60 Q140 64 121 82 Z" />
-          <path d="M149 66 Q164 70 149 84 Z" />
-          <path d="M118 54 l8 4 -8 4 z" fill="var(--vermillion)" />
-        </g>
-        {/* side quest bonus: black eggs left on the near shore */}
-        <g className="vq-bonus" aria-hidden="true">
-          <ellipse cx="24" cy="110" rx="4.5" ry="5.5" fill="var(--art-silhouette)" />
-          <ellipse cx="34" cy="114" rx="4" ry="5" fill="var(--art-silhouette)" />
-          <ellipse cx="16" cy="115" rx="3.6" ry="4.4" fill="var(--art-silhouette)" />
-          <circle cx="22.5" cy="107.5" r="1" fill="var(--art-snow)" opacity="0.8" />
-          <circle cx="32.5" cy="111.5" r="0.9" fill="var(--art-snow)" opacity="0.8" />
-          <circle cx="14.8" cy="112.8" r="0.8" fill="var(--art-snow)" opacity="0.8" />
-        </g>
-      </g>
-    </Stage>
-  )
-}
-
 type Gate = { x: number; s: number; o: number }
 const GATES: Gate[] = [
   { x: 60, s: 1, o: 1 },
@@ -366,8 +306,9 @@ function HomeVignette() {
           <ellipse cx="300" cy="40" rx="24" ry="8" fill="var(--art-snow)" opacity="0.4" />
         </g>
         {/* side quest bonus: a tiny second plane far behind the first.
-            Day 14 (Home) has no quests, so this one never unlocks — deliberate
-            groundwork for a future quest pack, not an error. */}
+            The Home days (1 and 12) have no quests, so this one never
+            unlocks — deliberate groundwork for a future quest pack, not
+            an error. */}
         <g className="vq-bonus" aria-hidden="true">
           <g transform="translate(150 18) rotate(-10) scale(0.4)" fill="var(--art-mtn-far)" opacity="0.8">
             <path d="M0 0 Q34 -6 64 -2 Q70 0 64 3 Q34 6 0 4 Q-6 2 0 0 Z" />
@@ -412,8 +353,6 @@ export function CityVignette({ city }: { city: string }) {
   switch (city) {
     case 'Tokyo':
       return <TokyoVignette />
-    case 'Hakone':
-      return <HakoneVignette />
     case 'Kyoto':
       return <KyotoVignette />
     case 'Nara':

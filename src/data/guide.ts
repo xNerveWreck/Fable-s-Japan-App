@@ -106,7 +106,7 @@ export const guideSections: GuideSection[] = [
         id: 'luggage',
         title: 'Takkyubin luggage forwarding',
         jp: '宅急便',
-        body: 'Japan’s best travel secret: hand suitcases to any hotel front desk or konbini and they appear at your next hotel by the next day (~¥2,000/bag). Do Tokyo→Kyoto while you loop through Hakone with overnight bags. Travel weightless.',
+        body: 'Japan’s best travel secret: hand suitcases to any hotel front desk or konbini and they appear at your next hotel by the next day (~¥2,000/bag). Forward the big bags Tokyo→Kyoto or Kyoto→Osaka and ride the trains with daypacks only. Travel weightless.',
       },
       {
         id: 'metro',

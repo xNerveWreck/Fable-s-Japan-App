@@ -6,7 +6,7 @@ import { useStored } from '../hooks/useStored'
 import { useSpeech } from '../hooks/useSpeech'
 import { useTilt } from '../hooks/useTilt'
 import type { Moment, Reservation } from '../lib/sync'
-import { daysBetween, jstToday, todayStr } from '../lib/dates'
+import { daysBetween, jstToday, shortDate, todayStr } from '../lib/dates'
 import { play } from '../lib/sound'
 import { inkBloom } from '../lib/ink'
 import { currentSolar, PHASE_LABEL } from '../lib/solar'
@@ -262,8 +262,8 @@ function JourneyHome({
         {lovedKeys.length > 0 && <Treasures moments={moments} openDay={openDay} />}
 
         <div className="section-title">
-          <h2>Fourteen days</h2>
-          <span className="jp">東京 → 箱根 → 京都 → 奈良 → 大阪</span>
+          <h2>Twelve days</h2>
+          <span className="jp">東京 → 京都 → 奈良 → 大阪 → 東京</span>
         </div>
 
         <div className="day-list">
@@ -277,6 +277,7 @@ function JourneyHome({
                   <span className={`day-eyebrow text-${day.color}`}>
                     Day {day.id} · {day.city}
                     <span className="city-jp">{day.cityJp}</span>
+                    <span className="day-date">{shortDate(day.date)}</span>
                     {isToday && <span className="chip chip-sakura">Today</span>}
                   </span>
                   <h3>{day.title}</h3>
@@ -463,7 +464,7 @@ function DayDetail({
 
       <header className="detail-hero">
         <div className={`day-no text-${day.color}`}>
-          Day {day.id} — {day.city} {day.cityJp}
+          Day {day.id} · {shortDate(day.date)} — {day.city} {day.cityJp}
         </div>
         <h1 className="t-display">{day.title}</h1>
         <p className="theme">{day.theme}</p>
@@ -586,7 +587,7 @@ function Pocket({ dayId }: { dayId: number }) {
   return (
     <div className="card pocket">
       <div className="t-kicker">Pocket · 予約</div>
-      <p className="pocket-hint">Confirmation numbers for this day — teamLab tickets, dinner bookings, the ryokan.</p>
+      <p className="pocket-hint">Confirmation numbers for this day — hotel bookings, USJ tickets, the Airbnb. They stay on this phone (and travel only in your family sync link).</p>
       {list.map((r) => (
         <div key={r.id} className="pocket-row">
           <span className="grow">

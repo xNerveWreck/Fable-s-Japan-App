@@ -47,10 +47,10 @@ export const packGroups: PackGroup[] = [
     emoji: '👕',
     items: [
       { id: 'walking-shoes', label: 'Broken-in walking shoes', note: '15,000–20,000 steps/day is normal here.' },
-      { id: 'slip-ons', label: 'Slip-on shoes', note: 'Temples, ryokan, and restaurants: shoes off constantly.' },
+      { id: 'slip-ons', label: 'Slip-on shoes', note: 'Temples, the Airbnb, and restaurants: shoes off constantly.' },
       { id: 'layers', label: 'Layers, not bulk', note: 'Trains are warm, streets are not. Laundry is easy — hotels have coin machines.' },
       { id: 'rain', label: 'Packable rain jackets ×4', note: 'Konbini umbrellas (¥500) cover the rest.' },
-      { id: 'nice-outfit', label: 'One nicer outfit each', note: 'For the ryokan kaiseki night.' },
+      { id: 'nice-outfit', label: 'One nicer outfit each', note: 'For the farewell-favorite dinner.' },
       { id: 'socks', label: 'Good socks, no holes', note: 'Your socks will be on display at every temple. They will be judged.' },
     ],
   },
@@ -66,6 +66,20 @@ export const packGroups: PackGroup[] = [
       { id: 'snacks', label: 'Emergency kid snacks' },
       { id: 'meds', label: 'Meds pouch + band-aids', note: 'Bring your own children’s fever meds — brands differ.' },
       { id: 'journal', label: 'Trip journal + glue stick', note: 'For tickets, stamps, purikura, and gachapon inventories.' },
+    ],
+  },
+  {
+    id: 'heat',
+    name: 'The Heat Plan',
+    emoji: '🌞',
+    items: [
+      { id: 'handheld-fans', label: 'Handheld fans ×4', note: 'Day-one Don Quijote / konbini buy — every local kid carries one in July.' },
+      { id: 'cooling-wipes', label: 'Cooling body wipes', note: 'The blue menthol packs, stocked by every konbini register in summer.' },
+      { id: 'neck-towels', label: 'Cooling neck towels ×4', note: 'Soak, snap, wear. Refresh at any restroom sink.' },
+      { id: 'hats', label: 'Sun hats ×4', note: 'Shaded side of the street is a strategy, not a suggestion.' },
+      { id: 'sunscreen', label: 'Sunscreen', note: 'Japanese sunscreen is excellent — buy more there.' },
+      { id: 'pocari', label: 'The Pocari Sweat rule', note: 'One bottle per person per outing — it puts back what the heat takes. Vending machines everywhere.' },
+      { id: 'water-breaks', label: 'Hourly water breaks at USJ', note: 'Forced if necessary. Mornings out by 7–8, AC from 11–3, evenings out.' },
     ],
   },
   {
@@ -127,6 +141,6 @@ export interface BudgetLine {
 export const budgetGuide: BudgetLine[] = [
   { id: 'food', label: 'Food for four', amount: '¥12,000–18,000', note: 'Konbini breakfast, casual lunch, one nice dinner.' },
   { id: 'transit', label: 'Local transit', amount: '¥2,000–4,000', note: 'Suica taps add up slowly; day passes help in Kyoto.' },
-  { id: 'sights', label: 'Admissions', amount: '¥3,000–8,000', note: 'Temples ¥300–600; big attractions ¥2,000+; DisneySea is its own planet.' },
+  { id: 'sights', label: 'Admissions', amount: '¥3,000–8,000', note: 'Temples ¥300–600; big attractions ¥2,000+; USJ is its own planet.' },
   { id: 'fun', label: 'Treats & gachapon', amount: '¥2,000–3,000', note: 'The joy budget. Protect it.' },
 ]

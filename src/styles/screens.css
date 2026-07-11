@@ -243,6 +243,14 @@
   letter-spacing: 0.14em;
 }
 
+.day-card .day-eyebrow .day-date {
+  font-weight: 500;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  margin-left: auto;
+}
+
 .day-card h3 {
   font-family: var(--font-display);
   font-size: 20px;

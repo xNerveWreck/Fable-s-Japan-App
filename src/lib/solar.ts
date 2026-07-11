@@ -38,10 +38,10 @@ export function sunAltitude(at: Date, lat: number, lon: number): number {
 
 export const CITY_COORDS: Record<string, [lat: number, lon: number]> = {
   Tokyo: [35.68, 139.77],
-  Hakone: [35.19, 139.03],
   Kyoto: [35.01, 135.77],
   Nara: [34.69, 135.8],
   Osaka: [34.69, 135.5],
+  // 'Home' (the flight days) has no coords on purpose — Tokyo carries the sky.
 }
 
 function currentCoords(): [number, number] {
