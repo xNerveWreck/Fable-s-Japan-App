@@ -10,7 +10,7 @@
  */
 import { chromium } from 'playwright'
 import { spawn } from 'child_process'
-import { existsSync, mkdirSync } from 'fs'
+import { existsSync, mkdirSync, readFileSync } from 'fs'
 
 const PORT = 4174
 const BASE = `http://localhost:${PORT}`
@@ -439,6 +439,55 @@ try {
   await qPage.waitForTimeout(500)
   check('finds are remembered', (await qPage.locator('.sq-quest.sq-done').count()) === 2)
   await qCtx.close()
+
+  /* ---- 14. The haiku engraver: every loved moment carries a poem ---- */
+  let haikuSrc = ''
+  try {
+    haikuSrc = readFileSync('src/data/haiku.ts', 'utf8')
+  } catch {}
+  const itinSrc = readFileSync('src/data/itinerary.ts', 'utf8')
+  const stopCount = (itinSrc.match(/^\s*time: '/gm) ?? []).length
+  const poems = [...haikuSrc.matchAll(/'(d\d+:\d+)':\s*\n?\s*'((?:[^'\\]|\\.)*)'/g)]
+  check('every stop carries a poem', stopCount > 0 && poems.length === stopCount, `${poems.length}/${stopCount}`)
+  check('every poem is three lines', poems.length > 0 && poems.every((m) => m[2].split('\\n').length === 3))
+  check('no stop is engraved twice', poems.length > 0 && new Set(poems.map((m) => m[1])).size === poems.length)
+
+  const hCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const hPage = await hCtx.newPage()
+  await hPage.goto(`${BASE}/?demo=1#journey`)
+  await hPage.waitForTimeout(700)
+  check('loved moments are engraved', (await hPage.locator('.treasure-row .t-haiku').count()) === 6)
+  const firstPoem = poems.find((m) => m[1] === 'd1:0')
+  const firstLine = await hPage.locator('.treasure-row .t-haiku i').first().textContent().catch(() => null)
+  check('the engraving is the right poem', !!firstPoem && firstLine === firstPoem[2].split('\\n')[0], firstLine ?? '')
+  if (await hPage.locator('.scroll-btn').count()) {
+    await hPage.locator('.scroll-btn').click()
+    await hPage.waitForTimeout(700)
+  }
+  check('the tanzaku scroll unrolls', (await hPage.locator('.tanzaku .tz-poem').count()) === 6)
+  check('the scroll reads in trip order', ((await hPage.locator('.tz-mark').first().textContent().catch(() => null)) ?? '').startsWith('Day 1'))
+  await shot(hPage, 'tanzaku')
+  if (await hPage.locator('.tz-close').count()) {
+    await hPage.locator('.tz-close').click()
+    await hPage.waitForTimeout(300)
+  }
+  check('the scroll rolls back up', (await hPage.locator('.tanzaku').count()) === 0)
+  await hCtx.close()
+
+  const tzCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, reducedMotion: 'reduce' })
+  const tzPage = await tzCtx.newPage()
+  await tzPage.goto(`${BASE}/?demo=1#journey`)
+  await tzPage.waitForTimeout(700)
+  let tzAnim = 'no overlay'
+  if (await tzPage.locator('.scroll-btn').count()) {
+    await tzPage.locator('.scroll-btn').click()
+    await tzPage.waitForTimeout(400)
+    if (await tzPage.locator('.tanzaku').count()) {
+      tzAnim = await tzPage.locator('.tanzaku').evaluate((el) => getComputedStyle(el).animationName)
+    }
+  }
+  check('reduced motion stills the unroll', tzAnim === 'none', tzAnim)
+  await tzCtx.close()
 } finally {
   await browser.close()
   server.kill()

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 import { itinerary, kindMeta, TRIP_LENGTH, type Day } from '../data/itinerary'
+import { haiku } from '../data/haiku'
 import { phraseCategories } from '../data/phrases'
 import { useStored } from '../hooks/useStored'
 import { useSpeech } from '../hooks/useSpeech'
@@ -12,6 +13,7 @@ import { currentSolar, PHASE_LABEL } from '../lib/solar'
 import { microseasonFor } from '../data/sekki'
 import { journalDays } from '../lib/db'
 import { TravelersCard } from '../components/Travelers'
+import { TanzakuScroll } from '../components/TanzakuScroll'
 import { Journal } from '../components/Journal'
 import { FujiWindow } from '../components/FujiWindow'
 import { DeerDojo } from '../components/DeerDojo'
@@ -338,6 +340,7 @@ function PhraseOfTheDay() {
 /* ================= treasures ================= */
 
 function Treasures({ moments, openDay }: { moments: MomentMap; openDay: (id: number) => void }) {
+  const [unrolled, setUnrolled] = useState(false)
   const loved = itinerary.flatMap((day) =>
     day.activities
       .map((act, i) => ({ day, act, key: `d${day.id}:${i}` }))
@@ -349,6 +352,9 @@ function Treasures({ moments, openDay }: { moments: MomentMap; openDay: (id: num
       <div className="section-title">
         <h2>Loved moments</h2>
         <span className="jp">宝物 · treasures</span>
+        <button className="scroll-btn" onClick={() => setUnrolled(true)}>
+          短冊 · unroll
+        </button>
       </div>
       <div className="card" style={{ padding: '4px 16px' }}>
         {loved.map(({ day, act, key }) => (
@@ -359,6 +365,13 @@ function Treasures({ moments, openDay }: { moments: MomentMap; openDay: (id: num
               <span className="t-sub">
                 Day {day.id} · {day.city}
               </span>
+              {haiku[key] && (
+                <span className="t-haiku">
+                  {haiku[key].split('\n').map((line, li) => (
+                    <i key={li}>{line}</i>
+                  ))}
+                </span>
+              )}
             </span>
             <span className="chev" style={{ width: 18, height: 18, color: 'var(--ink-faint)' }}>
               <ChevronIcon />
@@ -366,6 +379,7 @@ function Treasures({ moments, openDay }: { moments: MomentMap; openDay: (id: num
           </button>
         ))}
       </div>
+      {unrolled && <TanzakuScroll moments={moments} onClose={() => setUnrolled(false)} />}
     </>
   )
 }
