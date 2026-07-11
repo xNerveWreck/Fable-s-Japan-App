@@ -28,10 +28,11 @@ suite green, propose next increment).
   and stop; the owner reviews and merges on GitHub — always (universal rule,
   restated here because it has been violated once on another project).
 - Offline-first; no new dependencies; no runtime network — sole sanctioned
-  exception: the sign decoder, when built, calls `api.anthropic.com` with the
-  owner's on-device key (DECISIONS.md #17; resolves #14). That key lives in
+  exception: the sign decoder (built 2026-07-11) calls `api.anthropic.com` with
+  the owner's on-device key (DECISIONS.md #17; resolves #14). That key lives in
   `localStorage` only — it must never appear in `src/lib/sync.ts`, any sync
-  payload, the repo, or a fixture. All art inline SVG on `--art-*` tokens.
+  payload, the repo, or a fixture; the story suite greps for it. All art inline
+  SVG on `--art-*` tokens.
 - Test-first against `tests/story.mjs`; everything green before any push.
 - Multi-surface repo: `git fetch` FIRST, every session — claude.ai cloud sessions
   edit this repo too, and local may be stale.
@@ -72,8 +73,13 @@ interactive work: just do it directly.
   (results don't print) — that IS the expected red state, not a broken suite.
   Guard red-phase clicks with `if (await locator.count())` so the FAIL lines
   still print instead of the run dying at the first absent element.
-- The itinerary has **73** activities — count with the strict `^\s*time: '`
-  regex; a loose `^\s*time:` over-counts by one (ROADMAP's "73 stops" is right).
+- The itinerary has **62** activities since the 2026-07-11 real-itinerary swap
+  (73 before it) — count with the strict `^\s*time: '` regex; a loose
+  `^\s*time:` over-counts. The suite enforces haiku coverage at exactly one
+  poem per stop, so itinerary and `haiku.ts` must change together.
+- If the Browser-pane screenshot tool times out (it did, twice, restart
+  included), don't fight it: `SHOT_DIR=<dir> npm run check` makes Playwright
+  capture real screenshots of the key screens.
 - Full-screen overlays must beat the tab bar: `.tabbar` is `z-index: 100`, so
   overlays go higher (the tanzaku sits at 120) or taps land on the tabbar.
 - The story suite is one ESM scope — top-level `const` names collide across
