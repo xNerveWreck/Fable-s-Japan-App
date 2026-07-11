@@ -36,6 +36,6 @@ export const dishes: Dish[] = [
   { id: 'yakitori', name: 'Yakitori', jp: '焼き鳥', desc: 'Charcoal chicken skewers by the stick under lantern light. Momo (thigh) and tsukune (meatball) are the crowd-pleasers. Say "tare" for sauce.', kidMeter: 4, where: 'Omoide Yokochō, izakaya alleys' },
   { id: 'unagi', name: 'Unagi', jp: 'うなぎ', desc: 'Grilled freshwater eel lacquered with sweet soy, over rice. Sounds scary, tastes like candy teriyaki. A classic "I can’t believe I like eel" moment.', kidMeter: 2, where: 'Specialty unagi houses' },
   { id: 'takotamago', name: 'Tako tamago', jp: 'たこ卵', desc: 'A whole candied baby octopus with a quail egg tucked inside its head, on a stick. The Nishiki Market dare. Photograph first; there will be witnesses.', kidMeter: 1, where: 'Nishiki Market, Kyoto' },
-  { id: 'natto', name: 'Nattō', jp: '納豆', desc: 'Fermented soybeans: sticky, stringy, smells like a locker room, beloved nationally at breakfast. The ultimate adventurer’s badge. Stir 50 times, commit fully.', kidMeter: 1, where: 'Ryokan breakfasts, konbini' },
+  { id: 'natto', name: 'Nattō', jp: '納豆', desc: 'Fermented soybeans: sticky, stringy, smells like a locker room, beloved nationally at breakfast. The ultimate adventurer’s badge. Stir 50 times, commit fully.', kidMeter: 1, where: 'Breakfast sets, konbini' },
   { id: 'purin', name: 'Purin', jp: 'プリン', desc: 'Japanese crème caramel in a little glass or cup — silkier than any pudding at home. The konbini fridge hides world-class dessert for ¥150.', kidMeter: 5, where: 'Konbini, cafés' },
 ]

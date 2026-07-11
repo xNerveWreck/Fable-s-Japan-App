@@ -1,6 +1,6 @@
-/** Side Quests v1 — three find-it micro-hunts per city, unlocked when the
- *  family is actually there. Ids and subjects are fixed by the plan; never
- *  rename an existing id (the story suite depends on the count per city). */
+/** Side Quests v1 — find-it micro-hunts per city, unlocked when the
+ *  family is actually there. Never rename an existing id (the story suite
+ *  depends on the count per city — Tokyo has four, update it if that moves). */
 
 export interface Quest {
   id: string
@@ -33,29 +33,21 @@ export const quests: Quest[] = [
     jp: 'コーンスープ',
     hint: 'Somewhere in Tokyo a vending machine sells hot canned corn soup right beside the cold drinks. Find one and hold the warm can.',
   },
-  // ---------- Hakone ----------
   {
-    id: 'h-blackegg',
-    city: 'Hakone',
-    title: 'A real black egg',
-    jp: '黒たまご',
-    hint: 'At Ōwakudani, eggs boiled in the volcanic hot springs turn black as coal. Spot one — or better, eat one.',
-  },
-  {
-    id: 'h-torii',
-    city: 'Hakone',
-    title: 'The lake torii, from the ship',
-    jp: '芦ノ湖の鳥居',
-    hint: 'From the deck of the pirate ship crossing Lake Ashi, find the red torii standing in the water, framed against the far shore.',
-  },
-  {
-    id: 'h-switchback',
-    city: 'Hakone',
-    title: 'The great switchback swap',
-    jp: 'スイッチバック',
-    hint: 'On the Hakone Tozan train, catch the moment it reverses direction — the driver and conductor cross paths right past your window.',
+    id: 't-yanakacat',
+    city: 'Tokyo',
+    title: 'A carved cat of Yanaka',
+    jp: '谷中の猫',
+    hint: 'Yanaka Ginza is Tokyo’s cat town — seven carved wooden cats hide along the shopping street, on rooftops and shopfronts. Find even one and you’re in the club.',
   },
   // ---------- Kyoto ----------
+  {
+    id: 'k-float',
+    city: 'Kyoto',
+    title: 'A wheel taller than a parent',
+    jp: '山鉾の車輪',
+    hint: 'The Gion Matsuri floats roll on wooden wheels taller than a grown-up. Stand next to one (politely, from the side) and check who wins.',
+  },
   {
     id: 'k-fox',
     city: 'Kyoto',
@@ -120,5 +112,12 @@ export const quests: Quest[] = [
     title: 'A takoyaki flip, mid-air',
     jp: 'たこ焼きの妙技',
     hint: 'Watch a takoyaki cook flick the batter balls with two picks — catch one caught mid-flip, spinning in the air.',
+  },
+  {
+    id: 'o-daruma',
+    city: 'Osaka',
+    title: 'The tiniest daruma',
+    jp: '一番小さい達磨',
+    hint: 'Katsuōji’s hillside holds thousands of daruma dolls, tucked into ledges, lanterns, and tree roots. Somewhere is one smaller than your thumb. Find it.',
   },
 ]

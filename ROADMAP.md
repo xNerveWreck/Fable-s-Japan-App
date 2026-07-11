@@ -84,7 +84,7 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 
 ### 🎒 For the parents — practical magic, upgraded
 
-- **Live Transit Copilot** `L · net` — Wire the 73 stops to a transit API (Ekispert/NAVITIME) so the plan knows
+- **Live Transit Copilot** `L · net` — Wire the 62 stops to a transit API (Ekispert/NAVITIME) so the plan knows
   the actual next train: a soft temple-bell nudge says "leave the ryokan by 9:12 for the 9:31 Hakone Tozan" —
   including which car to board so you step off at the elevator.
 - **Rain-Day Auto-Replan** `M · net` — Feed JMA's hourly forecast into the hand-written rain plans: at 6 a.m.
@@ -163,7 +163,7 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 - **Menu Lens** `M · AI` — Photograph any menu — handwritten izakaya chalkboard, ramen ticket machine — and
   vision translates it, cross-checks every dish against the stored allergy card, marks the kid-safe picks, and
   drafts the exact polite Japanese to order.
-- **Sign & Etiquette Decoder** 📐 *(designed + planned 2026-07-10, key architecture decided — build on the owner's go)* `S · AI` — Camera on any onsen rules placard, shrine instruction board, or
+- **Sign & Etiquette Decoder** ✅ *(built 2026-07-11 on `claude/real-itinerary` — the first Aibō feature; BYO on-device key per DECISIONS.md #17)* `S · AI` — Camera on any onsen rules placard, shrine instruction board, or
   coin-locker screen; back comes not a translation but *what this means and what your family should do next*,
   faux-pas warnings first.
 - **Two-Way Voice Interpreter** `L · AI` — Hold, speak English; natural, correctly-polite Japanese comes out
@@ -188,12 +188,12 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
   the Daibutsu — and a 60-second story streams out, tuned separately to each kid's age.
 - **Konbini Mystery Snack Referee** `S · AI` — Day 1's snack-roulette game gets an official: scans the label,
   flags hidden allergens, and reveals what the snack actually *was* only after everyone has tasted and ranked it.
-- **Haiku Engraver** ✅ *(pre-authored — 73 poems ship as data, zero runtime AI)* `S · AI` — Every loved moment quietly receives a 5-7-5, engraved into its treasure card.
+- **Haiku Engraver** ✅ *(pre-authored — 62 poems ship as data after the 2026-07-11 re-engraving for the real itinerary, zero runtime AI)* `S · AI` — Every loved moment quietly receives a 5-7-5, engraved into its treasure card.
   On the flight home they unroll as a single tanzaku scroll: the trip, written as poetry, by the day it was lived.
 - **Dinner-table quiz** `S · AI` — Five fresh questions each night generated from what the family actually did
   today ("How much was the mystery drink Dad hated?"). Same painted quiz UI; the answer key is your own day.
 - **Build-Time Lore Press** `M · AI offline-at-runtime` — The contrarian play: Claude runs only in CI, batch-
-  enriching all 73 stops with age-tuned tip variants, "if you only have 20 minutes" cuts, and pre-baked Q&A —
+  enriching all 62 stops with age-tuned tip variants, "if you only have 20 minutes" cuts, and pre-baked Q&A —
   shipping an app that *feels* AI-deep while staying 100% offline at runtime.
 
 ### 📱 Deeper into the iPhone — the platform maximal
@@ -382,7 +382,7 @@ The ideas that make no economic sense until they suddenly define the product. Ke
 |---|---|---|---|
 | **v2.1** ✅ | 記憶 *Kioku* | Remember | The committed four: journal + photos, sound & haptics, four travelers, the Japan clock — *shipped July 2026* |
 | **v3** 🖌️ | 生きている *Ikiteiru* | The painting lives | **Shipped:** solar clock, microseasons, nijimi physics, living vignettes (tilt/drift depth planes, the heron, the gondola, the deer's bow, after-dark neon and windows), Fuji Window (the Day-7 GPS Tōkaidō scroll — "Fuji on the right in N minutes"), the trip pack (family voice phrasebook, Denshadex, Deer Diplomacy, Side Quests v1), the Haiku Engraver (73 pre-authored poems engraved into loved moments + the tanzaku scroll) (plus field fixes: the iOS departure-date picker, day-to-day paging, Windows story-suite spawn). **Remaining:** Sumi (mascot), opening cinematic, kids' game layer (yōkai camera, Denshadex, boss battles, side quests), geofenced stamps |
-| **v3.5** | 相棒 *Aibō* | The companion | Claude layer: Menu Lens, interpreter, concierge, journal weaver, bedtime stories, phrase dojo — every feature degrading gracefully offline |
+| **v3.5** 🔦 | 相棒 *Aibō* | The companion | **Shipped:** the Sign & Etiquette Decoder (built 2026-07-11, the first Aibō feature — BYO on-device key), riding with the **real-itinerary swap** (the fictional 14 days became the booked Jul 12–23 twelve: dated cards, 62 re-engraved haiku, new route map/quests/Denshadex/Heat Plan). **Remaining:** Menu Lens, interpreter, concierge, journal weaver, bedtime stories, phrase dojo — every feature degrading gracefully offline |
 | **v4** | 一緒に *Issho ni* | Together | Backend: live Family Ink sync, grandparents' window, split-party days, reservation inbox, park mode, transit copilot, rain auto-replan |
 | **v4.5** | 手元に *Temoto ni* | In your hands | The physical pipeline: trip poster, goshuincho, photo book, postcards from 7-Eleven, furoshiki, omamori charms |
 | **v5** | 旅の棚 *Tabi no tana* | The shelf | Destination packs, Trip Weaver, remix gallery, ateliers, the Memory Vault — Tabi as the place a family keeps its adventures |

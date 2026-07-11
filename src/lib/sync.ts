@@ -39,6 +39,9 @@ export interface TripState {
   deer?: number
 }
 
+// NOTE: the owner's Anthropic API key (Kit → Settings → AI key) is deliberately
+// absent from this map — a device secret must never travel in a sync link
+// (DECISIONS.md #11, #17). The story suite enforces this.
 const K = {
   moments: 'tabi:moments',
   packed: 'tabi:packed',

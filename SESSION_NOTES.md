@@ -6,6 +6,63 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-11 (late) — The real itinerary + the Sign Decoder, one branch, night before the flight
+
+**What happened (desktop session, branch `claude/real-itinerary` — pushed, awaiting owner merge):**
+
+1. **The real trip replaced the dream trip** (DECISIONS.md #18). The owner
+   delivered the final booked plan (Jul 12–23) and approved a full replace:
+   12 dated day cards — Day 1 is the flight day ("The Leap"), then
+   Nishi-Nippori base, Puroland, Yoiyama on the biggest night, the Gion
+   Matsuri parade, Fushimi Inari at 7am, the Nara→Osaka day, USJ, Katsuōji,
+   the return shinkansen, and the Skyliner home. `TRIP_LENGTH = 12`; new
+   `date` field on `Day` renders "Thu · Jul 16" labels; `fujiWindow` moved to
+   day 5, `deerDojo` to day 8; **62 haiku re-engraved** (survivors ported);
+   route map is now Tokyo → Kyoto → Nara → Osaka + a dashed arc home; Hakone
+   vignette/coords/trains/quests retired (Skyliner AE, Keiō 8000, 323 Loop,
+   Yanaka cat, Gion float wheel, tiniest daruma join); Kit gained **The Heat
+   Plan** checklist; demo reseeded.
+2. **Privacy line drawn** (DECISIONS.md #19): hotel names yes, booking
+   refs/host names/PNRs no — those go in the on-device reservations pocket.
+   The owner asked about "private repo + everything in": doesn't work, the
+   Pages site (and bundle) is public regardless of repo visibility.
+3. **Sign & Etiquette Decoder built** (DECISIONS.md #20) — the owner gave the
+   go and asked for everything in one branch/merge. Executed
+   `docs/superpowers/plans/2026-07-10-sign-decoder.md` exactly as written
+   (red → green): `src/lib/lens.ts`, `SignLens` card in Speak, AI-key row in
+   Kit → Settings, sync tripwire comment + suite check.
+
+**Verified how:** suite grew 88 → **94/94 green** (two red commits first, per
+process); visual pass at 390×844 via preview + the suite's SHOT_DIR
+screenshots (day cards with dates, The Leap's plane vignette, Fuji Window on
+day 5, Denshadex's new roster, SignLens idle/offline states, Heat Plan and AI
+key in Kit, dawn/day/dusk/lantern/night palettes). Two stragglers caught in
+the visual pass and fixed: the stamp journal's hardcoded `/14`, and the
+pocket's teamLab placeholder.
+
+**Weird things hit (gold for the next agent):**
+- The Browser-pane `computer` screenshot tool timed out repeatedly even after
+  a preview restart — the suite's `SHOT_DIR=<dir> npm run check` is the
+  reliable way to get real screenshots (Playwright captures them).
+- The itinerary now has **62** activities (was 73) — the suite counts with
+  the strict `^\s*time: '` regex and haiku coverage is enforced 62/62.
+- Sign-decoder red state: the plan's section-15 checks abort with a hard
+  TimeoutError at the first missing locator rather than printing FAILs —
+  known behavior (AGENTS.md), fine as the red proof.
+
+**Pick up here:** (1) owner reviews + merges `claude/real-itinerary` (single
+merge; Pages deploys automatically); (2) after merge: tag **v3.5.0** +
+GitHub Release with `dist/` zipped (offered — see DECISIONS.md #20 for why
+3.5 not 4.0); (3) BOTH phones on Wi-Fi: open the app to refresh the service
+worker, set departure = **2026-07-12**, paste a spend-capped Anthropic key
+into Kit → Settings on each phone, and type the booking numbers into the
+reservations pockets (the copy list is in the session's final report — Day 2
+Booking.com, Day 5 Airbnb, Day 8 Daiwa Roynet, Day 9 USJ tickets when
+bought, Day 11 the last hotel); (4) family-sync the phones once everything
+is entered. Nothing else is mid-flight. 行ってらっしゃい!
+
+---
+
 ## 2026-07-11 — v3.2.0 tagged and released
 
 **What happened:** owner merged `claude/haiku-engraver` (PR #15); main verified

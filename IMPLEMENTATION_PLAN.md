@@ -1,10 +1,10 @@
 # Implementation Plan of Record — Tabi (旅)
 
-**Status (2026-07-10, late session):** trip pack merged and tagged v3.1.0. The
-**Haiku Engraver is BUILT** on branch `claude/haiku-engraver` (88-check suite
-green) awaiting the owner's merge; the **Sign & Etiquette Decoder is designed
-and planned, build deferred** until the owner says go (key architecture
-decided — DECISIONS.md #17).
+**Status (2026-07-11, late session):** v3.2.0 shipped and live. The **real
+itinerary (12 days, Jul 12–23) and the Sign & Etiquette Decoder are BUILT**
+together on branch `claude/real-itinerary` (94-check suite green), awaiting the
+owner's single merge; tag v3.5.0 + Release follow the merge (DECISIONS.md
+#18–#20).
 
 ## How planning works in this repo
 
@@ -19,8 +19,9 @@ keep it updated, it is a rule here, not a nicety).
 | `2026-07-09-living-vignettes.md` | `2026-07-09-living-vignettes-design.md` | ✅ shipped (merged to main) |
 | `2026-07-10-fuji-window.md` | `2026-07-10-fuji-window-design.md` | ✅ shipped (merged to main) |
 | `2026-07-10-trip-pack.md` (4 waves) | decisions inline in the plan | ✅ shipped (merged to main, tagged v3.1.0) |
-| `2026-07-10-haiku-engraver.md` | `2026-07-10-haiku-engraver-design.md` | ✅ built — **on `claude/haiku-engraver`, awaiting merge** |
-| `2026-07-10-sign-decoder.md` | `2026-07-10-sign-decoder-design.md` | 📐 planned, executor-grade — **build deferred, owner says go** |
+| `2026-07-10-haiku-engraver.md` | `2026-07-10-haiku-engraver-design.md` | ✅ shipped (merged to main, tagged v3.2.0) |
+| `2026-07-10-sign-decoder.md` | `2026-07-10-sign-decoder-design.md` | ✅ built — **on `claude/real-itinerary`, awaiting merge** (owner gave the go 2026-07-11; built on the shared branch per DECISIONS.md #20) |
+| Real itinerary swap (Claude Code plan-mode session, 2026-07-11) | decisions in DECISIONS.md #18–#19 | ✅ built — **on `claude/real-itinerary`, awaiting merge** |
 
 ## Hard invariants (bind every plan and every session)
 
@@ -49,14 +50,12 @@ keep it updated, it is a rule here, not a nicety).
 
 ## Next-build candidates (owner picks; none started)
 
-In rough value order, from the 2026-07-10 discussion:
+In rough value order (2026-07-10 list, updated 2026-07-11 — the decoder and
+engraver have shipped off it):
 1. **During-trip polish** driven by real family use (tilt feel tuning is a
-   two-number CSS change; expect it).
-2. **Living Sky Engine** (`net`) — first network feature; good rainy-week or
-   post-trip build.
+   two-number CSS change; expect it). The trip is Jul 12–23 — this is now live.
+2. **Living Sky Engine** (`net`) — good rainy-week or post-trip build.
 3. **Sumi, the ink spirit** — L-size, post-trip, do it properly.
-4. **Sign & Etiquette Decoder** — blocked on the API-key architecture decision.
-5. **Haiku Engraver** — build-time generation, can ship offline any time.
-6. **Side Quests v2** — photo proof via the journal's IndexedDB photo store.
-7. **Meltdown SOS** — descoped to the calm-breathing screen if built (see
+4. **Side Quests v2** — photo proof via the journal's IndexedDB photo store.
+5. **Meltdown SOS** — descoped to the calm-breathing screen if built (see
    DECISIONS.md context; the "nearest toilet" finder is not worth its data cost).

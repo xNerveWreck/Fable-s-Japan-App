@@ -19,3 +19,13 @@ export function shiftDate(date: string, delta: number): string {
   const [y, m, d] = date.split('-').map(Number)
   return new Date(Date.UTC(y, m - 1, d + delta)).toISOString().slice(0, 10)
 }
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+/** "Thu · Jul 16" from YYYY-MM-DD — locale-proof, date-only. */
+export function shortDate(date: string): string {
+  const [y, m, d] = date.split('-').map(Number)
+  const weekday = new Date(Date.UTC(y, m - 1, d)).getUTCDay()
+  return `${WEEKDAYS[weekday]} · ${MONTHS[m - 1]} ${d}`
+}

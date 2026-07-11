@@ -2,16 +2,16 @@ import { itinerary } from '../data/itinerary'
 import type { Moment } from '../lib/sync'
 
 /**
- * The journey as a single brushstroke. Five cities along the road; when
- * every day in a city is fully resolved, a red hanko stamp lands on it.
+ * The journey as a single brushstroke. Four cities along the road and the
+ * long arc home; when every day in a city is fully resolved, a red hanko
+ * stamp lands on it. (Days spent in the sky belong to no city.)
  */
 
 const cities = [
-  { name: 'Tokyo', jp: '東京', kanji: '東', x: 42, y: 96 },
-  { name: 'Hakone', jp: '箱根', kanji: '箱', x: 118, y: 74 },
-  { name: 'Kyoto', jp: '京都', kanji: '京', x: 200, y: 92 },
-  { name: 'Nara', jp: '奈良', kanji: '奈', x: 274, y: 70 },
-  { name: 'Osaka', jp: '大阪', kanji: '大', x: 348, y: 90 },
+  { name: 'Tokyo', jp: '東京', kanji: '東', x: 48, y: 96 },
+  { name: 'Kyoto', jp: '京都', kanji: '京', x: 178, y: 90 },
+  { name: 'Nara', jp: '奈良', kanji: '奈', x: 254, y: 68 },
+  { name: 'Osaka', jp: '大阪', kanji: '大', x: 336, y: 92 },
 ]
 
 export function RouteMap({ moments }: { moments: Record<string, Moment> }) {
@@ -22,14 +22,14 @@ export function RouteMap({ moments }: { moments: Record<string, Moment> }) {
   })
 
   return (
-    <svg viewBox="0 0 390 150" role="img" aria-label="Route map: Tokyo to Osaka" style={{ display: 'block', width: '100%' }}>
-      {/* Fuji, keeping watch between Tokyo and Hakone */}
-      <path d="M52 62 L80 34 L108 62 Z" fill="var(--art-mtn-near)" opacity="0.7" />
-      <path d="M71 43 L80 34 L89 43 Q80 48 71 43 Z" fill="var(--paper)" />
+    <svg viewBox="0 0 390 150" role="img" aria-label="Route map: Tokyo to Osaka and back" style={{ display: 'block', width: '100%' }}>
+      {/* Fuji, keeping watch between Tokyo and Kyoto — the shinkansen really does pass it */}
+      <path d="M85 66 L113 38 L141 66 Z" fill="var(--art-mtn-near)" opacity="0.7" />
+      <path d="M104 47 L113 38 L122 47 Q113 52 104 47 Z" fill="var(--paper)" />
 
       {/* the road, one brushstroke */}
       <path
-        d="M20 106 C60 84 92 66 118 74 C156 86 168 102 200 92 C236 80 246 62 274 70 C306 78 320 100 366 88"
+        d="M18 104 C40 98 60 92 88 86 C126 78 148 96 178 90 C214 84 228 62 254 68 C288 76 304 98 336 92 C350 90 360 90 372 92"
         fill="none"
         stroke="var(--art-silhouette)"
         strokeWidth="5"
@@ -37,13 +37,24 @@ export function RouteMap({ moments }: { moments: Record<string, Moment> }) {
         opacity="0.85"
       />
       <path
-        d="M20 106 C60 84 92 66 118 74 C156 86 168 102 200 92 C236 80 246 62 274 70 C306 78 320 100 366 88"
+        d="M18 104 C40 98 60 92 88 86 C126 78 148 96 178 90 C214 84 228 62 254 68 C288 76 304 98 336 92 C350 90 360 90 372 92"
         fill="none"
         stroke="var(--paper)"
         strokeWidth="1.4"
         strokeDasharray="1 10"
         strokeLinecap="round"
         opacity="0.9"
+      />
+
+      {/* the way back — a dashed arc over Fuji, Osaka to Tokyo */}
+      <path
+        d="M336 84 C296 26 128 22 52 86"
+        fill="none"
+        stroke="var(--art-silhouette)"
+        strokeWidth="2"
+        strokeDasharray="4 7"
+        strokeLinecap="round"
+        opacity="0.45"
       />
 
       {progress.map((c, i) => {

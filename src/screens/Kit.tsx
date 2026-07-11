@@ -3,7 +3,7 @@ import { allergens, budgetGuide, emergencyItems, packGroups } from '../data/kit'
 import { useStored } from '../hooks/useStored'
 import { shareUrl } from '../lib/sync'
 import { play, type SoundName } from '../lib/sound'
-import { CheckIcon, ChevronIcon, GearIcon, ShareIcon } from '../art/icons'
+import { CheckIcon, ChevronIcon, GearIcon, ShareIcon, TrashIcon } from '../art/icons'
 
 export function Kit() {
   const [showSettings, setShowSettings] = useState(false)
@@ -43,6 +43,8 @@ export function Kit() {
 function KitSettings() {
   const [departure, setDeparture] = useStored<string>('departure', '')
   const [enabled, setEnabled] = useStored<boolean>('sound', false)
+  const [claudeKey, setClaudeKey] = useStored<string>('claude-key', '')
+  const [keyDraft, setKeyDraft] = useState('')
 
   const demoNames: { name: SoundName; label: string }[] = [
     { name: 'tap', label: 'Did it' },
@@ -69,6 +71,37 @@ function KitSettings() {
         </label>
         <p className="pocket-hint" style={{ marginTop: 6 }}>
           The whole journey counts from this day — the countdown, “Day 3 in Kyoto”, the stamps.
+        </p>
+
+        <hr className="hr-ink" />
+
+        <label className="depart-row">
+          <span className="depart-label">AI key · 鍵</span>
+          {claudeKey ? (
+            <span className="key-set">
+              ✓ key saved
+              <button className="icon-btn" aria-label="Clear the AI key" onClick={() => setClaudeKey('')}>
+                <TrashIcon />
+              </button>
+            </span>
+          ) : (
+            <span className="key-entry">
+              <input
+                type="password"
+                placeholder="paste Anthropic key"
+                autoComplete="off"
+                value={keyDraft}
+                onChange={(e) => setKeyDraft(e.target.value)}
+              />
+              <button className="key-save" disabled={!keyDraft.trim()} onClick={() => { setClaudeKey(keyDraft.trim()); setKeyDraft('') }}>
+                Save
+              </button>
+            </span>
+          )}
+        </label>
+        <p className="key-note">
+          Powers the sign decoder. Use a key from a dedicated workspace with a monthly spend cap
+          (console.anthropic.com). Stored only on this phone — never synced, never shared.
         </p>
 
         <hr className="hr-ink" />
