@@ -19,8 +19,9 @@ Fourteen days, hand-crafted. Built for iPhone, works offline, beautiful in dayli
 
 **As of 2026-07-10 — [v3.1.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.1.0) shipped** (the repo's first tagged release, built app attached).
 `main` carries v2.1 *Kioku*, the v3 *Ikiteiru* core (solar clock, microseasons,
-nijimi, living vignettes, Fuji Window), and the trip pack (family voice
-phrasebook, Denshadex, Deer Diplomacy, Side Quests v1) — 79-check suite green —
+nijimi, living vignettes, Fuji Window), the trip pack (family voice
+phrasebook, Denshadex, Deer Diplomacy, Side Quests v1), and the **Haiku
+Engraver** (73 pre-authored poems + the tanzaku scroll) — 88-check suite green —
 and auto-deploys via the GitHub Pages workflow. **Source of truth:** GitHub
 `xNerveWreck/Fable-s-Japan-App`, branch `main`; agents `git fetch` before working
 (the owner edits from claude.ai cloud sessions too). **Verify a checkout:**
@@ -35,7 +36,7 @@ Tabi (旅, *journey*) is a complete travel companion for a family's first two we
 
 | | |
 |---|---|
-| ⛩️ **Journey** | The 14-day itinerary as a living record. Every day has a theme, a painted city vignette, a timeline of stops, honest family pacing, a rain plan, a **reservations pocket** for confirmation codes, and 🦊 *For the kids* tips on nearly every activity. Mark each stop **Did it / Loved it / Skipped** — loved moments collect into a treasures list. The home screen carries the countdown (then live *Up next today* during the trip), **The Road** — the route as one brushstroke, where a red hanko stamp lands on each completed city — a rotating phrase of the day, and the **stamp journal**: fourteen eki-stamp badges earned day by day. From any day page, flip through the trip like pages of a scroll — chevrons in the header, painted next/previous cards at the foot. The bullet-train day opens the **Fuji Window** (below); Nara day runs the **Deer Dojo**, a practice round of shika-senbei protocol that becomes a live exchange log with ranks; and every city hides three **Side Quests** — find-it micro-hunts that unlock on arrival, where two finds paint a secret detail into that city's vignette forever. |
+| ⛩️ **Journey** | The 14-day itinerary as a living record. Every day has a theme, a painted city vignette, a timeline of stops, honest family pacing, a rain plan, a **reservations pocket** for confirmation codes, and 🦊 *For the kids* tips on nearly every activity. Mark each stop **Did it / Loved it / Skipped** — loved moments collect into a treasures list, and each one is quietly **engraved with its own 5-7-5** (seventy-three haiku ship in the bundle, one per stop); the *短冊 unroll* button opens the **tanzaku scroll** — every loved poem on one washi strip, in trip order, sealed with a hanko. Built for the flight home. The home screen carries the countdown (then live *Up next today* during the trip), **The Road** — the route as one brushstroke, where a red hanko stamp lands on each completed city — a rotating phrase of the day, and the **stamp journal**: fourteen eki-stamp badges earned day by day. From any day page, flip through the trip like pages of a scroll — chevrons in the header, painted next/previous cards at the foot. The bullet-train day opens the **Fuji Window** (below); Nara day runs the **Deer Dojo**, a practice round of shika-senbei protocol that becomes a live exchange log with ranks; and every city hides three **Side Quests** — find-it micro-hunts that unlock on arrival, where two finds paint a secret detail into that city's vignette forever. |
 | 🪭 **Discover** | A field guide to how Japan works: etiquette (onsen rules, chopstick taboos, the escalator-side rivalry), transit mastery (Suica, Shinkansen, luggage forwarding), practical magic (konbini, vending machines, gachapon), culture keys (shrine vs. temple, omamori) — plus a 20-dish food guide rated on a five-petal **kid-meter**, and the **Train Quiz**: sixteen questions to pass around the shinkansen, scored like an omikuji fortune. Plus the **Denshadex**: ten collectible cards for the rolling stock this exact trip rides — grey ink silhouettes until *乗った! I rode it!* floods them with ink, with rarity dots, spotter facts, and first-ridden dates that sync between the family's phones. |
 | 📓 **Kioku Journal** *(v2.1)* | One entry per day — what actually happened — with photos stored on-device in IndexedDB and displayed through a **sumi-e ink filter** (tap any photo to flip between ink and original). **Four travelers** give the family names, animal mascots, and ink colors: journal entries carry their author, the Train Quiz keeps a family leaderboard, and the trip-day counter runs on **Japan time**. A synthesized **sound & haptic grammar** (off by default) gives check-offs a stone tap, loved moments a heartbeat, and completed days the deep thunk of a landing hanko. |
 | 💬 **Speak** | A 46-phrase family phrasebook with kana, romaji, and usage notes. Tap the speaker and the phone *says the phrase aloud* in Japanese (on-device speech synthesis, offline). Star your go-to phrases; search across everything. Includes a Kids' Corner — *sugoi!*, *yatta!*, *janken pon!* A brush-red mic beside every speaker records the **family's own attempt** (kept on-device in IndexedDB) — ten years on, the phrasebook still plays their eight-year-old voices trying *oishii!* |
@@ -51,6 +52,11 @@ Tabi (旅, *journey*) is a complete travel companion for a family's first two we
   <img src="docs/screens/quiz-light.png" width="30%" alt="The Train Quiz" />
   <img src="docs/screens/phrases-light.png" width="30%" alt="Phrasebook with speech synthesis" />
   <img src="docs/screens/kit-sync-dark.png" width="30%" alt="Family Sync in the Kit tab, dark theme" />
+</p>
+
+<p align="center">
+  <img src="docs/screens/treasures-haiku-light.png" width="30%" alt="Loved moments engraved with their haiku" />
+  <img src="docs/screens/tanzaku-dark.png" width="30%" alt="The tanzaku scroll at night — the trip written as poetry" />
 </p>
 
 ## The design

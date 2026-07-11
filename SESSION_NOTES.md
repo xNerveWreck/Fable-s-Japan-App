@@ -6,6 +6,44 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-10 (late) — The Haiku Engraver ships; the Sign Decoder is fully planned
+
+**What happened (desktop session, branch `claude/haiku-engraver` — awaiting owner merge):**
+
+1. **Haiku Engraver built** (owner-approved design): `src/data/haiku.ts` — 73
+   pre-authored 5-7-5s, one per itinerary stop, keyed by the moment key — no
+   runtime AI (DECISIONS.md #16). Loved moments are engraved in their treasure
+   rows; the *短冊 unroll* button opens the **TanzakuScroll** overlay (all loved
+   poems in trip order, hanko seal, reduced-motion safe).
+2. **Sign & Etiquette Decoder designed + planned, build deferred.** The big
+   unlock: owner resolved #14 — **BYO Anthropic key pasted on-device** into Kit
+   (localStorage `tabi:claude-key`, never synced), direct browser CORS calls,
+   model `claude-opus-4-8` (DECISIONS.md #17). Executor-grade plan at
+   `docs/superpowers/plans/2026-07-10-sign-decoder.md` is cold-session
+   buildable: complete code for lens library, Speak-tab card, Kit key row,
+   `?lens=` fixtures. Do not build until the owner says go.
+
+**Verified how:** suite grew 79 → **88/88 green** (red commits first); visual
+pass at 390×844 — treasures engraving, tanzaku scroll in day and night phases.
+
+**Weird things hit (gold for the next agent):**
+- The itinerary has **73** activities, not 74 — a loose `^\s*time:` regex
+  over-counts by one; the suite's stricter `^\s*time: '` is the truth (and
+  matches ROADMAP's "73 stops").
+- Full-screen overlays must beat the tab bar: `.tabbar` is `z-index: 100`, so
+  the tanzaku sits at 120 — otherwise Playwright reports the tabbar
+  intercepting taps on the close button.
+- The suite already had an `rmCtx` — new sections need fresh context names
+  (ESM top-level `const` collisions kill the whole run, not one check).
+
+**Pick up here:** (1) owner reviews + merges `claude/haiku-engraver`, then tag
+**v3.2.0** + GitHub Release with `dist/` zipped; (2) decoder build is one
+"go" away — new branch `claude/sign-decoder`, follow the plan, paste a
+spend-capped key into Kit on each phone; (3) pre-flight phone checklist from
+the previous entry still stands.
+
+---
+
 ## 2026-07-10 — Living vignettes, Fuji Window, and the four-feature trip pack
 
 **What happened (three arcs, one desktop session):**

@@ -1,7 +1,10 @@
 # Implementation Plan of Record — Tabi (旅)
 
-**Status (2026-07-10):** all planned work is BUILT; branch `claude/trip-pack`
-awaits the owner's merge. Nothing is currently mid-flight.
+**Status (2026-07-10, late session):** trip pack merged and tagged v3.1.0. The
+**Haiku Engraver is BUILT** on branch `claude/haiku-engraver` (88-check suite
+green) awaiting the owner's merge; the **Sign & Etiquette Decoder is designed
+and planned, build deferred** until the owner says go (key architecture
+decided — DECISIONS.md #17).
 
 ## How planning works in this repo
 
@@ -15,7 +18,9 @@ keep it updated, it is a rule here, not a nicety).
 |------|------|--------|
 | `2026-07-09-living-vignettes.md` | `2026-07-09-living-vignettes-design.md` | ✅ shipped (merged to main) |
 | `2026-07-10-fuji-window.md` | `2026-07-10-fuji-window-design.md` | ✅ shipped (merged to main) |
-| `2026-07-10-trip-pack.md` (4 waves) | decisions inline in the plan | ✅ built, all waves ☑ — **on `claude/trip-pack`, awaiting merge** |
+| `2026-07-10-trip-pack.md` (4 waves) | decisions inline in the plan | ✅ shipped (merged to main, tagged v3.1.0) |
+| `2026-07-10-haiku-engraver.md` | `2026-07-10-haiku-engraver-design.md` | ✅ built — **on `claude/haiku-engraver`, awaiting merge** |
+| `2026-07-10-sign-decoder.md` | `2026-07-10-sign-decoder-design.md` | 📐 planned, executor-grade — **build deferred, owner says go** |
 
 ## Hard invariants (bind every plan and every session)
 
@@ -37,6 +42,10 @@ keep it updated, it is a rule here, not a nicety).
 - 2026-07-10 — "No network, ever" is formally a *principle* (offline-first, never
   offline-only), per ROADMAP's preamble; runtime network remains unused in
   practice until the AI-layer key decision (DECISIONS.md #14).
+- 2026-07-10 (later) — #14 is **resolved** (DECISIONS.md #17): when the sign
+  decoder is built, it may call `api.anthropic.com` at runtime with the owner's
+  on-device key. Everything else remains offline; no feature may *require* the
+  network to leave the family stranded.
 
 ## Next-build candidates (owner picks; none started)
 
