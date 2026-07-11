@@ -2339,3 +2339,9 @@
 .lens-sect ul { margin: 0; padding-left: 18px; }
 .lens-sect li { margin: 3px 0; }
 .lens-again { border: 1px solid var(--hairline); background: none; color: var(--ink-soft); border-radius: var(--radius); padding: 6px 14px; margin-top: 6px; font-size: 13px; }
+
+.key-entry { display: flex; gap: 8px; align-items: center; }
+.key-entry input { flex: 1; min-width: 0; }
+.key-save { border: 1px solid var(--hairline); background: var(--card); color: var(--ink); border-radius: var(--radius); padding: 6px 12px; font-size: 13px; }
+.key-set { display: flex; gap: 8px; align-items: center; color: var(--ink-soft); }
+.key-note { font-size: 12px; color: var(--ink-faint); margin: 6px 2px 0; }
