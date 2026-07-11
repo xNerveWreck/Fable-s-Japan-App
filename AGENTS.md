@@ -27,8 +27,11 @@ suite green, propose next increment).
 - **Never merge to main. Never open a PR unless asked.** Push the session branch
   and stop; the owner reviews and merges on GitHub — always (universal rule,
   restated here because it has been violated once on another project).
-- Offline-first; no new dependencies; no runtime network (see DECISIONS.md #14
-  for the AI-layer exception path); all art inline SVG on `--art-*` tokens.
+- Offline-first; no new dependencies; no runtime network — sole sanctioned
+  exception: the sign decoder, when built, calls `api.anthropic.com` with the
+  owner's on-device key (DECISIONS.md #17; resolves #14). That key lives in
+  `localStorage` only — it must never appear in `src/lib/sync.ts`, any sync
+  payload, the repo, or a fixture. All art inline SVG on `--art-*` tokens.
 - Test-first against `tests/story.mjs`; everything green before any push.
 - Multi-surface repo: `git fetch` FIRST, every session — claude.ai cloud sessions
   edit this repo too, and local may be stale.
@@ -67,6 +70,15 @@ interactive work: just do it directly.
   field note 1: the compiler can't see whether the deer's bow looks like a bow.
 - Red-state TDD runs abort with a hard TimeoutError at the first missing locator
   (results don't print) — that IS the expected red state, not a broken suite.
+  Guard red-phase clicks with `if (await locator.count())` so the FAIL lines
+  still print instead of the run dying at the first absent element.
+- The itinerary has **73** activities — count with the strict `^\s*time: '`
+  regex; a loose `^\s*time:` over-counts by one (ROADMAP's "73 stops" is right).
+- Full-screen overlays must beat the tab bar: `.tabbar` is `z-index: 100`, so
+  overlays go higher (the tanzaku sits at 120) or taps land on the tabbar.
+- The story suite is one ESM scope — top-level `const` names collide across
+  sections and kill the whole run at parse time; give each new section fresh
+  context/page variable names.
 
 ## Wrap-up (every session that changed anything)
 
