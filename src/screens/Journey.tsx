@@ -600,7 +600,7 @@ function Pocket({ dayId }: { dayId: number }) {
         </div>
       ))}
       <div className="pocket-add">
-        <input placeholder="What (e.g. teamLab 9:30)" value={label} onChange={(e) => setLabel(e.target.value)} />
+        <input placeholder="What (e.g. USJ tickets)" value={label} onChange={(e) => setLabel(e.target.value)} />
         <input placeholder="Code" value={code} onChange={(e) => setCode(e.target.value)} />
         <button className="icon-btn" aria-label="Add reservation" onClick={add}>
           <PlusIcon />
