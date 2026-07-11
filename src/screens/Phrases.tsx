@@ -4,6 +4,7 @@ import { useSpeech } from '../hooks/useSpeech'
 import { useStored } from '../hooks/useStored'
 import { SpeakerIcon, StarIcon } from '../art/icons'
 import { VoiceButton } from '../components/VoiceButton'
+import { SignLens } from '../components/SignLens'
 
 export function Phrases() {
   const { speak, speakingId, supported } = useSpeech()
@@ -74,6 +75,8 @@ export function Phrases() {
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
+
+      <SignLens />
 
       {filtered ? (
         <>
