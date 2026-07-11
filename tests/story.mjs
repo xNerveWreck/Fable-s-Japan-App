@@ -488,6 +488,44 @@ try {
   }
   check('reduced motion stills the unroll', tzAnim === 'none', tzAnim)
   await tzCtx.close()
+
+  /* ---- 15. The sign decoder: photograph a sign, learn what to do ---- */
+  // a 1x1 JPEG — enough for the canvas downscale path; fixtures answer, not the network
+  const tinyJpeg = Buffer.from(
+    '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAALCAABAAEBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==',
+    'base64'
+  )
+  const lCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const lPage = await lCtx.newPage()
+
+  await lPage.goto(`${BASE}/#speak`)
+  await lPage.waitForTimeout(500)
+  check('the decoder card waits in Speak', (await lPage.locator('.lens-card').count()) === 1)
+  await lPage.locator('.lens-begin').click()
+  await lPage.waitForTimeout(300)
+  check('no key points at Kit', ((await lPage.textContent('.lens-fail')) ?? '').includes('Kit'))
+
+  await lPage.goto(`${BASE}/?lens=ok#speak`)
+  await lPage.waitForTimeout(500)
+  await lPage.locator('.lens-begin').click()
+  await lPage.locator('.lens-card input[type="file"]').setInputFiles({ name: 'sign.jpg', mimeType: 'image/jpeg', buffer: tinyJpeg })
+  await lPage.waitForTimeout(900)
+  check('the sign is decoded', (await lPage.locator('.lens-result').count()) === 1)
+  const firstBlock = await lPage.locator('.lens-result > *').first().getAttribute('class')
+  check('warnings come first', (firstBlock ?? '').includes('lens-warning'), firstBlock ?? '')
+
+  await lPage.goto(`${BASE}/?lens=offline#speak`)
+  await lPage.waitForTimeout(500)
+  await lPage.locator('.lens-begin').click()
+  await lPage.locator('.lens-card input[type="file"]').setInputFiles({ name: 'sign.jpg', mimeType: 'image/jpeg', buffer: tinyJpeg })
+  await lPage.waitForTimeout(900)
+  check('offline gets a calm face', ((await lPage.textContent('.lens-fail')) ?? '').includes('sky'))
+  await shot(lPage, 'sign-lens')
+  await lCtx.close()
+
+  // the key must never be able to travel in a sync link
+  const syncSrc = readFileSync('src/lib/sync.ts', 'utf8')
+  check('the key never syncs', !syncSrc.includes('claude-key'))
 } finally {
   await browser.close()
   server.kill()
