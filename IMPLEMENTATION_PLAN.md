@@ -1,11 +1,14 @@
 # Implementation Plan of Record — Tabi (旅)
 
-**Status (2026-07-12, night — trip underway):** everything through
+**Status (2026-07-12, overnight — trip underway):** everything through
 **v4.0.1 is merged, tagged, and live.** v3.5.0/v3.6.0 shipped departure
 morning; **v4.0.0 Family Ink live sync** (Supabase realtime, DECISIONS.md
 #22–#23) shipped the same day and the family paired both phones; **v4.0.1**
-fixed the synced card's invite-code display hours later. Suite 107/107; live
-E2E (`npm run check:live`) 8/8 against the real project.
+fixed the synced card's invite-code display hours later. The **Michizure
+batch** (Menu Lens + kiwi, generative kamon, Sumi v1 — DECISIONS.md #24–#26)
+is built and pushed on `claude/menu-kamon-sumi`, **awaiting owner merge →
+v4.1.0**. Suite 130/130; live E2E (`npm run check:live`) 8/8 against the
+real project.
 
 ## How planning works in this repo
 
@@ -25,13 +28,15 @@ keep it updated, it is a rule here, not a nicety).
 | Real itinerary swap (Claude Code plan-mode session, 2026-07-11) | decisions in DECISIONS.md #18–#19 | ✅ shipped (merged to main 2026-07-12, PR #17) |
 | Treasures tab reorg (owner field feedback, 2026-07-12) | decision in DECISIONS.md #21 | ✅ shipped (merged to main 2026-07-12, PR #18, tagged v3.6.0) |
 | `2026-07-12-live-family-sync.md` (6 tasks, subagent-driven) | `2026-07-12-live-family-sync-design.md` | ✅ shipped (merged 2026-07-12, PR #20, tagged v4.0.0; field fix PR #22 tagged v4.0.1 the same night) |
+| Michizure batch (plan-mode session, built in-session, 2026-07-12 overnight) | `2026-07-12-menu-lens-kamon-sumi-design.md` | 🖌️ built + pushed on `claude/menu-kamon-sumi`, awaiting owner merge (→ v4.1.0) |
 
 ## Hard invariants (bind every plan and every session)
 
 - No new npm dependencies; no image/font/audio assets; no runtime network —
   with exactly TWO sanctioned exceptions, both opt-in and both degrading to a
-  working offline app: the Sign Decoder (`api.anthropic.com`, on-device key,
-  DECISIONS.md #17) and Family Ink live sync (`@supabase/supabase-js`,
+  working offline app: the Aibō lenses — Sign Decoder and Menu Lens, one shared
+  call path (`api.anthropic.com`, on-device key,
+  DECISIONS.md #17/#24) and Family Ink live sync (`@supabase/supabase-js`,
   lazy-loaded, OFF by default, DECISIONS.md #22). No third exception without an
   owner decision.
 - All art inline SVG on existing `--art-*`/theme tokens; never a hardcoded color;

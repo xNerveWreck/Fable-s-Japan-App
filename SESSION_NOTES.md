@@ -6,6 +6,47 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-12 (overnight) — the Michizure batch: Menu Lens + kiwi, the kamon, and Sumi
+
+**What happened (desktop session, branch `claude/menu-kamon-sumi` off main@d70edc7
+— three feature commits pushed, awaiting owner merge → proposed v4.1.0):** the
+owner picked three of the six vision-talk features and went to bed ("knock out
+all of them at once. Menu, kiwi, Sumi, and Kamon"); Phrase Dojo, soundscape, and
+the opening cinematic stay deferred. Everything landed:
+
+1. **Menu Lens + kiwi** (`fa3be32`) — the second lens on the #17 key (shared
+   `lensCall`, `?menu=` fixtures, allergy card in the prompt; dishes with
+   vermillion avoid-strikes, gold cautions, 子 kid picks, the polite order
+   line). Kiwi (キウイフルーツ) joined the allergen picker — it's a live-synced
+   field, so one tap propagates to all four phones.
+2. **Generative kamon** (`9bcdce4`) — the crest derives from the travelers'
+   animals + ink colors (no picker, DECISIONS #25), gains a petal per loved
+   moment (capped 36), seals Family Ink and the Treasures header, blossom
+   fallback pre-travelers.
+3. **Sumi v1** (`9530a28`) — the ink spirit above the tab bar (DECISIONS #26):
+   breathes/blinks, sleeps at `data-phase='night'` as a pale moonlit spirit,
+   hops with an ink splash on the new `tabi:loved` event, Nara antlers via the
+   newly exported `currentCity()`, pettable, stilled by reduced motion.
+
+**Verified how:** suite **107 → 130/130 green** (build + check before every
+commit); visual pass via Playwright element screenshots at iPhone viewport, day
+and night — menu result card, kamon close-up and both mounts, Sumi awake/asleep/
+antlered/in-place. One design iteration each on the kamon (fold dividers + knot
+to bind the field, stronger motif silhouettes) and Sumi's antlers (beams-with-
+tines, not antennae) after looking at real renders. Docs: DECISIONS #24–#26,
+ROADMAP Part II ✅s + the v4.1 道連れ row, README (Current state, Speak, Treasures,
+Sumi), and the spec at `docs/superpowers/specs/2026-07-12-menu-lens-kamon-sumi-design.md`.
+
+**Pick up here:** (1) **owner merges** `claude/menu-kamon-sumi` → Pages deploys →
+phones refresh on Wi-Fi; then tag **v4.1.0** + Release on his go. (2) On any
+phone: Kit → Allergy card → tap **Kiwi** once (it unions everywhere), then point
+the Menu Lens at dinner — the real-key smoke test is that first meal. (3) Sumi
+extension points are ready when wanted: `tabi:loved` for reactions,
+`currentCity()` for costumes (Kyoto/Osaka ideas in ROADMAP), the brain stays
+moonshot. (4) Still deferred: Phrase Dojo, soundscape, opening cinematic.
+
+---
+
 ## 2026-07-12 (night) — v4.0.1 fix: the synced card now shows invite codes
 
 **What happened (desktop session, branch `claude/fix-invite-code`, stacked on
