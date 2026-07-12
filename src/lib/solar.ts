@@ -44,21 +44,24 @@ export const CITY_COORDS: Record<string, [lat: number, lon: number]> = {
   // 'Home' (the flight days) has no coords on purpose — Tokyo carries the sky.
 }
 
-function currentCoords(): [number, number] {
+/** Today's trip city, or null before/after the trip (and when storage is out). */
+export function currentCity(): string | null {
   try {
     const raw = localStorage.getItem('tabi:departure')
     const departure = raw ? (JSON.parse(raw) as string) : ''
     if (departure) {
       const tripDay = daysBetween(departure, jstToday()) + 1
-      if (tripDay >= 1 && tripDay <= TRIP_LENGTH) {
-        const city = itinerary[tripDay - 1].city
-        if (CITY_COORDS[city]) return CITY_COORDS[city]
-      }
+      if (tripDay >= 1 && tripDay <= TRIP_LENGTH) return itinerary[tripDay - 1].city
     }
   } catch {
     /* storage unavailable — Tokyo carries the sky */
   }
-  return CITY_COORDS.Tokyo
+  return null
+}
+
+function currentCoords(): [number, number] {
+  const city = currentCity()
+  return (city && CITY_COORDS[city]) || CITY_COORDS.Tokyo
 }
 
 /* ---------- the five key palettes ---------- */

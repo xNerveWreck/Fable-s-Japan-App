@@ -2352,6 +2352,81 @@
 .menu-dish.caution .menu-why { color: var(--gold); }
 .menu-price { color: var(--ink-soft); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
+/* ================= Sumi · 墨の精 ================= */
+.sumi {
+  position: fixed;
+  right: 8px;
+  bottom: calc(76px + env(safe-area-inset-bottom));
+  width: 56px;
+  height: 56px;
+  z-index: 60; /* under the tabbar and every modal (they live at 100+) */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.sumi svg { display: block; animation: sumi-breathe 4.4s ease-in-out infinite; transform-origin: 50% 96%; }
+@keyframes sumi-breathe {
+  0%, 100% { transform: scaleX(1) scaleY(1); }
+  50% { transform: scaleX(1.025) scaleY(0.965); }
+}
+
+.sumi-eye { animation: sumi-blink 6.2s infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes sumi-blink {
+  0%, 93.5%, 97%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.06); }
+}
+
+.sumi-ear-l { animation: sumi-ear 8.6s infinite; transform-origin: 80% 90%; transform-box: fill-box; }
+.sumi-ear-r { animation: sumi-ear 8.6s 4.3s infinite; transform-origin: 20% 90%; transform-box: fill-box; }
+@keyframes sumi-ear {
+  0%, 90%, 100% { transform: rotate(0deg); }
+  92.5% { transform: rotate(-8deg); }
+  95% { transform: rotate(3deg); }
+}
+
+.sumi-lid, .sumi-zz { opacity: 0; }
+
+/* asleep after dark — the solar palette already stamps data-phase on :root */
+:root[data-phase='night'] .sumi svg { animation-duration: 7.5s; }
+:root[data-phase='night'] .sumi .sumi-eye { opacity: 0; animation: none; }
+:root[data-phase='night'] .sumi .sumi-lid { opacity: 1; }
+:root[data-phase='night'] .sumi .sumi-zz { opacity: 1; animation: sumi-drift 3.8s ease-in-out infinite; }
+:root[data-phase='night'] .sumi .sumi-ear-l,
+:root[data-phase='night'] .sumi .sumi-ear-r { animation: none; }
+@keyframes sumi-drift {
+  0% { transform: translate(0, 2px); opacity: 0; }
+  30% { opacity: 0.85; }
+  100% { transform: translate(3px, -5px); opacity: 0; }
+}
+
+/* joy — a hop and an ink splash when a moment is loved (or Sumi is petted) */
+.sumi.sumi-joy svg { animation: sumi-hop 0.62s cubic-bezier(0.34, 1.56, 0.5, 1) 2; }
+@keyframes sumi-hop {
+  0%, 100% { transform: translateY(0) scaleX(1) scaleY(1); }
+  35% { transform: translateY(-10px) scaleX(0.95) scaleY(1.06); }
+  70% { transform: translateY(0) scaleX(1.06) scaleY(0.93); }
+}
+.sumi-drop { opacity: 0; }
+.sumi.sumi-joy .sumi-drop { animation: sumi-splash 1.05s ease-out forwards; }
+.sumi.sumi-joy .sumi-drop:nth-of-type(1) { --dx: -13px; --dy: -17px; }
+.sumi.sumi-joy .sumi-drop:nth-of-type(2) { --dx: 13px; --dy: -19px; animation-delay: 0.05s; }
+.sumi.sumi-joy .sumi-drop:nth-of-type(3) { --dx: -18px; --dy: -6px; animation-delay: 0.1s; }
+.sumi.sumi-joy .sumi-drop:nth-of-type(4) { --dx: 18px; --dy: -9px; animation-delay: 0.08s; }
+@keyframes sumi-splash {
+  0% { opacity: 0.9; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.4); }
+}
+/* joy wakes Sumi even at night — same specificity as the phase rules, later wins */
+:root .sumi.sumi-joy .sumi-eye { opacity: 1; animation: none; }
+:root .sumi.sumi-joy .sumi-lid,
+:root .sumi.sumi-joy .sumi-zz { opacity: 0; animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sumi svg, .sumi-eye, .sumi-ear-l, .sumi-ear-r, .sumi-drop, .sumi-zz { animation: none !important; }
+}
+
 /* ================= the family kamon · 家紋 ================= */
 .kamon { flex-shrink: 0; display: block; }
 .kamon-seal { display: flex; justify-content: center; padding: 2px 0 10px; }

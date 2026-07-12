@@ -584,6 +584,46 @@ try {
   check('the blank crest has no folds', (await km2Page.locator('.kamon-motif').count()) === 0)
   await km2Ctx.close()
 
+  /* ---- 15d. Sumi, the ink spirit above the tab bar ---- */
+  const smCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const smPage = await smCtx.newPage()
+  await smPage.goto(`${BASE}/?clock=12:00#discover`)
+  await smPage.waitForTimeout(600)
+  check('sumi lives above the tabbar', (await smPage.locator('.sumi').count()) === 1)
+  check('no antlers away from Nara', (await smPage.locator('.sumi-antlers').count()) === 0)
+  const lidNoon = await smPage.locator('.sumi-lid').evaluate((el) => getComputedStyle(el).opacity)
+  check('sumi wakes with the sun', lidNoon === '0', lidNoon)
+
+  await smPage.goto(`${BASE}/?clock=00:30#discover`)
+  await smPage.waitForTimeout(600)
+  const lidNight = await smPage.locator('.sumi-lid').evaluate((el) => getComputedStyle(el).opacity)
+  check('sumi sleeps at night', lidNight === '1', lidNight)
+
+  await smPage.goto(`${BASE}/?demo=1&clock=12:00#journey/7`)
+  await smPage.waitForTimeout(700)
+  await smPage.locator('.state-btn.sb-loved').first().click()
+  await smPage.waitForTimeout(250)
+  check('a loved moment splashes joy', (await smPage.locator('.sumi.sumi-joy').count()) === 1)
+  await smPage.waitForTimeout(1800)
+  check('sumi settles back down', (await smPage.locator('.sumi.sumi-joy').count()) === 0)
+
+  // the Nara day dresses Sumi in antlers
+  await smPage.evaluate((dep) => localStorage.setItem('tabi:departure', JSON.stringify(dep)), shiftDate(jstToday(), -7))
+  await smPage.goto(`${BASE}/?clock=12:00#journey`)
+  await smPage.waitForTimeout(600)
+  check('deer antlers on the Nara day', (await smPage.locator('.sumi-antlers').count()) === 1)
+  await shot(smPage, 'sumi')
+  await smCtx.close()
+
+  // reduced motion stills the spirit
+  const smrCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, reducedMotion: 'reduce' })
+  const smrPage = await smrCtx.newPage()
+  await smrPage.goto(`${BASE}/#discover`)
+  await smrPage.waitForTimeout(600)
+  const smAnim = await smrPage.locator('.sumi svg').evaluate((el) => getComputedStyle(el).animationName)
+  check('reduced motion stills sumi', smAnim === 'none', smAnim)
+  await smrCtx.close()
+
   // the key must never be able to travel in a sync link
   const syncSrc = readFileSync('src/lib/sync.ts', 'utf8')
   check('the key never syncs', !syncSrc.includes('claude-key'))

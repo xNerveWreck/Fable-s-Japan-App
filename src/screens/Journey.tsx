@@ -65,6 +65,8 @@ export function Journey({ route, nav }: { route: string[]; nav: (p: string, repl
         const nowComplete = day ? dayIsComplete(day, next) : false
         if (!wasComplete && nowComplete) play('stamp')
         else play(m === 'loved' ? 'loved' : m === 'skipped' ? 'skip' : 'tap')
+        // Sumi (and anything else listening) hears every loved moment
+        if (m === 'loved') window.dispatchEvent(new CustomEvent('tabi:loved'))
       }
       return next
     })

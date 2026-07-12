@@ -10,6 +10,7 @@ import { Kit } from './screens/Kit'
 import { SyncImport } from './screens/SyncImport'
 import { FanIcon, PackIcon, SpeechIcon, ToriiIcon, TreasureIcon } from './art/icons'
 import { InkFilters } from './art/InkFilters'
+import { Sumi } from './art/Sumi'
 
 const tabs = [
   { id: 'journey', label: 'Journey', icon: (on: boolean) => <ToriiIcon filled={on} /> },
@@ -54,6 +55,8 @@ export default function App() {
         {tab === 'speak' && <Phrases />}
         {tab === 'kit' && <Kit />}
       </Fragment>
+
+      <Sumi />
 
       <nav className="tabbar" aria-label="Main">
         {tabs.map((t) => (
