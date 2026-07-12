@@ -6,6 +6,69 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-12 (later, departure day) — Family Ink live sync built, ships dark
+
+**What happened (desktop session, branch `claude/live-family-sync` — pushed,
+awaiting owner merge):**
+
+1. **Backend:** a fresh Supabase project, `tabi-family-sync` (Tokyo, free
+   tier); migration `supabase/migrations/20260712000000_family_ink.sql`
+   **applied to the live project** — the `families`, `family_members`, and
+   `family_state` tables, RLS, and the pairing RPCs.
+2. **Engine:** `src/lib/liveSync.ts` — lazy-loaded `supabase-js`, `FUJI-42`-
+   style single-use pairing codes, a 5-second fold-and-push loop, and a
+   realtime bloom back onto every other phone in the family.
+3. **Kit card:** "Family ink" — start a family, or join one by typing a code.
+4. **App wiring:** boot + bloom — the live view folds in on load and blooms
+   as rows arrive over realtime.
+
+Two calls worth recording as the session's real story, both in the spec's
+SyncPayload section: (1) the non-converging fields — `notes`, `travelers`,
+`departure`, `rate` — are **pinned out** of the live payload; their
+mine-wins/append merge semantics would ping-pong a polling loop forever. (2)
+the live view is **normalized** before it goes over the wire (favs/allergies
+sorted, packed kept true-only) so identical progress always serializes
+identically. What actually rides the wire: moments, packed, favs, allergies,
+quizScores, densha, deer. Reservations/PNRs still never reach the server
+(DECISIONS.md #19 upheld), and — inherited from the manual link — sync stays
+additive only: no retraction while the ink is on.
+
+**Verified how:** suite grew 98 → **106/106 green**, and the live two-browser
+E2E (`npm run check:live`, real project, owner's Anonymous-sign-ins toggle ON)
+passed **7/7 — twice**: pair by code, realtime bloom, tunnel-heal convergence,
+and a planted fake PNR that never reached the other phone. Test families
+deleted after each run (tables verified 0/0/0). Final whole-branch review
+(fresh eyes, most capable model): **ready to merge**, zero blockers.
+
+**Ships dark:** OFF by default, the folded link unchanged as the permanent
+fallback. Owner-side before flip-on: (1) merge this branch; (2) enable
+Anonymous sign-ins in the Supabase dashboard (Authentication → Sign In /
+Providers); (3) Kit → Family ink → start our family on phone 1, join by code
+on phone 2. Tag will be **v4.0.0** — the first 一緒に feature.
+
+**Known sharp edge, consciously deferred (fix-before-flip-on candidate, not a
+merge blocker):** a sync bloom remounts the visible screen, which closes an
+open modal — e.g. the allergy card mid-display to restaurant staff. Data is
+never lost (everything persists on change); recovery is two taps. Deferred
+because the exposure window is owner-controlled (ink ships OFF) and any fix
+touches trip-critical stable components mid-trip.
+
+**Follow-ups logged (post-merge hardening, none block):** revoke anon EXECUTE
+on the definer RPCs + attempt-cap the code-mint loops (one small migration);
+enable Supabase anonymous-sign-in rate limiting; soften the unreachable-face
+flicker on flaky Wi-Fi; speech can clip when a bloom remounts mid-phrase;
+`client()` single-flight guard; freeze `LIVE_PIN`.
+
+**Pick up here:** (1) owner merges `claude/live-family-sync` (Pages deploys;
+phones update on next Wi-Fi); (2) both phones open the app on Wi-Fi to refresh
+the SW; (3) Kit → Family ink → start our family on phone 1, join by code on
+phone 2 — the dashboard toggle is already ON; (4) tag **v4.0.0** + Release on
+the owner's go. Spec: `docs/superpowers/specs/2026-07-12-live-family-sync-design.md`
+· Plan: `docs/superpowers/plans/2026-07-12-live-family-sync.md` · Decisions:
+DECISIONS.md #22–#23. よい旅を!
+
+---
+
 ## 2026-07-12 (departure day) — both releases shipped
 
 **What happened:** owner merged `claude/treasures-tab` (PR #18) and gave the go

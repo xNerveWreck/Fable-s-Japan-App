@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import {
+  freshCode, familyId, getInkStatus, joinFamily, startFamily, turnOffInk, turnOnInk,
+} from '../lib/liveSync'
 import { allergens, budgetGuide, emergencyItems, packGroups } from '../data/kit'
 import { TravelersCard } from '../components/Travelers'
 import { useStored } from '../hooks/useStored'
@@ -33,6 +36,7 @@ export function Kit() {
       <Packing />
       <Notes />
       <AllergyCard />
+      <FamilyInk />
       <FamilySync />
       <Emergency />
     </div>
@@ -175,6 +179,163 @@ function Notes() {
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+/* ---------- live family ink ---------- */
+
+function FamilyInk() {
+  const [ink, setInk] = useState(getInkStatus())
+  const [joining, setJoining] = useState(false)
+  const [codeDraft, setCodeDraft] = useState('')
+  const [codeFail, setCodeFail] = useState(false)
+  const [, breathe] = useState(0) // re-render so the countdown stays honest
+
+  useEffect(() => {
+    const onStatus = () => setInk({ ...getInkStatus() })
+    window.addEventListener('tabi:ink-status', onStatus)
+    const t = window.setInterval(() => breathe((n) => n + 1), 30_000)
+    return () => {
+      window.removeEventListener('tabi:ink-status', onStatus)
+      window.clearInterval(t)
+    }
+  }, [])
+
+  const join = async () => {
+    setCodeFail(false)
+    const ok = await joinFamily(codeDraft.trim())
+    if (ok) {
+      setJoining(false)
+      setCodeDraft('')
+    } else if (getInkStatus().kind !== 'unreachable') {
+      setCodeFail(true)
+    }
+  }
+
+  const minsLeft =
+    ink.codeExpiresAt != null ? Math.max(0, Math.round((ink.codeExpiresAt - Date.now()) / 60_000)) : null
+
+  return (
+    <section className="kit-section" data-testid="family-ink">
+      <div className="section-title">
+        <h2>Family ink</h2>
+        <span className="jp">家族の墨</span>
+      </div>
+      <div className="card sync-card">
+        {ink.kind === 'off' && (
+          <>
+            <p className="pocket-hint" style={{ marginTop: 0 }}>
+              Flip this on and the phones keep each other's ink fresh by themselves, whenever
+              they find the sky. Off, the share link below still does everything by hand.
+            </p>
+            {familyId() ? (
+              <button className="show-card-btn pressable" onClick={() => void turnOnInk()}>
+                Turn on live sync
+              </button>
+            ) : joining ? (
+              <>
+                <div className="pocket-add" style={{ marginTop: 4 }}>
+                  <input
+                    placeholder="FUJI-42"
+                    autoCapitalize="characters"
+                    autoComplete="off"
+                    value={codeDraft}
+                    onChange={(e) => setCodeDraft(e.target.value.toUpperCase())}
+                  />
+                  <button className="key-save" disabled={!codeDraft.trim()} onClick={() => void join()}>
+                    Join
+                  </button>
+                </div>
+                {codeFail && <p className="pocket-hint ink-fail">That code has faded — ask for a fresh one.</p>}
+              </>
+            ) : (
+              <>
+                <button className="show-card-btn pressable" onClick={() => void startFamily()}>
+                  Turn on live sync — start our family
+                </button>
+                <button className="show-card-btn pressable ink-quiet" onClick={() => setJoining(true)}>
+                  Join a family
+                </button>
+              </>
+            )}
+          </>
+        )}
+
+        {ink.kind === 'connecting' && <p className="ink-status">Lifting the brush…</p>}
+
+        {ink.kind === 'solo' && (
+          <>
+            <p className="ink-status" style={{ marginTop: 0 }}>
+              Solo — waiting for family
+            </p>
+            {ink.code ? (
+              <>
+                <div className="ink-code">{ink.code}</div>
+                <p className="pocket-hint">
+                  On the other phone: Kit → Family ink → Join a family, and type this code.
+                  {minsLeft != null && ` It fades in about ${minsLeft} min.`}
+                </p>
+              </>
+            ) : (
+              <p className="pocket-hint">The last code faded — mint a fresh one below.</p>
+            )}
+            <div className="quick-refs">
+              <button className="chip chip-indigo" onClick={() => void freshCode()}>
+                New code
+              </button>
+              <button className="chip" onClick={turnOffInk}>
+                Turn off
+              </button>
+            </div>
+          </>
+        )}
+
+        {ink.kind === 'synced' && (
+          <>
+            <p className="ink-status" style={{ marginTop: 0 }}>
+              Synced — {ink.phones} phones
+              {ink.lastSync ? ` · ${new Date(ink.lastSync).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+            </p>
+            <p className="pocket-hint">
+              Check-offs, loved moments, packing, and treasures now flow between the phones on
+              their own. Reservations stay in each phone's pocket, as always.
+            </p>
+            <div className="quick-refs">
+              <button className="chip chip-indigo" onClick={() => void freshCode()}>
+                Invite another phone
+              </button>
+              <button className="chip" onClick={turnOffInk}>
+                Turn off
+              </button>
+            </div>
+            {ink.code && (
+              <>
+                <div className="ink-code">{ink.code}</div>
+                <p className="pocket-hint">
+                  Type this on the new phone{minsLeft != null && ` — it fades in about ${minsLeft} min`}.
+                </p>
+              </>
+            )}
+          </>
+        )}
+
+        {ink.kind === 'unreachable' && (
+          <>
+            <p className="ink-status" style={{ marginTop: 0 }}>
+              The ink can't reach the sky right now — the link below still works.
+            </p>
+            <div className="quick-refs">
+              <button className="chip chip-indigo" onClick={() => void turnOnInk()}>
+                Try again
+              </button>
+              <button className="chip" onClick={turnOffInk}>
+                Turn off
+              </button>
+            </div>
+          </>
         )}
       </div>
     </section>
