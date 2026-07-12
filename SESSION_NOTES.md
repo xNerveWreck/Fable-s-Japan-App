@@ -6,6 +6,30 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-12 (night) — v4.0.1 fix: the synced card now shows invite codes
+
+**What happened (desktop session, branch `claude/fix-invite-code`, stacked on
+`claude/v4.0.0-docs` — pushed, awaiting owner merge):** the owner paired the
+real phones, then found **"Invite another phone" did nothing.** Root cause in
+`liveSync.ts` `markSynced()`: the SYNCED status object never carried
+`code`/`codeExpiresAt` — only the solo branch did — so `freshCode()` minted a
+code server-side that the card could never show (and the status-equality
+guard suppressed even the re-render). Fix: the code rides both branches while
+it's alive; expired codes now drop off on the next status pass instead of
+lingering as dead ink.
+
+**Verified how:** TDD — a new live E2E check reproduced the bug **RED (7/8)**,
+then the fix went **GREEN**: offline suite **107/107** (new `?ink=invited`
+fixture: a synced card showing a fresh code), live E2E **8/8**. Test families
+cleaned after both runs; **the family's real row (2 phones) is live on the
+project and untouched.**
+
+**Pick up here:** owner merges `claude/fix-invite-code` (it contains the
+v4.0.0 docs bump — one merge lands both), then tag **v4.0.1** + Release on
+the go. Phones pick the fix up on their next Wi-Fi refresh.
+
+---
+
 ## 2026-07-12 (later, departure day) — Family Ink live sync built, ships dark
 
 **What happened (desktop session, branch `claude/live-family-sync` — pushed,
