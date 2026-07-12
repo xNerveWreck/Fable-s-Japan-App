@@ -6,8 +6,9 @@ morning; **v4.0.0 Family Ink live sync** (Supabase realtime, DECISIONS.md
 #22–#23) shipped the same day and the family paired both phones; **v4.0.1**
 fixed the synced card's invite-code display hours later. The **Michizure
 batch** (Menu Lens + kiwi, generative kamon, Sumi v1 — DECISIONS.md #24–#26)
-is built and pushed on `claude/menu-kamon-sumi`, **awaiting owner merge →
-v4.1.0**. Suite 130/130; live E2E (`npm run check:live`) 8/8 against the
+**shipped as v4.1.0** (merged 2026-07-13, PR #24; main verified 130/130 at
+merge commit 7b7f10e; tagged + Release live; phones refreshed and kiwi
+tapped). Suite 130/130; live E2E (`npm run check:live`) 8/8 against the
 real project.
 
 ## How planning works in this repo
@@ -28,7 +29,7 @@ keep it updated, it is a rule here, not a nicety).
 | Real itinerary swap (Claude Code plan-mode session, 2026-07-11) | decisions in DECISIONS.md #18–#19 | ✅ shipped (merged to main 2026-07-12, PR #17) |
 | Treasures tab reorg (owner field feedback, 2026-07-12) | decision in DECISIONS.md #21 | ✅ shipped (merged to main 2026-07-12, PR #18, tagged v3.6.0) |
 | `2026-07-12-live-family-sync.md` (6 tasks, subagent-driven) | `2026-07-12-live-family-sync-design.md` | ✅ shipped (merged 2026-07-12, PR #20, tagged v4.0.0; field fix PR #22 tagged v4.0.1 the same night) |
-| Michizure batch (plan-mode session, built in-session, 2026-07-12 overnight) | `2026-07-12-menu-lens-kamon-sumi-design.md` | 🖌️ built + pushed on `claude/menu-kamon-sumi`, awaiting owner merge (→ v4.1.0) |
+| Michizure batch (plan-mode session, built in-session, 2026-07-12 overnight) | `2026-07-12-menu-lens-kamon-sumi-design.md` | ✅ shipped (merged 2026-07-13, PR #24, tagged v4.1.0) |
 
 ## Hard invariants (bind every plan and every session)
 
