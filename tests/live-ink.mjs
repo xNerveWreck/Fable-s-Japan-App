@@ -107,6 +107,12 @@ try {
     ),
   )
 
+  /* invite a third phone: the SYNCED card must mint and SHOW a fresh code */
+  await A.click('text=Invite another phone')
+  const invited = await settled(A.waitForSelector('.ink-code', { timeout: 15000 }))
+  const code2 = invited ? ((await A.textContent('.ink-code')) ?? '').trim() : ''
+  check('invite another phone shows a fresh code on the synced card', invited && /^[A-Z]+-\d\d$/.test(code2))
+
   /* realtime: B writes, A blooms without touching anything */
   await addMoment(B, 'e2e-beta', 'loved')
   check(

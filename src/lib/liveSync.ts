@@ -77,6 +77,7 @@ const FIXTURES: Record<string, InkStatus> = {
   off: { kind: 'off' },
   solo: { kind: 'solo', code: 'FUJI-42', codeExpiresAt: Date.now() + 15 * 60_000 },
   synced: { kind: 'synced', phones: 2, lastSync: Date.now() },
+  invited: { kind: 'synced', phones: 2, lastSync: Date.now(), code: 'NARA-07', codeExpiresAt: Date.now() + 15 * 60_000 },
   unreachable: { kind: 'unreachable' },
 }
 
@@ -146,8 +147,16 @@ function applyIncoming(state: unknown) {
 }
 
 function markSynced() {
-  if (phones >= 2) setStatus({ kind: 'synced', phones, lastSync: lastSyncAt })
-  else setStatus({ kind: 'solo', code: activeCode ?? undefined, codeExpiresAt: activeCodeExp ?? undefined })
+  /* The pairing code rides the status while it's alive — on the SOLO card and
+   * the SYNCED card both: inviting a third phone happens from synced. (v4.0.1
+   * field fix — the invite button minted a code the synced status never
+   * carried, so the card had nothing to show.) Expired codes drop off on the
+   * next status pass instead of lingering as dead ink. */
+  const alive = activeCode !== null && activeCodeExp !== null && Date.now() < activeCodeExp
+  const code = alive ? (activeCode ?? undefined) : undefined
+  const codeExpiresAt = alive ? (activeCodeExp ?? undefined) : undefined
+  if (phones >= 2) setStatus({ kind: 'synced', phones, lastSync: lastSyncAt, code, codeExpiresAt })
+  else setStatus({ kind: 'solo', code, codeExpiresAt })
 }
 
 async function refreshPhones() {
