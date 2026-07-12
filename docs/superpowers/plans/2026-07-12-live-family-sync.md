@@ -1032,6 +1032,14 @@ const check = (name, ok) => {
   console.log(`${ok ? '✅' : '❌'} ${name}`)
 }
 const settled = (p) => p.then(() => true, () => false)
+/* Probe field: moments — notes/travelers/departure/rate are pinned out of the
+ * live payload (non-converging merges; see the spec's SyncPayload paragraph). */
+const addMoment = (pg, id, val) =>
+  pg.evaluate(([k, v]) => {
+    const m = JSON.parse(localStorage.getItem('tabi:moments') ?? '{}')
+    m[k] = v
+    localStorage.setItem('tabi:moments', JSON.stringify(m))
+  }, [id, val])
 
 const server = spawn(
   process.execPath,
@@ -1051,7 +1059,8 @@ try {
   const ctxA = await mk()
   const A = await ctxA.newPage()
   await A.addInitScript(() => {
-    if (!localStorage.getItem('tabi:notes')) localStorage.setItem('tabi:notes', JSON.stringify('ink-e2e-alpha'))
+    if (!localStorage.getItem('tabi:moments'))
+      localStorage.setItem('tabi:moments', JSON.stringify({ 'e2e-alpha': 'done' }))
   })
   await A.goto(`${BASE}/#kit`)
   await A.waitForTimeout(800)
@@ -1072,9 +1081,9 @@ try {
   await B.fill('input[placeholder="FUJI-42"]', code)
   await B.click('text=Join')
   check(
-    "B joins and A's notes arrive",
+    "B joins and A's moments arrive",
     await settled(
-      B.waitForFunction(() => (localStorage.getItem('tabi:notes') ?? '').includes('ink-e2e-alpha'), null, {
+      B.waitForFunction(() => (localStorage.getItem('tabi:moments') ?? '').includes('e2e-alpha'), null, {
         timeout: 20000,
       }),
     ),
@@ -1089,16 +1098,11 @@ try {
   )
 
   /* realtime: B writes, A blooms without touching anything */
-  await B.evaluate(() =>
-    localStorage.setItem(
-      'tabi:notes',
-      JSON.stringify(JSON.parse(localStorage.getItem('tabi:notes')) + '\n⸻\nink-e2e-beta'),
-    ),
-  )
+  await addMoment(B, 'e2e-beta', 'loved')
   check(
-    "A blooms with B's line (realtime)",
+    "A blooms with B's loved moment (realtime)",
     await settled(
-      A.waitForFunction(() => (localStorage.getItem('tabi:notes') ?? '').includes('ink-e2e-beta'), null, {
+      A.waitForFunction(() => (localStorage.getItem('tabi:moments') ?? '').includes('e2e-beta'), null, {
         timeout: 25000,
       }),
     ),
@@ -1106,25 +1110,15 @@ try {
 
   /* the tunnel: B goes dark, both write, B resurfaces, both converge */
   await ctxB.setOffline(true)
-  await B.evaluate(() =>
-    localStorage.setItem(
-      'tabi:notes',
-      JSON.stringify(JSON.parse(localStorage.getItem('tabi:notes')) + '\n⸻\nink-e2e-tunnel'),
-    ),
-  )
-  await A.evaluate(() =>
-    localStorage.setItem(
-      'tabi:notes',
-      JSON.stringify(JSON.parse(localStorage.getItem('tabi:notes')) + '\n⸻\nink-e2e-meanwhile'),
-    ),
-  )
+  await addMoment(B, 'e2e-tunnel', 'done')
+  await addMoment(A, 'e2e-meanwhile', 'loved')
   await A.waitForTimeout(8000) // A pushes while B is dark
   await ctxB.setOffline(false)
   const converged = (pg) =>
     pg.waitForFunction(
       () => {
-        const n = localStorage.getItem('tabi:notes') ?? ''
-        return n.includes('ink-e2e-tunnel') && n.includes('ink-e2e-meanwhile')
+        const m = localStorage.getItem('tabi:moments') ?? ''
+        return m.includes('e2e-tunnel') && m.includes('e2e-meanwhile')
       },
       null,
       { timeout: 30000 },
