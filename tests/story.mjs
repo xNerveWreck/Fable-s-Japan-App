@@ -10,7 +10,7 @@
  */
 import { chromium } from 'playwright'
 import { spawn } from 'child_process'
-import { existsSync, mkdirSync, readFileSync } from 'fs'
+import { existsSync, mkdirSync, readFileSync, readdirSync } from 'fs'
 
 const PORT = 4174
 const BASE = `http://localhost:${PORT}`
@@ -547,6 +547,22 @@ try {
   await browser.close()
   server.kill()
 }
+
+/* ---- 17. Live family ink: the engine's guardrails (suite stays offline) ---- */
+const inkSrc = existsSync('src/lib/liveSync.ts') ? readFileSync('src/lib/liveSync.ts', 'utf8') : ''
+check('the ink carries progress only — reservations pinned empty', inkSrc.includes('reservations: {}'))
+check('the AI key never touches the ink', inkSrc !== '' && !inkSrc.includes('claude-key'))
+
+const inkHtml = readFileSync('dist/index.html', 'utf8')
+const inkEntry = inkHtml.match(/assets\/(index-[\w-]+\.js)/)?.[1]
+const inkEntrySrc = inkEntry ? readFileSync(`dist/assets/${inkEntry}`, 'utf8') : ''
+check('supabase stays off the startup path', inkEntrySrc !== '' && !inkEntrySrc.includes('GoTrueClient'))
+check(
+  'the engine chunk exists and carries supabase',
+  readdirSync('dist/assets')
+    .filter((f) => f.endsWith('.js') && f !== inkEntry)
+    .some((f) => readFileSync(`dist/assets/${f}`, 'utf8').includes('GoTrueClient')),
+)
 
 console.log(results.join('\n'))
 const fails = results.filter((r) => r.startsWith('FAIL')).length
