@@ -543,26 +543,44 @@ try {
   await shPage.waitForTimeout(300)
   check('the travelers live in Kit settings now', (await shPage.locator('.travelers-card').count()) === 1)
   await shCtx.close()
+
+  /* ---- 17. Live family ink: the engine's guardrails (suite stays offline) ---- */
+  const inkSrc = existsSync('src/lib/liveSync.ts') ? readFileSync('src/lib/liveSync.ts', 'utf8') : ''
+  check('the ink carries progress only — reservations pinned empty', inkSrc.includes('reservations: {}'))
+  check('the AI key never touches the ink', inkSrc !== '' && !inkSrc.includes('claude-key'))
+
+  const inkHtml = readFileSync('dist/index.html', 'utf8')
+  const inkEntry = inkHtml.match(/assets\/(index-[\w-]+\.js)/)?.[1]
+  const inkEntrySrc = inkEntry ? readFileSync(`dist/assets/${inkEntry}`, 'utf8') : ''
+  check('supabase stays off the startup path', inkEntrySrc !== '' && !inkEntrySrc.includes('GoTrueClient'))
+  check(
+    'the engine chunk exists and carries supabase',
+    readdirSync('dist/assets')
+      .filter((f) => f.endsWith('.js') && f !== inkEntry)
+      .some((f) => readFileSync(`dist/assets/${f}`, 'utf8').includes('GoTrueClient')),
+  )
+
+  const ikCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const ikPage = await ikCtx.newPage()
+  await ikPage.goto(`${BASE}/?ink=solo#kit`)
+  await ikPage.waitForTimeout(600)
+  check('family ink card is on the kit shelf', await ikPage.isVisible('[data-testid="family-ink"]'))
+  // fixture-driven states only appear once App boot calls maybeStartInk() (Task 4) — .catch
+  // keeps a not-yet-wired fixture a graceful FAIL instead of a 30s hang that aborts the suite
+  check('solo shows the join code big', ((await ikPage.textContent('.ink-code', { timeout: 3000 }).catch(() => null)) ?? '').includes('FUJI-42'))
+  await ikPage.goto(`${BASE}/?ink=synced#kit`)
+  await ikPage.waitForTimeout(500)
+  check('synced counts the phones', ((await ikPage.textContent('.ink-status', { timeout: 3000 }).catch(() => null)) ?? '').includes('2 phones'))
+  await ikPage.goto(`${BASE}/#kit`)
+  await ikPage.waitForTimeout(500)
+  check('ink ships dark — off by default', ((await ikPage.textContent('[data-testid="family-ink"]', { timeout: 3000 }).catch(() => null)) ?? '').includes('Turn on live sync'))
+  await ikPage.locator('[data-testid="family-ink"]').scrollIntoViewIfNeeded()
+  await shot(ikPage, 'family-ink')
+  await ikCtx.close()
 } finally {
   await browser.close()
   server.kill()
 }
-
-/* ---- 17. Live family ink: the engine's guardrails (suite stays offline) ---- */
-const inkSrc = existsSync('src/lib/liveSync.ts') ? readFileSync('src/lib/liveSync.ts', 'utf8') : ''
-check('the ink carries progress only — reservations pinned empty', inkSrc.includes('reservations: {}'))
-check('the AI key never touches the ink', inkSrc !== '' && !inkSrc.includes('claude-key'))
-
-const inkHtml = readFileSync('dist/index.html', 'utf8')
-const inkEntry = inkHtml.match(/assets\/(index-[\w-]+\.js)/)?.[1]
-const inkEntrySrc = inkEntry ? readFileSync(`dist/assets/${inkEntry}`, 'utf8') : ''
-check('supabase stays off the startup path', inkEntrySrc !== '' && !inkEntrySrc.includes('GoTrueClient'))
-check(
-  'the engine chunk exists and carries supabase',
-  readdirSync('dist/assets')
-    .filter((f) => f.endsWith('.js') && f !== inkEntry)
-    .some((f) => readFileSync(`dist/assets/${f}`, 'utf8').includes('GoTrueClient')),
-)
 
 console.log(results.join('\n'))
 const fails = results.filter((r) => r.startsWith('FAIL')).length

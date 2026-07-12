@@ -2345,3 +2345,25 @@
 .key-save { border: 1px solid var(--hairline); background: var(--card); color: var(--ink); border-radius: var(--radius); padding: 6px 12px; font-size: 13px; }
 .key-set { display: flex; gap: 8px; align-items: center; color: var(--ink-soft); }
 .key-note { font-size: 12px; color: var(--ink-faint); margin: 6px 2px 0; }
+
+/* ---------- live family ink (Kit) ---------- */
+.ink-code {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-align: center;
+  padding: 14px 0 10px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.ink-status {
+  font-weight: 600;
+  font-size: 15px;
+}
+.ink-fail {
+  color: var(--vermillion, #c73e3a);
+}
+.ink-quiet {
+  opacity: 0.75;
+  margin-top: 8px;
+}
