@@ -59,11 +59,16 @@ enable Supabase anonymous-sign-in rate limiting; soften the unreachable-face
 flicker on flaky Wi-Fi; speech can clip when a bloom remounts mid-phrase;
 `client()` single-flight guard; freeze `LIVE_PIN`.
 
-**Pick up here:** (1) owner merges `claude/live-family-sync` (Pages deploys;
-phones update on next Wi-Fi); (2) both phones open the app on Wi-Fi to refresh
-the SW; (3) Kit → Family ink → start our family on phone 1, join by code on
-phone 2 — the dashboard toggle is already ON; (4) tag **v4.0.0** + Release on
-the owner's go. Spec: `docs/superpowers/specs/2026-07-12-live-family-sync-design.md`
+**Shipped, same day:** owner merged **PR #20**; `main` re-verified **106/106
+green at the merge commit** (0891998), tagged **v4.0.0**, and the [Release is
+published](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.0.0)
+with the dist zip. Pages auto-deploys `main`, so the live app carries the ink —
+dark until flipped.
+
+**Pick up here:** (1) both phones open the app on Wi-Fi to refresh the SW;
+(2) Kit → Family ink → start our family on phone 1, join by code on phone 2 —
+the dashboard toggle is already ON; (3) the follow-up hardening list above,
+whenever. Spec: `docs/superpowers/specs/2026-07-12-live-family-sync-design.md`
 · Plan: `docs/superpowers/plans/2026-07-12-live-family-sync.md` · Decisions:
 DECISIONS.md #22–#23. よい旅を!
 
