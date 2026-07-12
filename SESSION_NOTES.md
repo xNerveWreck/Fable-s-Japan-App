@@ -24,9 +24,20 @@ fixture: a synced card showing a fresh code), live E2E **8/8**. Test families
 cleaned after both runs; **the family's real row (2 phones) is live on the
 project and untouched.**
 
-**Pick up here:** owner merges `claude/fix-invite-code` (it contains the
-v4.0.0 docs bump — one merge lands both), then tag **v4.0.1** + Release on
-the go. Phones pick the fix up on their next Wi-Fi refresh.
+**Shipped, same night:** owner merged **PR #21** (docs) and **PR #22** (the
+fix); `main` re-verified **107/107 at the merge commit** (45e3c32), tagged
+**v4.0.1**, [Release published](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.0.1)
+with the dist zip. Wrap-up docs pass rode `claude/v4.0.1-docs`: README Current
+state → v4.0.1, IMPLEMENTATION_PLAN status/index/invariants caught up (the
+two-exceptions network rule, the live-payload law), AGENTS.md gained the
+check:live / Supabase-row-safety / Compress-Archive quirks.
+
+**Pick up here:** nothing is mid-flight. (1) Phones pick everything up on
+their next Wi-Fi refresh — then "Invite another phone" works for a third
+phone; (2) next builds are the owner's pick from IMPLEMENTATION_PLAN's
+candidates — item 0 is the small Family Ink hardening list; (3) during-trip
+polish requests will arrive from the field, as v3.6.0 and v4.0.1 did. The
+family is in Japan with a live-syncing painting. よい旅を!
 
 ---
 
