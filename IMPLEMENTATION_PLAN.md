@@ -1,11 +1,11 @@
 # Implementation Plan of Record — Tabi (旅)
 
-**Status (2026-07-12, departure morning):** **v3.5.0 merged and live** (real
-itinerary + Sign Decoder; tag + Release pending the owner's go). **v3.6.0 is
-BUILT** on `claude/treasures-tab` (98-check suite green), awaiting merge: the
-Treasures tab reorg from the owner's first on-device feedback (DECISIONS.md
-#21) — collection layer to its own tab, travelers to Kit settings, The Road
-retired.
+**Status (2026-07-12, night — trip underway):** everything through
+**v4.0.1 is merged, tagged, and live.** v3.5.0/v3.6.0 shipped departure
+morning; **v4.0.0 Family Ink live sync** (Supabase realtime, DECISIONS.md
+#22–#23) shipped the same day and the family paired both phones; **v4.0.1**
+fixed the synced card's invite-code display hours later. Suite 107/107; live
+E2E (`npm run check:live`) 8/8 against the real project.
 
 ## How planning works in this repo
 
@@ -21,14 +21,19 @@ keep it updated, it is a rule here, not a nicety).
 | `2026-07-10-fuji-window.md` | `2026-07-10-fuji-window-design.md` | ✅ shipped (merged to main) |
 | `2026-07-10-trip-pack.md` (4 waves) | decisions inline in the plan | ✅ shipped (merged to main, tagged v3.1.0) |
 | `2026-07-10-haiku-engraver.md` | `2026-07-10-haiku-engraver-design.md` | ✅ shipped (merged to main, tagged v3.2.0) |
-| `2026-07-10-sign-decoder.md` | `2026-07-10-sign-decoder-design.md` | ✅ built — **on `claude/real-itinerary`, awaiting merge** (owner gave the go 2026-07-11; built on the shared branch per DECISIONS.md #20) |
+| `2026-07-10-sign-decoder.md` | `2026-07-10-sign-decoder-design.md` | ✅ shipped (merged to main 2026-07-12, PR #17, tagged v3.5.0) |
 | Real itinerary swap (Claude Code plan-mode session, 2026-07-11) | decisions in DECISIONS.md #18–#19 | ✅ shipped (merged to main 2026-07-12, PR #17) |
-| Treasures tab reorg (owner field feedback, 2026-07-12) | decision in DECISIONS.md #21 | ✅ built — **on `claude/treasures-tab`, awaiting merge** |
+| Treasures tab reorg (owner field feedback, 2026-07-12) | decision in DECISIONS.md #21 | ✅ shipped (merged to main 2026-07-12, PR #18, tagged v3.6.0) |
+| `2026-07-12-live-family-sync.md` (6 tasks, subagent-driven) | `2026-07-12-live-family-sync-design.md` | ✅ shipped (merged 2026-07-12, PR #20, tagged v4.0.0; field fix PR #22 tagged v4.0.1 the same night) |
 
 ## Hard invariants (bind every plan and every session)
 
-- No new npm dependencies; no image/font/audio assets; no network calls at runtime
-  (until DECISIONS.md #14 is resolved for the AI layer).
+- No new npm dependencies; no image/font/audio assets; no runtime network —
+  with exactly TWO sanctioned exceptions, both opt-in and both degrading to a
+  working offline app: the Sign Decoder (`api.anthropic.com`, on-device key,
+  DECISIONS.md #17) and Family Ink live sync (`@supabase/supabase-js`,
+  lazy-loaded, OFF by default, DECISIONS.md #22). No third exception without an
+  owner decision.
 - All art inline SVG on existing `--art-*`/theme tokens; never a hardcoded color;
   semantic tokens per role.
 - `prefers-reduced-motion: reduce` stills everything new — same scene, no motion.
@@ -36,6 +41,11 @@ keep it updated, it is a rule here, not a nicety).
   (localStorage) or additive upgrades (IndexedDB version bumps, `contains()`-guarded).
 - Family Sync (`src/lib/sync.ts`): only OPTIONAL additive `TripState` fields with
   additive merge semantics; old links must always still decode; `v: 1` frozen.
+- Live Family Ink (`src/lib/liveSync.ts`): the live payload carries ONLY fields
+  whose merges converge (DECISIONS.md #23) — never re-add the pinned fields
+  (reservations/notes/travelers/departure/rate); the suite tripwires enforce it.
+  Never delete non-test rows in the `tabi-family-sync` Supabase project — the
+  family's real paired row lives there.
 - Story suite is the gate: test-first (red commit → green commit), append-only
   sections, `npm run build` before `npm run check`, everything green before push.
 - Branch-per-feature, pushed, never merged by an agent (owner merges on GitHub).
@@ -49,11 +59,21 @@ keep it updated, it is a rule here, not a nicety).
   decoder is built, it may call `api.anthropic.com` at runtime with the owner's
   on-device key. Everything else remains offline; no feature may *require* the
   network to leave the family stranded.
+- 2026-07-12 — the "no new dependencies / no runtime network" invariant gains
+  its second and final-for-now exception (DECISIONS.md #22): Family Ink live
+  sync adds `@supabase/supabase-js` (dynamic-imported; the suite proves it
+  stays off the startup path) and talks to the owner's Supabase project. The
+  principle stands: OFF by default, the folded link is the permanent floor,
+  and nothing requires the network.
 
 ## Next-build candidates (owner picks; none started)
 
-In rough value order (2026-07-10 list, updated 2026-07-11 — the decoder and
-engraver have shipped off it):
+In rough value order (2026-07-10 list, updated 2026-07-12 — the decoder,
+engraver, and live sync have shipped off/around it):
+0. **Family Ink follow-up hardening** — the small post-ship list in
+   SESSION_NOTES (2026-07-12): revoke anon EXECUTE on the definer RPCs +
+   attempt-cap the code-mint loops (one migration), soften the unreachable-face
+   flicker, the bloom-remount-closes-modals edge. Rainy-day sized.
 1. **During-trip polish** driven by real family use (tilt feel tuning is a
    two-number CSS change; expect it). The trip is Jul 12–23 — this is now live.
 2. **Living Sky Engine** (`net`) — good rainy-week or post-trip build.

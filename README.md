@@ -29,11 +29,13 @@ Denshadex, Train Quiz), the travelers moved into Kit → Settings, and The Road 
 retired. 98-check suite green, and the GitHub Pages workflow auto-deploys `main`.
 **[v4.0.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.0.0)
 shipped (merged 2026-07-12, PR #20):** Family Ink live sync (Supabase realtime,
-Tokyo) keeps the family's phones' progress fresh by itself — suite now 106/106,
-live two-browser E2E 7/7 against the real project. It ships **dark, OFF by
-default**; the dashboard toggle (Anonymous sign-ins) is already on, so the only
-remaining steps are on the phones: refresh on Wi-Fi, then Kit → Family ink →
-start our family / join by code.
+Tokyo) keeps the family's phones' progress fresh by itself — the family **paired
+both phones the same day**, and
+**[v4.0.1](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.0.1)**
+followed hours later with the first field fix (the synced card never showed
+"Invite another phone" codes). Suite now **107/107**, live two-browser E2E
+**8/8** against the real project. Live sync is opt-in per phone (Kit → Family
+ink); the folded share link below it remains the no-server fallback, forever.
 **Source of truth:** GitHub `xNerveWreck/Fable-s-Japan-App`, branch `main`;
 agents `git fetch` before working (the owner edits from claude.ai cloud sessions
 too). **Verify a checkout:** `npm install`, `npx playwright install chromium`,

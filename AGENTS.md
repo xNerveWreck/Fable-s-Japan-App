@@ -27,12 +27,22 @@ suite green, propose next increment).
 - **Never merge to main. Never open a PR unless asked.** Push the session branch
   and stop; the owner reviews and merges on GitHub — always (universal rule,
   restated here because it has been violated once on another project).
-- Offline-first; no new dependencies; no runtime network — sole sanctioned
-  exception: the sign decoder (built 2026-07-11) calls `api.anthropic.com` with
-  the owner's on-device key (DECISIONS.md #17; resolves #14). That key lives in
-  `localStorage` only — it must never appear in `src/lib/sync.ts`, any sync
-  payload, the repo, or a fixture; the story suite greps for it. All art inline
-  SVG on `--art-*` tokens.
+- Offline-first; no new dependencies; no runtime network — exactly TWO
+  sanctioned exceptions (no third without an owner decision): the sign decoder
+  (`api.anthropic.com`, owner's on-device key, DECISIONS.md #17) and Family Ink
+  live sync (`@supabase/supabase-js`, lazy-loaded, OFF by default, DECISIONS.md
+  #22). The AI key lives in `localStorage` only — never in `src/lib/sync.ts`,
+  any sync payload, the repo, or a fixture; the story suite greps for it. All
+  art inline SVG on `--art-*` tokens.
+- **Live-payload law (DECISIONS.md #23):** `collectLiveState()` carries only the
+  converging fields — never re-add the pinned ones (reservations/notes/
+  travelers/departure/rate); mine-wins/append merges make a polling loop
+  ping-pong forever. The suite tripwires enforce this; read the spec's
+  SyncPayload section before touching `src/lib/liveSync.ts`.
+- **The family's REAL paired row lives in the `tabi-family-sync` Supabase
+  project.** Never delete rows there except test families by their exact
+  printed id (the live E2E prints a `cleanup:` line). Never run destructive
+  SQL against that project without the owner's explicit go.
 - Test-first against `tests/story.mjs`; everything green before any push.
 - Multi-surface repo: `git fetch` FIRST, every session — claude.ai cloud sessions
   edit this repo too, and local may be stale.
@@ -85,6 +95,16 @@ interactive work: just do it directly.
 - The story suite is one ESM scope — top-level `const` names collide across
   sections and kill the whole run at parse time; give each new section fresh
   context/page variable names.
+- `npm run check:live` (`tests/live-ink.mjs`) is the ONLY networked test —
+  manual, never wired into `npm run check`. Build first; it needs Anonymous
+  sign-ins enabled on the Supabase project (it probes and says so if not). It
+  creates a real family and prints a `cleanup: delete from families where id =
+  '…'` line — run exactly that (Supabase MCP `execute_sql`), only that id.
+- Suite section 17 (live ink) drives fixture states via `?ink=off|solo|synced|
+  invited|unreachable` — fixtures only take effect through `maybeStartInk()`,
+  so they need App boot wiring to be in place (they are; don't move the call).
+- Git Bash on this machine has no `zip`; build Release zips with PowerShell
+  `Compress-Archive -Path dist\* -DestinationPath <name>.zip`.
 
 ## Wrap-up (every session that changed anything)
 
