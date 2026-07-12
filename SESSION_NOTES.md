@@ -33,7 +33,12 @@ quizScores, densha, deer. Reservations/PNRs still never reach the server
 (DECISIONS.md #19 upheld), and — inherited from the manual link — sync stays
 additive only: no retraction while the ink is on.
 
-**Verified how:** suite grew 98 → **106/106 green**.
+**Verified how:** suite grew 98 → **106/106 green**, and the live two-browser
+E2E (`npm run check:live`, real project, owner's Anonymous-sign-ins toggle ON)
+passed **7/7 — twice**: pair by code, realtime bloom, tunnel-heal convergence,
+and a planted fake PNR that never reached the other phone. Test families
+deleted after each run (tables verified 0/0/0). Final whole-branch review
+(fresh eyes, most capable model): **ready to merge**, zero blockers.
 
 **Ships dark:** OFF by default, the folded link unchanged as the permanent
 fallback. Owner-side before flip-on: (1) merge this branch; (2) enable
@@ -41,12 +46,26 @@ Anonymous sign-ins in the Supabase dashboard (Authentication → Sign In /
 Providers); (3) Kit → Family ink → start our family on phone 1, join by code
 on phone 2. Tag will be **v4.0.0** — the first 一緒に feature.
 
-**Pick up here:** nothing above is mid-flight, but the task isn't finished —
-next is the live two-browser E2E against the real project
-(`tests/live-ink.mjs`, `npm run check:live`), not written yet. Spec:
-`docs/superpowers/specs/2026-07-12-live-family-sync-design.md` · Plan:
-`docs/superpowers/plans/2026-07-12-live-family-sync.md` · Decision:
-DECISIONS.md #22. よい旅を!
+**Known sharp edge, consciously deferred (fix-before-flip-on candidate, not a
+merge blocker):** a sync bloom remounts the visible screen, which closes an
+open modal — e.g. the allergy card mid-display to restaurant staff. Data is
+never lost (everything persists on change); recovery is two taps. Deferred
+because the exposure window is owner-controlled (ink ships OFF) and any fix
+touches trip-critical stable components mid-trip.
+
+**Follow-ups logged (post-merge hardening, none block):** revoke anon EXECUTE
+on the definer RPCs + attempt-cap the code-mint loops (one small migration);
+enable Supabase anonymous-sign-in rate limiting; soften the unreachable-face
+flicker on flaky Wi-Fi; speech can clip when a bloom remounts mid-phrase;
+`client()` single-flight guard; freeze `LIVE_PIN`.
+
+**Pick up here:** (1) owner merges `claude/live-family-sync` (Pages deploys;
+phones update on next Wi-Fi); (2) both phones open the app on Wi-Fi to refresh
+the SW; (3) Kit → Family ink → start our family on phone 1, join by code on
+phone 2 — the dashboard toggle is already ON; (4) tag **v4.0.0** + Release on
+the owner's go. Spec: `docs/superpowers/specs/2026-07-12-live-family-sync-design.md`
+· Plan: `docs/superpowers/plans/2026-07-12-live-family-sync.md` · Decisions:
+DECISIONS.md #22–#23. よい旅を!
 
 ---
 

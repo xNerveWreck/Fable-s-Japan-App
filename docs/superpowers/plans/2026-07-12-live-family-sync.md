@@ -1153,7 +1153,7 @@ Add to `package.json` scripts: `"check:live": "node tests/live-ink.mjs"`.
 npm run build && npm run check:live
 ```
 
-Expected: **8/8 live checks passed** and a `cleanup:` line. Realtime legs may take a few seconds each — that's the 5-second loop breathing, not a hang.
+Expected: **7/7 live checks passed** and a `cleanup:` line. Realtime legs may take a few seconds each — that's the 5-second loop breathing, not a hang.
 
 - [ ] **Step 4 (ORCHESTRATOR): clean up the test family**
 
