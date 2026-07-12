@@ -6,6 +6,38 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-12 (4am, departure day) — v3.5.0 merged; the Treasures shelf built from field feedback
+
+**What happened (desktop session, branch `claude/treasures-tab` — pushed, awaiting owner merge):**
+
+1. Owner merged `claude/real-itinerary` (PR #17) — **v3.5.0 content is live on
+   main and on the family's phones** (screenshots from the device confirmed:
+   Day 1 "The Leap" showing TODAY, travelers named). The **v3.5.0 tag +
+   Release are still pending** — the tag push needs the owner's explicit
+   go (permission-gated); one word and it ships.
+2. First real-device feedback arrived at 4am with annotated screenshots, and
+   became **v3.6.0** (DECISIONS.md #21): new **Treasures · 宝物 tab** (hanko
+   icon) holding the stamp journal, loved moments + tanzaku, Denshadex, and
+   Train Quiz (`src/screens/Treasures.tsx`, quiz extracted to
+   `src/components/TrainQuiz.tsx`); Journey home slimmed to the plan;
+   travelers moved into Kit → Settings; **The Road deleted** (owner's call;
+   `src/art/RouteMap.tsx` removed); Discover back to field-guide only.
+
+**Verified how:** suite grew 94 → **98/98 green** (red commit first); visual
+pass at 390×844 via Playwright captures (Treasures shelf day + night, slim
+Journey home, Kit settings with travelers). Browser-pane screenshots still
+time out — the SHOT_DIR / one-off Playwright script path is the way.
+
+**Pick up here:** (1) owner merges `claude/treasures-tab` (Pages deploys;
+phones update on next Wi-Fi); (2) tag **v3.5.0** on the PR-17 merge commit
+(f4fb28e) + Release with dist zip, then **v3.6.0** on this merge + Release —
+both need the owner's go for the push; (3) on-device setup still open from
+the last entry: spend-capped AI key per phone, booking refs into the
+reservations pockets, family-sync both phones. The family flies TODAY —
+anything further waits for hotel Wi-Fi. よい旅を!
+
+---
+
 ## 2026-07-11 (late) — The real itinerary + the Sign Decoder, one branch, night before the flight
 
 **What happened (desktop session, branch `claude/real-itinerary` — pushed, awaiting owner merge):**
