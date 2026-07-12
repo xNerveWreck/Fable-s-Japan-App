@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import { maybeStartInk } from './lib/liveSync'
 import { useHashRoute } from './hooks/useHashRoute'
 import { useSolarClock } from './hooks/useSolarClock'
 import { Journey } from './screens/Journey'
@@ -23,6 +24,16 @@ export default function App() {
   const tab = route[0] || 'journey'
   useSolarClock()
 
+  // live family ink: boot once; when a remote merge lands, remount the screen
+  // so every component re-reads localStorage (rare event, additive data)
+  const [inkGen, setInkGen] = useState(0)
+  useEffect(() => {
+    void maybeStartInk()
+    const bloom = () => setInkGen((g) => g + 1)
+    window.addEventListener('tabi:ink', bloom)
+    return () => window.removeEventListener('tabi:ink', bloom)
+  }, [])
+
   // stop any phrase mid-speech and reset scroll when the tab changes
   useEffect(() => {
     window.speechSynthesis?.cancel()
@@ -36,11 +47,13 @@ export default function App() {
   return (
     <>
       <InkFilters />
-      {tab === 'journey' && <Journey route={route} nav={nav} />}
-      {tab === 'discover' && <Discover />}
-      {tab === 'treasures' && <Treasures nav={nav} />}
-      {tab === 'speak' && <Phrases />}
-      {tab === 'kit' && <Kit />}
+      <Fragment key={inkGen}>
+        {tab === 'journey' && <Journey route={route} nav={nav} />}
+        {tab === 'discover' && <Discover />}
+        {tab === 'treasures' && <Treasures nav={nav} />}
+        {tab === 'speak' && <Phrases />}
+        {tab === 'kit' && <Kit />}
+      </Fragment>
 
       <nav className="tabbar" aria-label="Main">
         {tabs.map((t) => (
