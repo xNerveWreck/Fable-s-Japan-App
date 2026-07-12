@@ -3,15 +3,17 @@ import { useHashRoute } from './hooks/useHashRoute'
 import { useSolarClock } from './hooks/useSolarClock'
 import { Journey } from './screens/Journey'
 import { Discover } from './screens/Discover'
+import { Treasures } from './screens/Treasures'
 import { Phrases } from './screens/Phrases'
 import { Kit } from './screens/Kit'
 import { SyncImport } from './screens/SyncImport'
-import { FanIcon, PackIcon, SpeechIcon, ToriiIcon } from './art/icons'
+import { FanIcon, PackIcon, SpeechIcon, ToriiIcon, TreasureIcon } from './art/icons'
 import { InkFilters } from './art/InkFilters'
 
 const tabs = [
   { id: 'journey', label: 'Journey', icon: (on: boolean) => <ToriiIcon filled={on} /> },
   { id: 'discover', label: 'Discover', icon: (on: boolean) => <FanIcon filled={on} /> },
+  { id: 'treasures', label: 'Treasures', icon: (on: boolean) => <TreasureIcon filled={on} /> },
   { id: 'speak', label: 'Speak', icon: (on: boolean) => <SpeechIcon filled={on} /> },
   { id: 'kit', label: 'Kit', icon: (on: boolean) => <PackIcon filled={on} /> },
 ] as const
@@ -36,6 +38,7 @@ export default function App() {
       <InkFilters />
       {tab === 'journey' && <Journey route={route} nav={nav} />}
       {tab === 'discover' && <Discover />}
+      {tab === 'treasures' && <Treasures nav={nav} />}
       {tab === 'speak' && <Phrases />}
       {tab === 'kit' && <Kit />}
 

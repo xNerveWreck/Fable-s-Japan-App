@@ -56,6 +56,29 @@ export function SpeechIcon({ filled = false }: { filled?: boolean }) {
   )
 }
 
+export function TreasureIcon({ filled = false }: { filled?: boolean }) {
+  // a hanko seal, slightly tilted — the mark that lands on everything earned
+  return (
+    <svg viewBox="0 0 26 26" aria-hidden="true">
+      <g {...stroke} fill={filled ? 'currentColor' : 'none'} fillOpacity={filled ? 0.18 : 0}>
+        <rect x="4.5" y="4.5" width="17" height="17" rx="4.5" transform="rotate(-5 13 13)" />
+      </g>
+      <text
+        x="13"
+        y="16.8"
+        textAnchor="middle"
+        fontSize="10"
+        fontWeight="700"
+        fill="currentColor"
+        style={{ fontFamily: 'var(--font-display)' }}
+        transform="rotate(-5 13 13)"
+      >
+        宝
+      </text>
+    </svg>
+  )
+}
+
 export function PackIcon({ filled = false }: { filled?: boolean }) {
   return (
     <svg viewBox="0 0 26 26" aria-hidden="true">

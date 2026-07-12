@@ -218,7 +218,7 @@ try {
   check('ink bloom cleans itself up', (await page.locator('.ink-bloom').count()) === 0)
 
   /* ---- 6. Regression sweep: all tabs render ---- */
-  for (const tab of ['journey', 'discover', 'speak', 'kit']) {
+  for (const tab of ['journey', 'discover', 'treasures', 'speak', 'kit']) {
     await page.goto(`${BASE}/#${tab}`)
     await page.waitForTimeout(400)
     check(`tab ${tab} renders`, (await page.locator('.screen').count()) > 0)
@@ -364,11 +364,9 @@ try {
   check('family voice survives reload (IndexedDB)', (await micPage.locator('.voice-play').count()) >= 1)
   await micBrowser.close()
 
-  /* ---- 11. Denshadex: gotta ride them all ---- */
-  await page.goto(`${BASE}/#discover`)
+  /* ---- 11. Denshadex: gotta ride them all (on the Treasures shelf) ---- */
+  await page.goto(`${BASE}/#treasures`)
   await page.waitForTimeout(500)
-  await page.locator('.seg button', { hasText: 'Denshadex' }).click()
-  await page.waitForTimeout(400)
   check('denshadex roster renders', (await page.locator('.dx-card').count()) >= 10)
   check('cards start locked', (await page.locator('.dx-card.dx-locked').count()) >= 10)
   await page.locator('.dx-card[data-train="n700s"]').click()
@@ -378,8 +376,6 @@ try {
   check('logging floods the card with ink', (await page.locator('.dx-card[data-train="n700s"].dx-logged').count()) === 1)
   await page.reload()
   await page.waitForTimeout(600)
-  await page.locator('.seg button', { hasText: 'Denshadex' }).click()
-  await page.waitForTimeout(400)
   check('the ride is remembered', (await page.locator('.dx-card[data-train="n700s"].dx-logged').count()) === 1)
 
   /* ---- 12. Deer Diplomacy: the protocol has three moves ---- */
@@ -454,7 +450,7 @@ try {
 
   const hCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
   const hPage = await hCtx.newPage()
-  await hPage.goto(`${BASE}/?demo=1#journey`)
+  await hPage.goto(`${BASE}/?demo=1#treasures`)
   await hPage.waitForTimeout(700)
   check('loved moments are engraved', (await hPage.locator('.treasure-row .t-haiku').count()) === 6)
   const firstPoem = poems.find((m) => m[1] === 'd1:0')
@@ -476,7 +472,7 @@ try {
 
   const tzCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, reducedMotion: 'reduce' })
   const tzPage = await tzCtx.newPage()
-  await tzPage.goto(`${BASE}/?demo=1#journey`)
+  await tzPage.goto(`${BASE}/?demo=1#treasures`)
   await tzPage.waitForTimeout(700)
   let tzAnim = 'no overlay'
   if (await tzPage.locator('.scroll-btn').count()) {
@@ -526,6 +522,27 @@ try {
   // the key must never be able to travel in a sync link
   const syncSrc = readFileSync('src/lib/sync.ts', 'utf8')
   check('the key never syncs', !syncSrc.includes('claude-key'))
+
+  /* ---- 16. The Treasures shelf: the collection moves out of Journey ---- */
+  const shCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const shPage = await shCtx.newPage()
+  await shPage.goto(`${BASE}/?demo=1#treasures`)
+  await shPage.waitForTimeout(700)
+  check('the shelf holds the stamps', (await shPage.locator('.stamp-grid').count()) === 1)
+  await shPage.goto(`${BASE}/#journey`)
+  await shPage.waitForTimeout(600)
+  check(
+    'journey home is the plan, not the shelf',
+    (await shPage.locator('.stamp-grid').count()) === 0 &&
+      (await shPage.locator('.travelers-card').count()) === 0 &&
+      ((await shPage.textContent('.screen')) ?? '').includes('Twelve days')
+  )
+  await shPage.goto(`${BASE}/#kit`)
+  await shPage.waitForTimeout(500)
+  await shPage.locator('.settings-btn').click()
+  await shPage.waitForTimeout(300)
+  check('the travelers live in Kit settings now', (await shPage.locator('.travelers-card').count()) === 1)
+  await shCtx.close()
 } finally {
   await browser.close()
   server.kill()

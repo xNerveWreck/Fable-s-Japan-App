@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { allergens, budgetGuide, emergencyItems, packGroups } from '../data/kit'
+import { TravelersCard } from '../components/Travelers'
 import { useStored } from '../hooks/useStored'
 import { shareUrl } from '../lib/sync'
 import { play, type SoundName } from '../lib/sound'
@@ -137,6 +138,10 @@ function KitSettings() {
           </div>
         )}
       </div>
+
+      {/* Set once, then it never changes — so the travelers live here now,
+          not on Journey home (owner decision, 2026-07-12). */}
+      <TravelersCard />
     </section>
   )
 }

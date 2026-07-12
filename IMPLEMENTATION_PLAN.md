@@ -1,10 +1,11 @@
 # Implementation Plan of Record — Tabi (旅)
 
-**Status (2026-07-11, late session):** v3.2.0 shipped and live. The **real
-itinerary (12 days, Jul 12–23) and the Sign & Etiquette Decoder are BUILT**
-together on branch `claude/real-itinerary` (94-check suite green), awaiting the
-owner's single merge; tag v3.5.0 + Release follow the merge (DECISIONS.md
-#18–#20).
+**Status (2026-07-12, departure morning):** **v3.5.0 merged and live** (real
+itinerary + Sign Decoder; tag + Release pending the owner's go). **v3.6.0 is
+BUILT** on `claude/treasures-tab` (98-check suite green), awaiting merge: the
+Treasures tab reorg from the owner's first on-device feedback (DECISIONS.md
+#21) — collection layer to its own tab, travelers to Kit settings, The Road
+retired.
 
 ## How planning works in this repo
 
@@ -21,7 +22,8 @@ keep it updated, it is a rule here, not a nicety).
 | `2026-07-10-trip-pack.md` (4 waves) | decisions inline in the plan | ✅ shipped (merged to main, tagged v3.1.0) |
 | `2026-07-10-haiku-engraver.md` | `2026-07-10-haiku-engraver-design.md` | ✅ shipped (merged to main, tagged v3.2.0) |
 | `2026-07-10-sign-decoder.md` | `2026-07-10-sign-decoder-design.md` | ✅ built — **on `claude/real-itinerary`, awaiting merge** (owner gave the go 2026-07-11; built on the shared branch per DECISIONS.md #20) |
-| Real itinerary swap (Claude Code plan-mode session, 2026-07-11) | decisions in DECISIONS.md #18–#19 | ✅ built — **on `claude/real-itinerary`, awaiting merge** |
+| Real itinerary swap (Claude Code plan-mode session, 2026-07-11) | decisions in DECISIONS.md #18–#19 | ✅ shipped (merged to main 2026-07-12, PR #17) |
+| Treasures tab reorg (owner field feedback, 2026-07-12) | decision in DECISIONS.md #21 | ✅ built — **on `claude/treasures-tab`, awaiting merge** |
 
 ## Hard invariants (bind every plan and every session)
 
