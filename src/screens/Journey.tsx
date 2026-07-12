@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 import { itinerary, kindMeta, TRIP_LENGTH, type Day } from '../data/itinerary'
-import { haiku } from '../data/haiku'
 import { phraseCategories } from '../data/phrases'
 import { useStored } from '../hooks/useStored'
 import { useSpeech } from '../hooks/useSpeech'
@@ -12,8 +11,6 @@ import { inkBloom } from '../lib/ink'
 import { currentSolar, PHASE_LABEL } from '../lib/solar'
 import { microseasonFor } from '../data/sekki'
 import { journalDays } from '../lib/db'
-import { TravelersCard } from '../components/Travelers'
-import { TanzakuScroll } from '../components/TanzakuScroll'
 import { Journal } from '../components/Journal'
 import { FujiWindow } from '../components/FujiWindow'
 import { DeerDojo } from '../components/DeerDojo'
@@ -22,8 +19,6 @@ import { quests } from '../data/quests'
 import { InkHero } from '../art/InkHero'
 import { Petals } from '../art/Petals'
 import { CityVignette } from '../art/Vignettes'
-import { RouteMap } from '../art/RouteMap'
-import { Stamp } from '../art/Stamp'
 import { BackIcon, CheckIcon, ChevronIcon, HeartIcon, PlusIcon, SkipIcon, SpeakerIcon, TrashIcon } from '../art/icons'
 
 type MomentMap = Record<string, Moment>
@@ -117,7 +112,6 @@ function JourneyHome({
   const totalActivities = useMemo(() => itinerary.reduce((n, d) => n + d.activities.length, 0), [])
   const doneCount = Object.values(moments).filter((m) => m === 'done' || m === 'loved').length
   const lovedKeys = Object.keys(moments).filter((k) => moments[k] === 'loved')
-  const stampsEarned = itinerary.filter((d) => dayIsComplete(d, moments)).length
 
   const [journaled, setJournaled] = useState<Set<number>>(new Set())
   useEffect(() => {
@@ -232,34 +226,7 @@ function JourneyHome({
           )}
         </div>
 
-        <TravelersCard />
-
-        <div className="section-title">
-          <h2>The road</h2>
-          <span className="jp">道のり</span>
-        </div>
-        <div className="card" style={{ padding: '10px 4px 2px' }}>
-          <RouteMap moments={moments} />
-        </div>
-
         <PhraseOfTheDay />
-
-        <div className="section-title">
-          <h2>Stamp journal</h2>
-          <span className="jp">判子帳 · {stampsEarned}/{TRIP_LENGTH}</span>
-        </div>
-        <div className="card stamp-grid-wrap">
-          <p className="stamp-hint">
-            Resolve every stop in a day — did it, loved it, or skipped it — and the day’s eki-stamp lands here.
-          </p>
-          <div className="stamp-grid">
-            {itinerary.map((d) => (
-              <Stamp key={d.id} day={d} earned={dayIsComplete(d, moments)} />
-            ))}
-          </div>
-        </div>
-
-        {lovedKeys.length > 0 && <Treasures moments={moments} openDay={openDay} />}
 
         <div className="section-title">
           <h2>Twelve days</h2>
@@ -338,52 +305,8 @@ function PhraseOfTheDay() {
   )
 }
 
-/* ================= treasures ================= */
-
-function Treasures({ moments, openDay }: { moments: MomentMap; openDay: (id: number) => void }) {
-  const [unrolled, setUnrolled] = useState(false)
-  const loved = itinerary.flatMap((day) =>
-    day.activities
-      .map((act, i) => ({ day, act, key: `d${day.id}:${i}` }))
-      .filter(({ key }) => moments[key] === 'loved')
-  )
-
-  return (
-    <>
-      <div className="section-title">
-        <h2>Loved moments</h2>
-        <span className="jp">宝物 · treasures</span>
-        <button className="scroll-btn" onClick={() => setUnrolled(true)}>
-          短冊 · unroll
-        </button>
-      </div>
-      <div className="card" style={{ padding: '4px 16px' }}>
-        {loved.map(({ day, act, key }) => (
-          <button key={key} className="treasure-row" onClick={() => openDay(day.id)}>
-            <span className="heart">♥</span>
-            <span className="grow">
-              <span className="t-title">{act.title}</span>
-              <span className="t-sub">
-                Day {day.id} · {day.city}
-              </span>
-              {haiku[key] && (
-                <span className="t-haiku">
-                  {haiku[key].split('\n').map((line, li) => (
-                    <i key={li}>{line}</i>
-                  ))}
-                </span>
-              )}
-            </span>
-            <span className="chev" style={{ width: 18, height: 18, color: 'var(--ink-faint)' }}>
-              <ChevronIcon />
-            </span>
-          </button>
-        ))}
-      </div>
-      {unrolled && <TanzakuScroll moments={moments} onClose={() => setUnrolled(false)} />}
-    </>
-  )
-}
+/* The treasures shelf (loved moments, stamps, tanzaku) moved to
+   src/screens/Treasures.tsx — the collection is its own tab now. */
 
 /* ================= day detail ================= */
 
