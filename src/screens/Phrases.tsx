@@ -5,6 +5,7 @@ import { useStored } from '../hooks/useStored'
 import { SpeakerIcon, StarIcon } from '../art/icons'
 import { VoiceButton } from '../components/VoiceButton'
 import { SignLens } from '../components/SignLens'
+import { MenuLens } from '../components/MenuLens'
 
 export function Phrases() {
   const { speak, speakingId, supported } = useSpeech()
@@ -77,6 +78,7 @@ export function Phrases() {
       </div>
 
       <SignLens />
+      <MenuLens />
 
       {filtered ? (
         <>

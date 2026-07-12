@@ -1,15 +1,6 @@
 import { useRef, useState } from 'react'
 import { useStored } from '../hooks/useStored'
-import { decodeSign, downscale, LensError, lensFixture, type LensFail, type LensResult } from '../lib/lens'
-
-const FAIL_FACE: Record<LensFail, string> = {
-  'no-key': 'The decoder needs a key. Paste yours in Kit → Settings → AI key.',
-  'bad-key': 'That key did not work — check it in Kit → Settings.',
-  offline: 'The decoder needs the sky — no signal here. The painting still works.',
-  busy: 'Claude is busy — try again in a moment.',
-  refused: 'Claude declined to read this one.',
-  unreadable: 'Could not make sense of that photo — try a straighter shot.',
-}
+import { decodeSign, downscale, FAIL_FACE, LensError, lensFixture, type LensFail, type LensResult } from '../lib/lens'
 
 /** Decode a sign · 読む — photograph any sign, learn what it means and what to do. */
 export function SignLens() {
@@ -42,7 +33,7 @@ export function SignLens() {
   }
 
   return (
-    <div className="card lens-card">
+    <div className="card lens-card sign-lens">
       <input
         ref={fileRef}
         type="file"

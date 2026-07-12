@@ -92,6 +92,16 @@ interactive work: just do it directly.
   capture real screenshots of the key screens.
 - Full-screen overlays must beat the tab bar: `.tabbar` is `z-index: 100`, so
   overlays go higher (the tanzaku sits at 120) or taps land on the tabbar.
+  Ambient chrome goes *lower*: Sumi floats at 60 so every modal covers it.
+- Playwright `page.goto()` to the **same URL** (even with a different hash) does
+  NOT reload the page — state and injected DOM survive. Navigate to a different
+  query/hash or call `page.reload()` when a fresh boot matters.
+- Playwright locators are **strict**: two lens cards live in Speak now, so lens
+  assertions scope to `.sign-lens` / `.menu-lens` — a bare `.lens-begin` click
+  throws on the two matches.
+- Journey's moment-setter dispatches `CustomEvent('tabi:loved')` on every loved
+  mark (Sumi listens); `currentCity()` in `solar.ts` is the one source for
+  "which trip city is today" — derive costumes/features from it, don't re-math.
 - The story suite is one ESM scope — top-level `const` names collide across
   sections and kill the whole run at parse time; give each new section fresh
   context/page variable names.

@@ -131,7 +131,9 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 - **Opening cinematic** `L · offline` — A skippable 20-second title: an unseen brush lays the route stroke in
   real time, five hanko stamps thunk down with haptic bumps, Fuji rises in three washes, the ink bleeds into
   the home screen. Tuned to that day's city and weather.
-- **Sumi, the ink spirit** `L · offline` — A mascot painted in three brushstrokes — an ink-blob fox-tanuki
+- **Sumi, the ink spirit** ✅ *(v1 built 2026-07-12 — breathes/blinks, sleeps on the solar clock as a pale
+  moonlit spirit, joy-splashes on every loved moment, Nara antlers, pettable; costume set, weather reactions,
+  and the brain remain)* `L · offline` — A mascot painted in three brushstrokes — an ink-blob fox-tanuki
   spirit living in the corner of every screen. Naps under a lantern at night, shakes off rain, does a joyful
   blot-splash when a moment is loved, wears deer antlers in Nara and a towel on its head in Hakone. (For its
   Claude-powered brain, see the Moonshot Shelf.)
@@ -144,9 +146,11 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 - **Nijimi ink physics** ✅ `M · offline` — Wet ink as the universal feedback: taps bloom small ink blots,
   transitions are a loaded brush wiping across, pull-to-refresh drags a wet stroke that snaps back. One shared
   SVG filter primitive powers all of it.
-- **Generative kamon** `M · offline` — Each family member picks a motif and the app composes a proper enclosed
-  family crest by classical construction rules. It seals every sync link like wax, and gains one tiny petal per
-  loved moment — visibly fuller by Osaka than it was at the airport.
+- **Generative kamon** ✅ *(built 2026-07-12 — derives from the travelers' animals + ink colors instead of a
+  picker, DECISIONS #25; seals the Family Ink card and the Treasures shelf)* `M · offline` — Each family
+  member picks a motif and the app composes a proper enclosed family crest by classical construction rules.
+  It seals every sync link like wax, and gains one tiny petal per loved moment — visibly fuller by Osaka than
+  it was at the airport.
 - **Hiroshige forecast** `L · net` — Tomorrow's weather as a woodblock print: rain over Kyoto drawn as driving
   diagonal lines across a bridge, heat as shimmer above Osaka rooftops. Checking the weather becomes the most
   beautiful thing you do each morning.
@@ -160,9 +164,10 @@ Everything else worth doing, by theme. Nothing here is rejected; it is sequenced
 
 ### 🤖 The AI companion — Claude in the daypack
 
-- **Menu Lens** `M · AI` — Photograph any menu — handwritten izakaya chalkboard, ramen ticket machine — and
-  vision translates it, cross-checks every dish against the stored allergy card, marks the kid-safe picks, and
-  drafts the exact polite Japanese to order.
+- **Menu Lens** ✅ *(built 2026-07-12 — the second lens on the #17 key, allergy card in the prompt, kid picks
+  marked 子, avoid rows struck in vermillion)* `M · AI` — Photograph any menu — handwritten izakaya
+  chalkboard, ramen ticket machine — and vision translates it, cross-checks every dish against the stored
+  allergy card, marks the kid-safe picks, and drafts the exact polite Japanese to order.
 - **Sign & Etiquette Decoder** ✅ *(built 2026-07-11 on `claude/real-itinerary` — the first Aibō feature; BYO on-device key per DECISIONS.md #17)* `S · AI` — Camera on any onsen rules placard, shrine instruction board, or
   coin-locker screen; back comes not a translation but *what this means and what your family should do next*,
   faux-pas warnings first.
@@ -381,10 +386,11 @@ The ideas that make no economic sense until they suddenly define the product. Ke
 | Version | Name | Theme | Contents |
 |---|---|---|---|
 | **v2.1** ✅ | 記憶 *Kioku* | Remember | The committed four: journal + photos, sound & haptics, four travelers, the Japan clock — *shipped July 2026* |
-| **v3** 🖌️ | 生きている *Ikiteiru* | The painting lives | **Shipped:** solar clock, microseasons, nijimi physics, living vignettes (tilt/drift depth planes, the heron, the gondola, the deer's bow, after-dark neon and windows), Fuji Window (the Day-7 GPS Tōkaidō scroll — "Fuji on the right in N minutes"), the trip pack (family voice phrasebook, Denshadex, Deer Diplomacy, Side Quests v1), the Haiku Engraver (73 pre-authored poems engraved into loved moments + the tanzaku scroll) (plus field fixes: the iOS departure-date picker, day-to-day paging, Windows story-suite spawn). **Remaining:** Sumi (mascot), opening cinematic, kids' game layer (yōkai camera, Denshadex, boss battles, side quests), geofenced stamps |
-| **v3.5** 🔦 | 相棒 *Aibō* | The companion | **Shipped (merged 2026-07-12):** the Sign & Etiquette Decoder (the first Aibō feature — BYO on-device key), riding with the **real-itinerary swap** (the fictional 14 days became the booked Jul 12–23 twelve: dated cards, 62 re-engraved haiku, new quests/Denshadex/Heat Plan). **v3.6 reorg (built 2026-07-12 from on-device feedback):** the **Treasures tab** — stamps, loved moments + tanzaku, Denshadex, and the quiz on one shelf; travelers into Kit settings; The Road retired. **Remaining:** Menu Lens, interpreter, concierge, journal weaver, bedtime stories, phrase dojo — every feature degrading gracefully offline |
+| **v3** 🖌️ | 生きている *Ikiteiru* | The painting lives | **Shipped:** solar clock, microseasons, nijimi physics, living vignettes (tilt/drift depth planes, the heron, the gondola, the deer's bow, after-dark neon and windows), Fuji Window (the Day-7 GPS Tōkaidō scroll — "Fuji on the right in N minutes"), the trip pack (family voice phrasebook, Denshadex, Deer Diplomacy, Side Quests v1), the Haiku Engraver (73 pre-authored poems engraved into loved moments + the tanzaku scroll) (plus field fixes: the iOS departure-date picker, day-to-day paging, Windows story-suite spawn). **Remaining:** opening cinematic, kids' game layer (yōkai camera, boss battles), geofenced stamps — Sumi shipped with v4.1 below |
+| **v3.5** 🔦 | 相棒 *Aibō* | The companion | **Shipped (merged 2026-07-12):** the Sign & Etiquette Decoder (the first Aibō feature — BYO on-device key), riding with the **real-itinerary swap** (the fictional 14 days became the booked Jul 12–23 twelve: dated cards, 62 re-engraved haiku, new quests/Denshadex/Heat Plan). **v3.6 reorg (built 2026-07-12 from on-device feedback):** the **Treasures tab** — stamps, loved moments + tanzaku, Denshadex, and the quiz on one shelf; travelers into Kit settings; The Road retired. **Remaining:** interpreter, concierge, journal weaver, bedtime stories, phrase dojo — every feature degrading gracefully offline (Menu Lens shipped with v4.1 below) |
 | **v4** | 一緒に *Issho ni* | Together | Backend (live Family Ink sync → pulled forward as v4.0.0 below): grandparents' window, split-party days, reservation inbox, park mode, transit copilot, rain auto-replan |
 | **v4.0.0** 🖋️ | 一緒に *Issho ni* | Together | **Shipped (merged 2026-07-12, PR #20):** Family Ink (live sync) — realtime rows on Supabase (Tokyo), silent anonymous identity, FUJI-42 pairing codes, the 5-second fold-and-push loop; only provably-converging fields ride the wire (DECISIONS #23); ships dark, folded link stays as floor. **Remaining in 一緒に:** flip-on on the phones, then the rest of the v4 bucket above |
+| **v4.1** 🦊 | 道連れ *Michizure* | Companions on the road | **Built 2026-07-12 overnight (branch `claude/menu-kamon-sumi`, three feature commits, 130/130 checks — awaiting owner merge):** **Menu Lens** (dinner through the #17 key: dishes in English, allergy flags with kid-plain whys, 子 kid picks, the polite order line) + **kiwi** on the allergy card + the **generative kamon** (the crest the trip paints — travelers' animals as folds, a petal per loved moment, sealing Family Ink and Treasures) + **Sumi v1** (the ink spirit above the tab bar: breathes, sleeps by the solar clock, joy-splashes on loved moments, Nara antlers, pettable). Deferred from the six-feature talk: Phrase Dojo, generative soundscape, opening cinematic |
 | **v4.5** | 手元に *Temoto ni* | In your hands | The physical pipeline: trip poster, goshuincho, photo book, postcards from 7-Eleven, furoshiki, omamori charms |
 | **v5** | 旅の棚 *Tabi no tana* | The shelf | Destination packs, Trip Weaver, remix gallery, ateliers, the Memory Vault — Tabi as the place a family keeps its adventures |
 

@@ -128,6 +128,7 @@ export const allergens: Allergen[] = [
   { id: 'fish', en: 'Fish', jp: '魚' },
   { id: 'soy', en: 'Soy', jp: '大豆' },
   { id: 'sesame', en: 'Sesame', jp: 'ごま' },
+  { id: 'kiwi', en: 'Kiwi', jp: 'キウイフルーツ' },
 ]
 
 /** Rough family budget guide, per day, in yen. */

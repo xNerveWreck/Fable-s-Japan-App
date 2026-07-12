@@ -4,8 +4,10 @@ import {
 } from '../lib/liveSync'
 import { allergens, budgetGuide, emergencyItems, packGroups } from '../data/kit'
 import { TravelersCard } from '../components/Travelers'
+import { Kamon } from '../art/Kamon'
+import type { Traveler } from '../data/travelers'
 import { useStored } from '../hooks/useStored'
-import { shareUrl } from '../lib/sync'
+import { shareUrl, type Moment } from '../lib/sync'
 import { play, type SoundName } from '../lib/sound'
 import { CheckIcon, ChevronIcon, GearIcon, ShareIcon, TrashIcon } from '../art/icons'
 
@@ -193,6 +195,9 @@ function FamilyInk() {
   const [codeDraft, setCodeDraft] = useState('')
   const [codeFail, setCodeFail] = useState(false)
   const [, breathe] = useState(0) // re-render so the countdown stays honest
+  const [travelers] = useStored<Traveler[]>('travelers', [])
+  const [moments] = useStored<Record<string, Moment>>('moments', {})
+  const lovedCount = Object.values(moments).filter((m) => m === 'loved').length
 
   useEffect(() => {
     const onStatus = () => setInk({ ...getInkStatus() })
@@ -225,6 +230,9 @@ function FamilyInk() {
         <span className="jp">家族の墨</span>
       </div>
       <div className="card sync-card">
+        <div className="kamon-seal">
+          <Kamon travelers={travelers} loved={lovedCount} size={76} />
+        </div>
         {ink.kind === 'off' && (
           <>
             <p className="pocket-hint" style={{ marginTop: 0 }}>
