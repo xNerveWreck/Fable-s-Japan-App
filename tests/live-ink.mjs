@@ -49,7 +49,14 @@ const server = spawn(
   ['node_modules/vite/bin/vite.js', 'preview', '--port', String(PORT), '--strictPort'],
   { stdio: 'ignore' },
 )
-await new Promise((r) => setTimeout(r, 1500))
+for (let i = 0; i < 50; i++) {
+  try {
+    await fetch(BASE)
+    break
+  } catch {
+    await new Promise((r) => setTimeout(r, 200))
+  }
+}
 
 const SYSTEM_CHROMIUM = '/opt/pw-browsers/chromium'
 const browser = await chromium.launch(existsSync(SYSTEM_CHROMIUM) ? { executablePath: SYSTEM_CHROMIUM } : {})
@@ -58,7 +65,7 @@ const mk = () =>
 
 let fid = null
 try {
-  /* Phone A: seeded notes, starts the family */
+  /* Phone A: seeded moments, starts the family */
   const ctxA = await mk()
   const A = await ctxA.newPage()
   await A.addInitScript(() => {
@@ -75,7 +82,7 @@ try {
   fid = await A.evaluate(() => localStorage.getItem('tabi:family'))
   console.log(`   family (for cleanup): ${fid}`)
 
-  /* Phone B: joins by code, receives A's notes */
+  /* Phone B: joins by code, receives A's moments */
   const ctxB = await mk()
   const B = await ctxB.newPage()
   await B.goto(`${BASE}/#kit`)
@@ -140,9 +147,9 @@ try {
 } finally {
   await browser.close()
   server.kill()
+  if (fid) console.log(`cleanup: delete from families where id = '${fid}';`)
 }
 
 const fails = results.filter((r) => r.startsWith('FAIL')).length
 console.log(`\n${results.length - fails}/${results.length} live checks passed`)
-if (fid) console.log(`cleanup: delete from families where id = '${fid}';`)
 process.exit(fails ? 1 : 0)
