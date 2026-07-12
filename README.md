@@ -27,11 +27,13 @@ reorganized the surface from the owner's first on-device feedback: a fifth
 **Treasures** tab gathers the collection layer (stamps, loved moments + tanzaku,
 Denshadex, Train Quiz), the travelers moved into Kit → Settings, and The Road was
 retired. 98-check suite green, and the GitHub Pages workflow auto-deploys `main`.
-**v4.0.0 is built and waiting:** Family Ink live sync (Supabase realtime, Tokyo)
-keeps two phones' progress fresh by itself once flipped on — suite now 106/106
-green on `claude/live-family-sync` — but it ships **dark, OFF by default**,
-pending the owner's merge and a dashboard toggle (Anonymous sign-ins) before
-flip-on.
+**[v4.0.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.0.0)
+shipped (merged 2026-07-12, PR #20):** Family Ink live sync (Supabase realtime,
+Tokyo) keeps the family's phones' progress fresh by itself — suite now 106/106,
+live two-browser E2E 7/7 against the real project. It ships **dark, OFF by
+default**; the dashboard toggle (Anonymous sign-ins) is already on, so the only
+remaining steps are on the phones: refresh on Wi-Fi, then Kit → Family ink →
+start our family / join by code.
 **Source of truth:** GitHub `xNerveWreck/Fable-s-Japan-App`, branch `main`;
 agents `git fetch` before working (the owner edits from claude.ai cloud sessions
 too). **Verify a checkout:** `npm install`, `npx playwright install chromium`,
