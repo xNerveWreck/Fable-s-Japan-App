@@ -60,6 +60,13 @@ they were written for. Pinning rather than removing fields means `mergeState()` 
 **untouched** — the constants no-op. `v: 1` is kept for the same tolerant-decode reasons
 as the link.
 
+One truth of additive sync, inherited deliberately: while the ink is on, progress can't
+be retracted — un-loving a moment or un-checking a packed item on one phone flows back
+from the family within seconds, exactly as a re-shared manual link would restore it.
+The merge's "progress is additive" philosophy extends to the loop unchanged; the state
+settles (no traffic loop), it just settles on the side of remembering. Documented so
+it's a decision, not a surprise.
+
 ## Identity & access
 
 Each phone calls `supabase.auth.signInAnonymously()` once, silently; supabase-js persists

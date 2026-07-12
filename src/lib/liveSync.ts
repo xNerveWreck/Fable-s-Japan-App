@@ -37,9 +37,24 @@ const LIVE_PIN = {
   rate: 155,
 }
 
+/* Canonical live view: sets sorted, packed only-trues — identical progress
+ * must serialize identically on every phone, or the loop never settles
+ * (mergeState unions are mine-first, so raw array ORDER diverges; explicit
+ * packed:false never crosses the fold). Defensive ?? guards: this also runs
+ * on server rows inside the realtime callback, outside any try. */
+function normalizeLive(s: TripState): TripState {
+  return {
+    ...s,
+    ...LIVE_PIN,
+    favs: [...(s.favs ?? [])].sort(),
+    allergies: [...(s.allergies ?? [])].sort(),
+    packed: Object.fromEntries(Object.entries(s.packed ?? {}).filter(([, v]) => v)),
+  }
+}
+
 /** Trip progress only — monotonic fields, so every phone converges (#19/#22). */
 export function collectLiveState(): TripState {
-  return { ...collectState(), ...LIVE_PIN }
+  return normalizeLive(collectState())
 }
 
 /* Canonical stringify: Postgres jsonb reorders object keys, so sorted-key
@@ -123,7 +138,7 @@ async function client(): Promise<SupabaseClient> {
 function applyIncoming(state: unknown) {
   const s = state as TripState
   if (!s || s.v !== 1 || typeof s.moments !== 'object') return // empty row / future schema — fold nothing
-  const safe = { ...s, ...LIVE_PIN } // server rows never write the pocket — nor the pinned fields
+  const safe = normalizeLive(s) // server rows never write the pocket — nor the pinned fields
   const before = canon(collectLiveState())
   mergeState(safe)
   lastAck = canon(safe)
