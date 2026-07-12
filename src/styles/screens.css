@@ -2352,6 +2352,12 @@
 .menu-dish.caution .menu-why { color: var(--gold); }
 .menu-price { color: var(--ink-soft); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
+/* ================= the family kamon · 家紋 ================= */
+.kamon { flex-shrink: 0; display: block; }
+.kamon-seal { display: flex; justify-content: center; padding: 2px 0 10px; }
+.kamon-row { display: flex; align-items: flex-start; gap: 12px; }
+.kamon-row .grow { flex: 1; min-width: 0; }
+
 .key-entry { display: flex; gap: 8px; align-items: center; }
 .key-entry input { flex: 1; min-width: 0; }
 .key-save { border: 1px solid var(--hairline); background: var(--card); color: var(--ink); border-radius: var(--radius); padding: 6px 12px; font-size: 13px; }

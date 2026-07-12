@@ -7,6 +7,8 @@ import { TanzakuScroll } from '../components/TanzakuScroll'
 import { Denshadex } from '../components/Denshadex'
 import { TrainQuiz } from '../components/TrainQuiz'
 import { Stamp } from '../art/Stamp'
+import { Kamon } from '../art/Kamon'
+import type { Traveler } from '../data/travelers'
 import { ChevronIcon } from '../art/icons'
 
 /**
@@ -23,6 +25,7 @@ const dayIsComplete = (day: Day, moments: MomentMap) =>
 
 export function Treasures({ nav }: { nav: (p: string) => void }) {
   const [moments] = useStored<MomentMap>('moments', {})
+  const [travelers] = useStored<Traveler[]>('travelers', [])
   const [unrolled, setUnrolled] = useState(false)
 
   const stampsEarned = itinerary.filter((d) => dayIsComplete(d, moments)).length
@@ -36,10 +39,13 @@ export function Treasures({ nav }: { nav: (p: string) => void }) {
 
   return (
     <div className="screen">
-      <header className="screen-head">
-        <div className="t-kicker">Collection · あつめ</div>
-        <h1>Treasures</h1>
-        <p className="sub">Everything the trip gives you — stamps, poems, trains, and bragging rights.</p>
+      <header className="screen-head kamon-row">
+        <div className="grow">
+          <div className="t-kicker">Collection · あつめ</div>
+          <h1>Treasures</h1>
+          <p className="sub">Everything the trip gives you — stamps, poems, trains, and bragging rights.</p>
+        </div>
+        <Kamon travelers={travelers} loved={loved.length} size={64} />
       </header>
 
       <div className="section-title">

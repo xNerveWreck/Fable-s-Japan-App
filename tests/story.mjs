@@ -552,6 +552,38 @@ try {
   check('menu offline gets a calm face', ((await mPage.textContent('.menu-lens .lens-fail')) ?? '').includes('sky'))
   await mCtx.close()
 
+  /* ---- 15c. The family kamon: the crest the trip paints ---- */
+  const kmCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const kmPage = await kmCtx.newPage()
+  await kmPage.goto(`${BASE}/?demo=1#treasures`)
+  await kmPage.waitForTimeout(700)
+  check('the kamon seals the treasures shelf', (await kmPage.locator('.kamon').count()) === 1)
+  check('four travelers, four folds', (await kmPage.locator('.kamon-motif').count()) === 4)
+  check('six loved moments, six petals', (await kmPage.locator('.kamon-petal').count()) === 6)
+
+  await kmPage.goto(`${BASE}/#journey/7`)
+  await kmPage.waitForTimeout(600)
+  await kmPage.locator('.state-btn.sb-loved').first().click()
+  await kmPage.waitForTimeout(400)
+  await kmPage.goto(`${BASE}/#treasures`)
+  await kmPage.waitForTimeout(600)
+  check('a fresh love adds a petal', (await kmPage.locator('.kamon-petal').count()) === 7)
+
+  await kmPage.goto(`${BASE}/#kit`)
+  await kmPage.waitForTimeout(600)
+  check('the kamon seals the family ink', (await kmPage.locator('[data-testid="family-ink"] .kamon').count()) === 1)
+  await shot(kmPage, 'kamon')
+  await kmCtx.close()
+
+  // before the family names itself, the crest falls back to a blossom
+  const km2Ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const km2Page = await km2Ctx.newPage()
+  await km2Page.goto(`${BASE}/#kit`)
+  await km2Page.waitForTimeout(600)
+  check('an unnamed family still gets a crest', (await km2Page.locator('.kamon').count()) === 1)
+  check('the blank crest has no folds', (await km2Page.locator('.kamon-motif').count()) === 0)
+  await km2Ctx.close()
+
   // the key must never be able to travel in a sync link
   const syncSrc = readFileSync('src/lib/sync.ts', 'utf8')
   check('the key never syncs', !syncSrc.includes('claude-key'))
