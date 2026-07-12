@@ -6,6 +6,33 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-13 — v4.1.0 shipped: Michizure merged, tagged, released, live on the phones
+
+**What happened (desktop session, morning after the overnight build):** the owner
+merged **PR #24** (`claude/menu-kamon-sumi`), refreshed both phones, and tapped
+the **Kiwi** chip (it synced family-wide). This session then ran the ship
+routine: `main` verified **130/130 at the merge commit (7b7f10e)**, tagged
+**v4.1.0**, and published the
+[Release](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.1.0)
+with the dist zip attached. Docs bump rides branch `claude/v4.1.0-docs`
+(this entry, README Current state → v4.1.0, ROADMAP v4.1 row → shipped,
+IMPLEMENTATION_PLAN status/index) — pushed, awaiting owner merge; docs-only,
+no urgency.
+
+**Verified how:** fresh `npm run build` + `npm run check` on `main` after the
+merge — 130/130, all offline. (The overnight session's per-feature verification
+and visual pass are in the entry below.)
+
+**Pick up here:** (1) The **Menu Lens real-key smoke test is the next meal** —
+first real menu photo through the owner's key; fixtures covered everything but
+the actual API round-trip. If anything looks off, `?menu=ok` isolates UI from
+API. (2) Owner merges `claude/v4.1.0-docs` whenever. (3) Next builds from the
+deferred list when asked: Phrase Dojo, generative soundscape, opening
+cinematic — or field requests, which is how v3.6.0 and v4.0.1 happened.
+(4) Sumi extension points ready: `tabi:loved`, `currentCity()`.
+
+---
+
 ## 2026-07-12 (overnight) — the Michizure batch: Menu Lens + kiwi, the kamon, and Sumi
 
 **What happened (desktop session, branch `claude/menu-kamon-sumi` off main@d70edc7

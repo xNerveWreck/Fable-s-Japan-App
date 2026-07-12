@@ -35,14 +35,16 @@ both phones the same day**, and
 followed hours later with the first field fix (the synced card never showed
 "Invite another phone" codes). Live sync is opt-in per phone (Kit → Family
 ink); the folded share link below it remains the no-server fallback, forever.
-**Built overnight 2026-07-12 (branch `claude/menu-kamon-sumi`, awaiting owner
-merge → v4.1):** the **Menu Lens** (photograph any menu from Speak — dishes in
-English, allergy flags, kid-safe picks, the polite order line; same on-device
-key as the sign decoder), **kiwi** on the allergy card, the **generative
-kamon** (the family crest composed from the travelers' animals, gaining a
-petal per loved moment), and **Sumi v1** — the ink spirit who lives above the
-tab bar, sleeps after dark, and hops when anyone loves a moment. Suite now
-**130/130**, live two-browser E2E **8/8** against the real project.
+**[v4.1.0 「道連れ Michizure」](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.1.0)
+shipped (merged 2026-07-13, PR #24; built overnight between trip days one and
+two):** the **Menu Lens** (photograph any menu from Speak — dishes in English,
+allergy flags, kid-safe picks, the polite order line; same on-device key as
+the sign decoder), **kiwi** on the allergy card (tapped in — it synced to the
+family's phones), the **generative kamon** (the family crest composed from the
+travelers' animals, gaining a petal per loved moment), and **Sumi v1** — the
+ink spirit who lives above the tab bar, sleeps after dark, and hops when
+anyone loves a moment. Suite now **130/130**, live two-browser E2E **8/8**
+against the real project.
 **Source of truth:** GitHub `xNerveWreck/Fable-s-Japan-App`, branch `main`;
 agents `git fetch` before working (the owner edits from claude.ai cloud sessions
 too). **Verify a checkout:** `npm install`, `npx playwright install chromium`,
