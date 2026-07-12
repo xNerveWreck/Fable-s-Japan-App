@@ -6,6 +6,32 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-12 (departure day) — both releases shipped
+
+**What happened:** owner merged `claude/treasures-tab` (PR #18) and gave the go
+to tag. Both versions are now tagged, pushed, and published as GitHub Releases
+with the built app zipped as the asset:
+
+- **[v3.5.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.5.0)**
+  — real itinerary + Sign Decoder (tag on the PR-17 merge commit `f4fb28e`)
+- **[v3.6.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.6.0)**
+  — the Treasures shelf (tag on the PR-18 merge `ef826db`), marked Latest
+
+Merged `main` verified **98/98 green** before tagging. The v3.5.0 zip was built
+from a throwaway git worktree at that tag (then removed); the v3.6.0 zip is the
+current build. README "Current state" updated to reflect both as shipped.
+Pages auto-deploys `main`, so the live app is v3.6.0.
+
+**Pick up here:** nothing is mid-flight in the code — the repo is clean and
+both releases are out. The only open items are **on-device and the owner's**,
+to do from Japan on hotel Wi-Fi: (1) reload the app on both phones so the
+service worker caches v3.6.0; (2) paste a spend-capped Anthropic key into each
+phone's Kit → Settings for the sign decoder; (3) type booking confirmation
+numbers into each day's reservations pocket; (4) family-sync the phones. The
+family is travelling Jul 13–23 — next real work is post-trip. よい旅を!
+
+---
+
 ## 2026-07-12 (4am, departure day) — v3.5.0 merged; the Treasures shelf built from field feedback
 
 **What happened (desktop session, branch `claude/treasures-tab` — pushed, awaiting owner merge):**
