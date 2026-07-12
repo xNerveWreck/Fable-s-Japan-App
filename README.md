@@ -17,16 +17,16 @@ Twelve days — July 12–23, 2026, as really booked — hand-crafted. Built for
 
 ## Current state
 
-**As of 2026-07-12 (departure morning!) — v3.6.0 built on `claude/treasures-tab`,
-awaiting the owner's merge.** `main` carries **v3.5.0** (merged 2026-07-12,
-PR #17; tag + Release pending): the real Jul 12–23 itinerary — 12 dated day
-cards, Gion Matsuri week, Puroland, USJ, Katsuōji, 62 re-engraved haiku — and
+**As of 2026-07-12 (departure day) — [v3.6.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.6.0) shipped** (built app attached to the Release), on top of
+[v3.5.0](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v3.5.0)
+earlier the same day. **v3.5.0** brought the real Jul 12–23 itinerary — 12 dated
+day cards, Gion Matsuri week, Puroland, USJ, Katsuōji, 62 re-engraved haiku — and
 the **Sign & Etiquette Decoder** (photograph any Japanese sign from the Speak
-tab; BYO Anthropic key in Kit → Settings, stored on-device only). The v3.6.0
-branch reorganizes the surface per the owner's field feedback: a fifth
-**Treasures** tab gathers the collection layer (stamps, loved moments +
-tanzaku, Denshadex, Train Quiz), the travelers move into Kit → Settings, and
-The Road is retired. 98-check suite green. Pages auto-deploys on merge.
+tab; BYO Anthropic key in Kit → Settings, stored on-device only). **v3.6.0** then
+reorganized the surface from the owner's first on-device feedback: a fifth
+**Treasures** tab gathers the collection layer (stamps, loved moments + tanzaku,
+Denshadex, Train Quiz), the travelers moved into Kit → Settings, and The Road was
+retired. 98-check suite green, and the GitHub Pages workflow auto-deploys `main`.
 **Source of truth:** GitHub `xNerveWreck/Fable-s-Japan-App`, branch `main`;
 agents `git fetch` before working (the owner edits from claude.ai cloud sessions
 too). **Verify a checkout:** `npm install`, `npx playwright install chromium`,
