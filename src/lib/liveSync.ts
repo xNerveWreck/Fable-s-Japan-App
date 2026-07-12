@@ -24,9 +24,22 @@ export interface InkStatus {
   lastSync?: number
 }
 
-/** Trip progress only — the reservations pocket never leaves the phones (#19). */
+/* Fields whose folded-link merge can't converge (mine-wins or append
+ * semantics) are pinned to constants in the LIVE payload: a 5-second loop
+ * would ping-pong them between phones forever — and grow notes without
+ * bound. They still travel in the manual share link, whose one-shot merge
+ * those semantics were written for. Do not "helpfully" re-add them. */
+const LIVE_PIN = {
+  reservations: {} as TripState['reservations'], // never on the server (#19)
+  notes: '',
+  travelers: [] as NonNullable<TripState['travelers']>,
+  departure: '',
+  rate: 155,
+}
+
+/** Trip progress only — monotonic fields, so every phone converges (#19/#22). */
 export function collectLiveState(): TripState {
-  return { ...collectState(), reservations: {} }
+  return { ...collectState(), ...LIVE_PIN }
 }
 
 /* Canonical stringify: Postgres jsonb reorders object keys, so sorted-key
@@ -110,7 +123,7 @@ async function client(): Promise<SupabaseClient> {
 function applyIncoming(state: unknown) {
   const s = state as TripState
   if (!s || s.v !== 1 || typeof s.moments !== 'object') return // empty row / future schema — fold nothing
-  const safe = { ...s, reservations: {} } // server rows never write the pocket
+  const safe = { ...s, ...LIVE_PIN } // server rows never write the pocket — nor the pinned fields
   const before = canon(collectLiveState())
   mergeState(safe)
   lastAck = canon(safe)

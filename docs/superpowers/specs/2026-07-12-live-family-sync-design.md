@@ -50,11 +50,15 @@ part of sync, and it is already written and suite-enforced.
 - `family_state` — `family_id pk fk`, `state jsonb`, `version int`, `updated_at`,
   `updated_by uuid`. Realtime is enabled on this table only.
 
-`state` holds a **SyncPayload**: `TripState` with `reservations` pinned to `{}` — an
-explicit allowlist built by a new `collectLiveState()` (moments, packed, favs, allergies,
-departure, rate, travelers, quizScores, notes, densha, deer). Pinning `reservations: {}`
-(rather than removing the field) means `mergeState()` is reused **untouched** — the empty
-map no-ops. `v: 1` is kept for the same tolerant-decode reasons as the link.
+`state` holds a **SyncPayload**: `TripState` with every non-converging field pinned to a
+constant — the live loop carries only what `mergeState()` folds monotonically (moments,
+packed, favs, allergies, quizScores, densha, deer). Pinned: `reservations: {}` (#19), and —
+build-time finding — `notes: ''`, `travelers: []`, `departure: ''`, `rate: 155`, whose
+mine-wins/append merge semantics would make a polling loop ping-pong forever (and grow
+notes without bound); those fields still travel in the manual link, whose one-shot merge
+they were written for. Pinning rather than removing fields means `mergeState()` is reused
+**untouched** — the constants no-op. `v: 1` is kept for the same tolerant-decode reasons
+as the link.
 
 ## Identity & access
 
