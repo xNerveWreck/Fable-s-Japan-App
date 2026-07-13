@@ -6,10 +6,13 @@ morning; **v4.0.0 Family Ink live sync** (Supabase realtime, DECISIONS.md
 #22–#23) shipped the same day and the family paired both phones; **v4.0.1**
 fixed the synced card's invite-code display hours later. The **Michizure
 batch** (Menu Lens + kiwi, generative kamon, Sumi v1 — DECISIONS.md #24–#26)
-**shipped as v4.1.0** (merged 2026-07-13, PR #24; main verified 130/130 at
-merge commit 7b7f10e; tagged + Release live; phones refreshed and kiwi
-tapped). Suite 130/130; live E2E (`npm run check:live`) 8/8 against the
-real project.
+**shipped as v4.1.0** (merged 2026-07-13, PR #24). The **Kairanban**
+(DECISIONS.md #27 — the family journal feed with database-enforced
+ownership, hearts, the key-test brush, and the sweep's join throttle)
+**shipped as v4.2.0** (merged 2026-07-14 JST, PR #26; main verified 144/144
+at merge commit 12a4532; migration applied to `tabi-family-sync`; tagged +
+Release live). Suite 144/144; live E2E (`npm run check:live`) 13/13 against
+the real project.
 
 ## How planning works in this repo
 
@@ -30,6 +33,7 @@ keep it updated, it is a rule here, not a nicety).
 | Treasures tab reorg (owner field feedback, 2026-07-12) | decision in DECISIONS.md #21 | ✅ shipped (merged to main 2026-07-12, PR #18, tagged v3.6.0) |
 | `2026-07-12-live-family-sync.md` (6 tasks, subagent-driven) | `2026-07-12-live-family-sync-design.md` | ✅ shipped (merged 2026-07-12, PR #20, tagged v4.0.0; field fix PR #22 tagged v4.0.1 the same night) |
 | Michizure batch (plan-mode session, built in-session, 2026-07-12 overnight) | `2026-07-12-menu-lens-kamon-sumi-design.md` | ✅ shipped (merged 2026-07-13, PR #24, tagged v4.1.0) |
+| Kairanban — the family journal feed (brainstormed + built in-session, 2026-07-13 evening) | `2026-07-13-kairanban-family-feed-design.md` | ✅ shipped (merged 2026-07-14 JST, PR #26, tagged v4.2.0; migration applied; live E2E 13/13) |
 
 ## Hard invariants (bind every plan and every session)
 

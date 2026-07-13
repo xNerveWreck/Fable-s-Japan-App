@@ -6,6 +6,28 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-14 (JST, past midnight) — v4.2.0 shipped: the Kairanban is live
+
+**What happened:** the owner merged **PR #26** (`claude/kairanban-feed`, atop
+the v4.1.0 docs branch); this session verified `main` at the merge commit
+(**144/144** at `12a4532`), tagged **v4.2.0**, and published the
+[Release](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.2.0)
+with the dist zip. The migration was already applied and the test families
+already cleaned (1 family / 4 members / 0 posts on the project — the board is
+blank and waiting). Docs bump rides `claude/v4.2.0-docs` (this entry, README
+Current state, ROADMAP v4.2 → shipped, IMPLEMENTATION_PLAN status + index) —
+pushed, awaiting owner merge; docs-only, no urgency.
+
+**Pick up here:** owner-side only — (1) phones refresh on Wi-Fi; (2) fresh
+Anthropic key into Kit → Settings, tap **test the brush**, expect the green ✓;
+(3) write tonight's journal page on one phone and watch the kairanban carry it
+to the other three; first heart christens the board. Next builds when asked:
+Phrase Dojo, soundscape, opening cinematic (the deferred trio), or field
+requests. Trip builds may run as cloud sessions per the owner's preference —
+the repo docs are the shared memory either way.
+
+---
+
 ## 2026-07-13 (evening) — the Kairanban built: the journal becomes the family's feed
 
 **What happened (desktop session, branch `claude/kairanban-feed` stacked on
