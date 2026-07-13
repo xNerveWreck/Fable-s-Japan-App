@@ -34,15 +34,30 @@ a bug). Live E2E extended (publish A→B, **B's PATCH of A's row refused by the
 real database**, hearts realtime, 11-bad-codes throttle) but **NOT yet run**,
 and the **migration is NOT yet applied** — the laptop lost DNS mid-session.
 
-**Pick up here (network-gated, in order):** (1) apply
-`supabase/migrations/20260713000000_kairanban.sql` to `tabi-family-sync` (MCP
-apply_migration or dashboard SQL editor); (2) `npm run build && npm run
-check:live` — expect the old 8 + 5 new greens; delete the printed test family
-(cascade cleans posts/hearts; one orphan `join_attempts` row per run is known
-and harmless); (3) push the branch; (4) owner merges → phones refresh → write
-a journal page on one phone, watch it appear on the other; (5) owner re-pastes
-a fresh API key and taps **test the brush**. Docs (README/ROADMAP/DECISIONS/
-this file) are already written; ROADMAP v4.2 row flips to shipped at merge.
+**Update, same evening:** the **migration IS APPLIED** to `tabi-family-sync`
+(owner-approved, via MCP — the tables, RLS, and join throttle are live; the
+deployed app ignores them until this branch ships). The hotel Wi-Fi never gave
+git a window, so this branch reached GitHub **through the MCP tunnel with the
+commits flattened by theme** — the laptop's local `claude/kairanban-feed` has
+identical content under different SHAs. **Next desktop session:** `git fetch`
+then `git reset --hard origin/claude/kairanban-feed` on that branch (or just
+delete the local copy); do NOT try to push it.
+
+**Pick up here (written for a CLOUD session — claude.ai/code on this repo):**
+(1) `npm run build && npm run check` — expect **144/144** (the SessionStart
+hook already installed deps). (2) `npm run check:live` — expect the old 8
+live checks plus 5 new (publish A→B, the vandal PATCH refused by RLS, the
+page surviving untouched, hearts realtime, the 11-bad-codes throttle). It
+prints the test family id — **delete that family row after** (dashboard SQL
+editor or an owner-approved `execute_sql`: `delete from families where id =
+'<printed id>';` — cascade cleans posts/hearts/members; one orphan
+`join_attempts` row per run is known and harmless). **Never touch non-test
+rows — the real family lives in this project.** (3) Report; the owner merges
+→ Pages deploys → phones refresh. (4) Owner-side after merge: re-paste a
+fresh Anthropic key (`sk-ant-api03-…`) and tap **test the brush** in Kit →
+Settings; then the field test — write a journal page on one phone, watch it
+appear on the other, heart it. (5) Tag **v4.2.0** + Release on the owner's
+go. ROADMAP's v4.2 row flips to shipped at merge.
 
 ---
 
