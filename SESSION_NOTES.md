@@ -6,6 +6,46 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-13 (evening) — the Kairanban built: the journal becomes the family's feed
+
+**What happened (desktop session, branch `claude/kairanban-feed` stacked on
+`claude/v4.1.0-docs` — pushed, awaiting owner merge → v4.2.0):** the owner asked
+for journal entries visible on every phone, read-only from there, "social media
+feel but just between the family" — and sent a field screenshot showing the
+Menu Lens **bad-key failure** at dinner. Both handled:
+
+1. **回覧板 Kairanban** (DECISIONS #27, spec in docs/superpowers/specs): the
+   day-journal auto-publishes ~3s behind saves while Family Ink is on; every
+   phone reads all pages in Treasures + on day pages; **RLS enforces
+   writer-only rows** (`device_uid = auth.uid()`, no delete policy); hearts in
+   a reactor-owned table; photos as ≤640px thumbs in-row (cap 4, originals
+   stay home); IndexedDB v3 feed cache for tunnels; unseen-dot on the tab.
+2. **Test the brush** — the AI-key ping in Kit → Settings (born from the
+   screenshot; the key itself was bad, not the lens — owner needs to re-paste
+   a fresh `sk-ant-api03-…` and tap test).
+3. **Security sweep follow-through** — same migration throttles `join_family`
+   (10/hour/uid) and locks the RPC surface (PUBLIC default-EXECUTE revoked,
+   `is_family_member` re-granted for policy evaluation).
+
+**Verified how:** offline suite **130 → 144/144** (feed fixtures, ownership
+affordances, dot lifecycle, day-page filter, key verdicts); visual pass day +
+night (fixture photos render as black squares — that's the 1×1 test JPEG, not
+a bug). Live E2E extended (publish A→B, **B's PATCH of A's row refused by the
+real database**, hearts realtime, 11-bad-codes throttle) but **NOT yet run**,
+and the **migration is NOT yet applied** — the laptop lost DNS mid-session.
+
+**Pick up here (network-gated, in order):** (1) apply
+`supabase/migrations/20260713000000_kairanban.sql` to `tabi-family-sync` (MCP
+apply_migration or dashboard SQL editor); (2) `npm run build && npm run
+check:live` — expect the old 8 + 5 new greens; delete the printed test family
+(cascade cleans posts/hearts; one orphan `join_attempts` row per run is known
+and harmless); (3) push the branch; (4) owner merges → phones refresh → write
+a journal page on one phone, watch it appear on the other; (5) owner re-pastes
+a fresh API key and taps **test the brush**. Docs (README/ROADMAP/DECISIONS/
+this file) are already written; ROADMAP v4.2 row flips to shipped at merge.
+
+---
+
 ## 2026-07-13 — v4.1.0 shipped: Michizure merged, tagged, released, live on the phones
 
 **What happened (desktop session, morning after the overnight build):** the owner
