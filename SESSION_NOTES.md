@@ -43,21 +43,32 @@ identical content under different SHAs. **Next desktop session:** `git fetch`
 then `git reset --hard origin/claude/kairanban-feed` on that branch (or just
 delete the local copy); do NOT try to push it.
 
-**Pick up here (written for a CLOUD session — claude.ai/code on this repo):**
-(1) `npm run build && npm run check` — expect **144/144** (the SessionStart
-hook already installed deps). (2) `npm run check:live` — expect the old 8
-live checks plus 5 new (publish A→B, the vandal PATCH refused by RLS, the
-page surviving untouched, hearts realtime, the 11-bad-codes throttle). It
-prints the test family id — **delete that family row after** (dashboard SQL
-editor or an owner-approved `execute_sql`: `delete from families where id =
-'<printed id>';` — cascade cleans posts/hearts/members; one orphan
-`join_attempts` row per run is known and harmless). **Never touch non-test
-rows — the real family lives in this project.** (3) Report; the owner merges
-→ Pages deploys → phones refresh. (4) Owner-side after merge: re-paste a
-fresh Anthropic key (`sk-ant-api03-…`) and tap **test the brush** in Kit →
-Settings; then the field test — write a journal page on one phone, watch it
-appear on the other, heart it. (5) Tag **v4.2.0** + Release on the owner's
-go. ROADMAP's v4.2 row flips to shipped at merge.
+**Update, later the same evening — the Wi-Fi relented and it ALL ran from the
+laptop:** branch pushed (real history, no MCP flattening needed — ignore the
+tunnel paragraph above); **live E2E 13/13** against the real project. The
+first run flaked on hotel websockets; the second caught a REAL bug — the feed
+engine only started at app boot, so a phone that created/joined the family
+mid-session had a dead feed until relaunch. Fixed: `maybeStartFeed()` now
+also wakes on `tabi:ink-status` (create/join both announce it). Third run:
+all thirteen green — publish A→B, the vandal PATCH refused by RLS, the page
+surviving untouched, hearts realtime, eleven bad codes hitting the throttle.
+
+**Pick up here:** (1) **Cleanup, needs owner approval or the dashboard SQL
+editor** — three E2E test families to delete (cascade cleans members/posts/
+hearts; a few orphan `join_attempts` uid-rows are known and harmless;
+**never touch non-test rows — the real family lives in this project**):
+`delete from families where id in ('76fdfc8f-0967-4ef4-8f64-ee34aab04b4f',
+'6e87e7e6-b1eb-45e7-a6ee-6e82df9fcf21', '1999280c-c055-4e30-b838-c2067b6bc2b5');`
+(2) **Owner merges** `claude/v4.1.0-docs` then `claude/kairanban-feed`
+(stacked, in that order) → Pages deploys → phones refresh on Wi-Fi. (3)
+Owner-side after merge: re-paste a fresh Anthropic key (`sk-ant-api03-…`)
+and tap **test the brush** in Kit → Settings; then the field test — write a
+journal page on one phone, watch it appear on the other, heart it. (4) Tag
+**v4.2.0** + Release on the owner's go; ROADMAP's v4.2 row flips to shipped
+at merge. (5) Housekeeping: `.claude/settings.local.json` does NOT exist
+(the auto-mode gate refused self-granting — write it manually if wanted);
+future trip builds are fine as cloud sessions per the owner's preference,
+with the vault catching up on desktop days.
 
 ---
 

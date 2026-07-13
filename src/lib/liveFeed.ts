@@ -271,14 +271,12 @@ export async function toggleHeart(postDevice: string, postDay: number, travelerI
 
 let started = false
 
-/** App calls once alongside maybeStartInk(). Fixtures mean never-network. */
-export async function maybeStartFeed(): Promise<void> {
-  if (feedFixture() || started) return
-  if (!inkOn() || !familyId()) return
+async function startFeed(): Promise<void> {
+  if (started) return
   started = true
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') flushAll()
-    else void fetchFeed().catch(() => {})
+    else if (inkOn()) void fetchFeed().catch(() => {})
   })
   try {
     const fid = familyId()!
@@ -296,4 +294,17 @@ export async function maybeStartFeed(): Promise<void> {
   } catch {
     /* offline boot — the IndexedDB copy carries the feed until the sky returns */
   }
+}
+
+/** App calls once alongside maybeStartInk(). Fixtures mean never-network.
+ *  The engine also wakes when the ink turns ON mid-session (create/join both
+ *  announce via 'tabi:ink-status') — a phone must not need a relaunch before
+ *  its pages start flowing. */
+export async function maybeStartFeed(): Promise<void> {
+  if (feedFixture()) return
+  const kick = () => {
+    if (!started && inkOn() && familyId()) void startFeed()
+  }
+  window.addEventListener('tabi:ink-status', kick)
+  kick()
 }
