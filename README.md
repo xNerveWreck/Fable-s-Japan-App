@@ -35,15 +35,18 @@ both phones the same day**, and
 followed hours later with the first field fix (the synced card never showed
 "Invite another phone" codes). Live sync is opt-in per phone (Kit → Family
 ink); the folded share link below it remains the no-server fallback, forever.
-**Built 2026-07-13 (branch `claude/kairanban-feed`, awaiting owner merge →
-v4.2): the 回覧板 Kairanban** — the journal becomes a family-only feed. Each
-phone's day-entry (text + photo thumbs) publishes itself while Family Ink is
-on and appears on every phone in Treasures and on that day's page —
-**read-only for everyone but the writer, enforced by the database itself** —
-with one vermillion ink-heart per person per page and a dot on the Treasures
-tab when new pages arrive. Kit's AI-key row gained **"test the brush"** (a
-one-cent ping that proves the key works, in the hotel rather than at a
-counter), and the pairing-code door gained a server-side rate limit.
+**[v4.2.0 「回覧板 Kairanban」](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.2.0)
+shipped (merged 2026-07-14 JST, PR #26; built and live-verified the night of
+trip day two):** the journal becomes a family-only feed. Each phone's
+day-entry (text + photo thumbs) publishes itself while Family Ink is on and
+appears on every phone in Treasures and on that day's page — **read-only for
+everyone but the writer, enforced by the database itself** (proven by a live
+test that forges an edit from another phone and gets refused) — with one
+vermillion ink-heart per person per page and a dot on the Treasures tab when
+new pages arrive. Kit's AI-key row gained **"test the brush"** (a one-cent
+ping that proves the key works, in the hotel rather than at a counter), and
+the pairing-code door gained a server-side rate limit. Offline suite
+**144/144**; live two-browser E2E **13/13** against the real project.
 **[v4.1.0 「道連れ Michizure」](https://github.com/xNerveWreck/Fable-s-Japan-App/releases/tag/v4.1.0)
 shipped (merged 2026-07-13, PR #24; built overnight between trip days one and
 two):** the **Menu Lens** (photograph any menu from Speak — dishes in English,
