@@ -10,6 +10,7 @@ create table journal_posts (
   author_id text,
   body text not null default '',
   photos jsonb not null default '[]',
+  extra_photos int not null default 0,
   updated_at timestamptz not null default now(),
   primary key (family_id, device_uid, day_id)
 );

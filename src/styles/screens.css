@@ -2427,6 +2427,29 @@
   .sumi svg, .sumi-eye, .sumi-ear-l, .sumi-ear-r, .sumi-drop, .sumi-zz { animation: none !important; }
 }
 
+/* ================= kairanban · 回覧板 ================= */
+.feed { display: flex; flex-direction: column; gap: 12px; }
+.feed-card { padding: 12px 14px; }
+.feed-card.own { border: 1px dashed var(--hairline); }
+.feed-head { display: flex; align-items: baseline; gap: 8px; }
+.feed-mascot { font-size: 20px; }
+.feed-author { font-weight: 700; }
+.feed-day { margin-left: 8px; font-size: 12px; color: var(--ink-faint); }
+.feed-stamp { font-size: 11.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.feed-body { margin: 8px 0 0; white-space: pre-wrap; }
+.feed-photos { margin-top: 10px; }
+.feed-more { font-size: 12px; color: var(--ink-faint); align-self: center; }
+.feed-foot { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.feed-heart { background: none; border: 1px solid var(--hairline); border-radius: 999px; color: var(--ink-faint); font-size: 14px; line-height: 1; padding: 5px 10px; }
+.feed-heart.on { color: var(--vermillion); border-color: var(--vermillion); }
+.feed-heart-row { display: flex; gap: 2px; font-size: 13px; }
+.feed-heart-blot { filter: drop-shadow(0 1px 0 var(--sakura-wash)); }
+.feed-own-hint { font-size: 11.5px; color: var(--ink-faint); font-style: italic; }
+.feed-empty { color: var(--ink-soft); font-size: 13.5px; margin: 2px 0 6px; }
+.journal-flows { font-size: 11.5px; color: var(--ink-faint); font-style: italic; margin: 6px 0 0; }
+.tab-dot { position: absolute; top: 6px; right: calc(50% - 16px); width: 7px; height: 7px; border-radius: 50%; background: var(--vermillion); }
+.tabbar button { position: relative; }
+
 /* ================= the family kamon · 家紋 ================= */
 .kamon { flex-shrink: 0; display: block; }
 .kamon-seal { display: flex; justify-content: center; padding: 2px 0 10px; }
@@ -2434,9 +2457,13 @@
 .kamon-row .grow { flex: 1; min-width: 0; }
 
 .key-entry { display: flex; gap: 8px; align-items: center; }
+.key-test-btn { font-size: 12px; }
+.key-verdict.good { color: var(--pine); }
+.key-verdict.bad { color: var(--vermillion); }
 .key-entry input { flex: 1; min-width: 0; }
 .key-save { border: 1px solid var(--hairline); background: var(--card); color: var(--ink); border-radius: var(--radius); padding: 6px 12px; font-size: 13px; }
-.key-set { display: flex; gap: 8px; align-items: center; color: var(--ink-soft); }
+.key-set { display: flex; gap: 8px; align-items: center; color: var(--ink-soft); white-space: nowrap; }
+.key-set .key-test-btn { white-space: nowrap; }
 .key-note { font-size: 12px; color: var(--ink-faint); margin: 6px 2px 0; }
 
 /* ---------- live family ink (Kit) ---------- */

@@ -135,6 +135,12 @@ async function client(): Promise<SupabaseClient> {
   return sb
 }
 
+/** The one client + anonymous identity, shared with the feed engine (liveFeed.ts). */
+export async function inkClient(): Promise<{ c: SupabaseClient; uid: string | null }> {
+  const c = await client()
+  return { c, uid }
+}
+
 /** Fold a server copy into this phone. Announces 'tabi:ink' only on real change. */
 function applyIncoming(state: unknown) {
   const s = state as TripState

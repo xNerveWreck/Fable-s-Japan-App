@@ -11,6 +11,8 @@ import {
 import { animalEmoji, type Traveler } from '../data/travelers'
 import { useStored } from '../hooks/useStored'
 import { play } from '../lib/sound'
+import { queuePublish } from '../lib/liveFeed'
+import { familyId, inkOn } from '../lib/liveSync'
 import { TrashIcon } from '../art/icons'
 
 /**
@@ -54,7 +56,9 @@ export function Journal({ dayId }: { dayId: number }) {
     setEntry(next)
     if (saveTimer.current) clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => {
-      void putEntry({ ...next, updatedAt: Date.now() })
+      void putEntry({ ...next, updatedAt: Date.now() }).then(() => {
+        queuePublish(next.dayId) // the kairanban: this page flies to the family
+      })
     }, 500)
   }
 
@@ -155,6 +159,9 @@ export function Journal({ dayId }: { dayId: number }) {
       <button className="journal-add-photo" onClick={() => fileRef.current?.click()}>
         + Add photos — they’ll be painted in ink
       </button>
+      {inkOn() && familyId() !== null && (
+        <p className="journal-flows">this page flows to the family · 回覧板</p>
+      )}
     </div>
   )
 }

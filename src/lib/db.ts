@@ -20,7 +20,7 @@ export interface JournalEntry {
 }
 
 const DB_NAME = 'tabi-kioku'
-const DB_VERSION = 2
+const DB_VERSION = 3
 
 let dbPromise: Promise<IDBDatabase> | null = null
 
@@ -32,11 +32,29 @@ function open(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains('journal')) db.createObjectStore('journal', { keyPath: 'dayId' })
       if (!db.objectStoreNames.contains('photos')) db.createObjectStore('photos')
       if (!db.objectStoreNames.contains('voices')) db.createObjectStore('voices')
+      if (!db.objectStoreNames.contains('feed')) db.createObjectStore('feed') // v3 — the kairanban cache
     }
     req.onsuccess = () => resolve(req.result)
     req.onerror = () => reject(req.error)
   })
   return dbPromise
+}
+
+/** The kairanban's offline copy — one record, whole feed. */
+export async function putFeedCache(value: unknown): Promise<void> {
+  const db = await open()
+  const tx = db.transaction('feed', 'readwrite')
+  tx.objectStore('feed').put(value, 'cache')
+  return txDone(tx)
+}
+
+export async function getFeedCache<T>(): Promise<T | undefined> {
+  const db = await open()
+  return new Promise((resolve, reject) => {
+    const req = db.transaction('feed').objectStore('feed').get('cache')
+    req.onsuccess = () => resolve(req.result as T | undefined)
+    req.onerror = () => reject(req.error)
+  })
 }
 
 function txDone(tx: IDBTransaction): Promise<void> {

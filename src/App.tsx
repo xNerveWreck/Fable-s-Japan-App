@@ -1,5 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { maybeStartInk } from './lib/liveSync'
+import { maybeStartFeed } from './lib/liveFeed'
+import { useFeedDot } from './components/FamilyFeed'
 import { useHashRoute } from './hooks/useHashRoute'
 import { useSolarClock } from './hooks/useSolarClock'
 import { Journey } from './screens/Journey'
@@ -24,12 +26,14 @@ export default function App() {
   const [route, nav] = useHashRoute()
   const tab = route[0] || 'journey'
   useSolarClock()
+  const feedDot = useFeedDot()
 
   // live family ink: boot once; when a remote merge lands, remount the screen
   // so every component re-reads localStorage (rare event, additive data)
   const [inkGen, setInkGen] = useState(0)
   useEffect(() => {
     void maybeStartInk()
+    void maybeStartFeed() // the kairanban rides the same ink
     const bloom = () => setInkGen((g) => g + 1)
     window.addEventListener('tabi:ink', bloom)
     return () => window.removeEventListener('tabi:ink', bloom)
@@ -68,6 +72,7 @@ export default function App() {
           >
             {t.icon(tab === t.id)}
             {t.label}
+            {t.id === 'treasures' && feedDot && <span className="tab-dot" aria-label="new family pages" />}
           </button>
         ))}
       </nav>

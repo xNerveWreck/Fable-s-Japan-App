@@ -7,6 +7,7 @@ import { TravelersCard } from '../components/Travelers'
 import { Kamon } from '../art/Kamon'
 import type { Traveler } from '../data/travelers'
 import { useStored } from '../hooks/useStored'
+import { FAIL_FACE, testKey, type LensFail } from '../lib/lens'
 import { shareUrl, type Moment } from '../lib/sync'
 import { play, type SoundName } from '../lib/sound'
 import { CheckIcon, ChevronIcon, GearIcon, ShareIcon, TrashIcon } from '../art/icons'
@@ -52,6 +53,12 @@ function KitSettings() {
   const [enabled, setEnabled] = useStored<boolean>('sound', false)
   const [claudeKey, setClaudeKey] = useStored<string>('claude-key', '')
   const [keyDraft, setKeyDraft] = useState('')
+  const [keyTest, setKeyTest] = useState<'idle' | 'testing' | 'ok' | LensFail>('idle')
+
+  const runKeyTest = async () => {
+    setKeyTest('testing')
+    setKeyTest(await testKey(claudeKey))
+  }
 
   const demoNames: { name: SoundName; label: string }[] = [
     { name: 'tap', label: 'Did it' },
@@ -87,7 +94,10 @@ function KitSettings() {
           {claudeKey ? (
             <span className="key-set">
               ✓ key saved
-              <button className="icon-btn" aria-label="Clear the AI key" onClick={() => setClaudeKey('')}>
+              <button className="chip key-test-btn" disabled={keyTest === 'testing'} onClick={() => void runKeyTest()}>
+                {keyTest === 'testing' ? 'asking…' : 'test the brush'}
+              </button>
+              <button className="icon-btn" aria-label="Clear the AI key" onClick={() => { setClaudeKey(''); setKeyTest('idle') }}>
                 <TrashIcon />
               </button>
             </span>
@@ -107,9 +117,14 @@ function KitSettings() {
           )}
         </label>
         <p className="key-note">
-          Powers the sign decoder. Use a key from a dedicated workspace with a monthly spend cap
-          (console.anthropic.com). Stored only on this phone — never synced, never shared.
+          Powers the sign decoder and the menu lens. Use a key from a dedicated workspace with a monthly
+          spend cap (console.anthropic.com). Stored only on this phone — never synced, never shared.
         </p>
+        {keyTest !== 'idle' && keyTest !== 'testing' && (
+          <p className={`key-note key-verdict ${keyTest === 'ok' ? 'good' : 'bad'}`}>
+            {keyTest === 'ok' ? '✓ the brush answers — both lenses are ready' : FAIL_FACE[keyTest]}
+          </p>
+        )}
 
         <hr className="hr-ink" />
 

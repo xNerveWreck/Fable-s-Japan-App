@@ -150,6 +150,78 @@ try {
     'reservations never reach the other phone',
     await B.evaluate(() => !(localStorage.getItem('tabi:reservations') ?? '').includes('PNR-SECRET')),
   )
+
+  /* ---- the kairanban: A writes a page; B reads it and cannot touch it ---- */
+  await A.goto(`${BASE}/#journey/1`)
+  await A.waitForTimeout(800)
+  await A.fill('.journal-text', 'e2e-kairanban: the plane ate a whole day')
+  await A.waitForTimeout(6500) // save debounce + publish debounce + upsert
+  await B.goto(`${BASE}/#treasures`)
+  check(
+    "B reads A's page on the kairanban",
+    await settled(
+      B.waitForFunction(() => (document.body.textContent ?? '').includes('e2e-kairanban'), null, { timeout: 25000 }),
+    ),
+  )
+
+  /* the read-only rule, tested against the real database: B PATCHes A's row */
+  const aUid = await A.evaluate(() => localStorage.getItem('tabi:feed-uid'))
+  const vandalized = await B.evaluate(
+    async ([url, key, famId, targetUid]) => {
+      const raw = Object.keys(localStorage).find((k) => k.startsWith('sb-') && k.endsWith('-auth-token'))
+      const token = raw ? JSON.parse(localStorage.getItem(raw)).access_token : null
+      const resp = await fetch(
+        `${url}/rest/v1/journal_posts?family_id=eq.${famId}&device_uid=eq.${targetUid}&day_id=eq.1`,
+        {
+          method: 'PATCH',
+          headers: {
+            apikey: key,
+            authorization: `Bearer ${token}`,
+            'content-type': 'application/json',
+            prefer: 'return=representation',
+          },
+          body: JSON.stringify({ body: 'VANDALIZED' }),
+        },
+      )
+      const rows = await resp.json().catch(() => [])
+      return Array.isArray(rows) && rows.length > 0
+    },
+    [URL, KEY, fid, aUid],
+  )
+  check("the database refuses B's edit of A's page", !vandalized)
+  await A.goto(`${BASE}/#treasures`)
+  await A.waitForTimeout(1500)
+  check(
+    "A's page survives the vandal untouched",
+    await A.evaluate(() => !(document.body.textContent ?? '').includes('VANDALIZED')),
+  )
+
+  /* hearts: B loves A's page through the UI; A sees the mascot blot */
+  await B.locator('.feed-card:not(.own) .feed-heart').first().click()
+  check(
+    "A sees B's heart bloom on the page",
+    await settled(A.waitForFunction(() => document.querySelectorAll('.feed-heart-blot').length >= 1, null, { timeout: 25000 })),
+  )
+
+  /* the join throttle: ten garbage codes, and the door stops answering */
+  const throttled = await B.evaluate(
+    async ([url, key]) => {
+      const raw = Object.keys(localStorage).find((k) => k.startsWith('sb-') && k.endsWith('-auth-token'))
+      const token = raw ? JSON.parse(localStorage.getItem(raw)).access_token : null
+      let last = null
+      for (let i = 0; i < 11; i++) {
+        const resp = await fetch(`${url}/rest/v1/rpc/join_family`, {
+          method: 'POST',
+          headers: { apikey: key, authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+          body: JSON.stringify({ code_in: `ZZZZ-${String(i).padStart(2, '0')}` }),
+        })
+        last = await resp.json().catch(() => null)
+      }
+      return last && last.throttled === true
+    },
+    [URL, KEY],
+  )
+  check('eleven bad codes in a row hit the throttle', throttled === true)
 } finally {
   await browser.close()
   server.kill()
