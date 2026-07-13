@@ -12,6 +12,7 @@ import { currentSolar, PHASE_LABEL } from '../lib/solar'
 import { microseasonFor } from '../data/sekki'
 import { journalDays } from '../lib/db'
 import { Journal } from '../components/Journal'
+import { FamilyFeed } from '../components/FamilyFeed'
 import { FujiWindow } from '../components/FujiWindow'
 import { DeerDojo } from '../components/DeerDojo'
 import { SideQuests } from '../components/SideQuests'
@@ -407,6 +408,8 @@ function DayDetail({
       <Pocket dayId={day.id} />
 
       <Journal dayId={day.id} />
+
+      <FamilyFeed dayId={day.id} />
 
       <div className="timeline">
         {day.activities.map((act, i) => {

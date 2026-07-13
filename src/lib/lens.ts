@@ -257,6 +257,39 @@ const MENU_FORMAT = {
   },
 } as const
 
+/** One-cent ping — proves the pasted key actually opens the door, in the
+ *  hotel, before it matters at a counter. ?keytest=ok|bad for the suite. */
+export async function testKey(key: string): Promise<'ok' | LensFail> {
+  const fx = new URLSearchParams(location.search).get('keytest')
+  if (fx) {
+    await new Promise((r) => setTimeout(r, 300))
+    return fx === 'ok' ? 'ok' : 'bad-key'
+  }
+  if (!key) return 'no-key'
+  let resp: Response
+  try {
+    resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-8',
+        max_tokens: 1,
+        messages: [{ role: 'user', content: 'ping' }],
+      }),
+    })
+  } catch {
+    return 'offline'
+  }
+  if (resp.status === 401) return 'bad-key'
+  if (!resp.ok) return 'busy'
+  return 'ok'
+}
+
 export async function decodeMenu(imageB64: string, key: string, allergies: { en: string; jp: string }[]): Promise<MenuResult> {
   const fx = menuFixture()
   if (fx) {

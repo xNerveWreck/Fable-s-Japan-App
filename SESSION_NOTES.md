@@ -6,6 +6,73 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-13 (evening) — the Kairanban built: the journal becomes the family's feed
+
+**What happened (desktop session, branch `claude/kairanban-feed` stacked on
+`claude/v4.1.0-docs` — pushed, awaiting owner merge → v4.2.0):** the owner asked
+for journal entries visible on every phone, read-only from there, "social media
+feel but just between the family" — and sent a field screenshot showing the
+Menu Lens **bad-key failure** at dinner. Both handled:
+
+1. **回覧板 Kairanban** (DECISIONS #27, spec in docs/superpowers/specs): the
+   day-journal auto-publishes ~3s behind saves while Family Ink is on; every
+   phone reads all pages in Treasures + on day pages; **RLS enforces
+   writer-only rows** (`device_uid = auth.uid()`, no delete policy); hearts in
+   a reactor-owned table; photos as ≤640px thumbs in-row (cap 4, originals
+   stay home); IndexedDB v3 feed cache for tunnels; unseen-dot on the tab.
+2. **Test the brush** — the AI-key ping in Kit → Settings (born from the
+   screenshot; the key itself was bad, not the lens — owner needs to re-paste
+   a fresh `sk-ant-api03-…` and tap test).
+3. **Security sweep follow-through** — same migration throttles `join_family`
+   (10/hour/uid) and locks the RPC surface (PUBLIC default-EXECUTE revoked,
+   `is_family_member` re-granted for policy evaluation).
+
+**Verified how:** offline suite **130 → 144/144** (feed fixtures, ownership
+affordances, dot lifecycle, day-page filter, key verdicts); visual pass day +
+night (fixture photos render as black squares — that's the 1×1 test JPEG, not
+a bug). Live E2E extended (publish A→B, **B's PATCH of A's row refused by the
+real database**, hearts realtime, 11-bad-codes throttle) but **NOT yet run**,
+and the **migration is NOT yet applied** — the laptop lost DNS mid-session.
+
+**Update, same evening:** the **migration IS APPLIED** to `tabi-family-sync`
+(owner-approved, via MCP — the tables, RLS, and join throttle are live; the
+deployed app ignores them until this branch ships). The hotel Wi-Fi never gave
+git a window, so this branch reached GitHub **through the MCP tunnel with the
+commits flattened by theme** — the laptop's local `claude/kairanban-feed` has
+identical content under different SHAs. **Next desktop session:** `git fetch`
+then `git reset --hard origin/claude/kairanban-feed` on that branch (or just
+delete the local copy); do NOT try to push it.
+
+**Update, later the same evening — the Wi-Fi relented and it ALL ran from the
+laptop:** branch pushed (real history, no MCP flattening needed — ignore the
+tunnel paragraph above); **live E2E 13/13** against the real project. The
+first run flaked on hotel websockets; the second caught a REAL bug — the feed
+engine only started at app boot, so a phone that created/joined the family
+mid-session had a dead feed until relaunch. Fixed: `maybeStartFeed()` now
+also wakes on `tabi:ink-status` (create/join both announce it). Third run:
+all thirteen green — publish A→B, the vandal PATCH refused by RLS, the page
+surviving untouched, hearts realtime, eleven bad codes hitting the throttle.
+
+**Update: cleanup DONE (owner-approved, same night)** — the three test
+families deleted with select-before/after verification; the project holds
+exactly 1 family / 4 members / 1 state / 0 posts / 0 hearts. (Orphan
+`join_attempts` throttle rows age out within the hour and can never touch
+the real phones' uids.)
+
+**Pick up here:** (1) **Owner merges** `claude/v4.1.0-docs` then
+`claude/kairanban-feed` (stacked, in that order) → Pages deploys → phones
+refresh on Wi-Fi. (2)
+Owner-side after merge: re-paste a fresh Anthropic key (`sk-ant-api03-…`)
+and tap **test the brush** in Kit → Settings; then the field test — write a
+journal page on one phone, watch it appear on the other, heart it. (4) Tag
+**v4.2.0** + Release on the owner's go; ROADMAP's v4.2 row flips to shipped
+at merge. (5) Housekeeping: `.claude/settings.local.json` does NOT exist
+(the auto-mode gate refused self-granting — write it manually if wanted);
+future trip builds are fine as cloud sessions per the owner's preference,
+with the vault catching up on desktop days.
+
+---
+
 ## 2026-07-13 — v4.1.0 shipped: Michizure merged, tagged, released, live on the phones
 
 **What happened (desktop session, morning after the overnight build):** the owner

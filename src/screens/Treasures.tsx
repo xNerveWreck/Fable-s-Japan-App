@@ -8,6 +8,7 @@ import { Denshadex } from '../components/Denshadex'
 import { TrainQuiz } from '../components/TrainQuiz'
 import { Stamp } from '../art/Stamp'
 import { Kamon } from '../art/Kamon'
+import { FamilyFeed } from '../components/FamilyFeed'
 import type { Traveler } from '../data/travelers'
 import { ChevronIcon } from '../art/icons'
 
@@ -47,6 +48,12 @@ export function Treasures({ nav }: { nav: (p: string) => void }) {
         </div>
         <Kamon travelers={travelers} loved={loved.length} size={64} />
       </header>
+
+      <div className="section-title">
+        <h2>Kairanban</h2>
+        <span className="jp">回覧板 · the family’s pages</span>
+      </div>
+      <FamilyFeed markSeen />
 
       <div className="section-title">
         <h2>Stamp journal</h2>

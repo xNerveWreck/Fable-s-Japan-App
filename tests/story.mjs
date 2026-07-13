@@ -624,6 +624,72 @@ try {
   check('reduced motion stills sumi', smAnim === 'none', smAnim)
   await smrCtx.close()
 
+  /* ---- 15e. The kairanban: the family's pages, passed around ---- */
+  const fdCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const fdPage = await fdCtx.newPage()
+
+  // unseen pages ring the treasures dot… (?demo=1 would replaceState the
+  // ?feed= param away — the fixture rides alone here)
+  await fdPage.goto(`${BASE}/?feed=ok#journey`)
+  await fdPage.waitForTimeout(700)
+  check('new pages ring the treasures dot', (await fdPage.locator('.tab-dot').count()) === 1)
+
+  // …the shelf gathers the pages…
+  await fdPage.goto(`${BASE}/?feed=ok#treasures`)
+  await fdPage.waitForTimeout(700)
+  check('the kairanban gathers the pages', (await fdPage.locator('.feed-card').count()) === 3)
+  check('my page is marked mine', (await fdPage.locator('.feed-card.own').count()) === 1)
+  check('my own page offers no heart', (await fdPage.locator('.feed-card.own .feed-heart').count()) === 0)
+  check('other pages can be loved', (await fdPage.locator('.feed-card:not(.own) .feed-heart').count()) === 2)
+  check('hearts wear the mascots', (await fdPage.locator('.feed-heart-blot').count()) === 3)
+  check('photos ride the pages', (await fdPage.locator('.feed-card img').count()) === 3)
+  check('the overflow is honest', ((await fdPage.textContent('.feed-more')) ?? '').includes('+2'))
+  await shot(fdPage, 'kairanban')
+
+  // …and reading the board rests the dot
+  await fdPage.goto(`${BASE}/?feed=ok#journey`)
+  await fdPage.waitForTimeout(600)
+  check('reading the board rests the dot', (await fdPage.locator('.tab-dot').count()) === 0)
+
+  // each day page carries that day's pages
+  await fdPage.goto(`${BASE}/?feed=ok#journey/2`)
+  await fdPage.waitForTimeout(600)
+  check('day two carries its two pages', (await fdPage.locator('.feed-card').count()) === 2)
+  await fdCtx.close()
+
+  // a blank board says so; a board without ink points at Kit
+  const fd2Ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const fd2Page = await fd2Ctx.newPage()
+  await fd2Page.goto(`${BASE}/?feed=empty#treasures`)
+  await fd2Page.waitForTimeout(600)
+  check('a blank board says so', ((await fd2Page.textContent('.feed-empty')) ?? '').includes('blank'))
+  await fd2Page.goto(`${BASE}/#treasures`)
+  await fd2Page.waitForTimeout(600)
+  check('no ink points at Kit', ((await fd2Page.textContent('.feed-empty')) ?? '').includes('Family Ink'))
+  await fd2Ctx.close()
+
+  /* ---- 15f. The key test: bad keys die in the hotel, not at the counter ---- */
+  const ktCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const ktPage = await ktCtx.newPage()
+  await ktPage.goto(`${BASE}/?keytest=ok#kit`)
+  await ktPage.evaluate(() => localStorage.setItem('tabi:claude-key', JSON.stringify('sk-test-fixture')))
+  await ktPage.reload()
+  await ktPage.waitForTimeout(600)
+  await ktPage.locator('.settings-btn').click()
+  await ktPage.waitForTimeout(300)
+  await ktPage.locator('.key-test-btn').click()
+  await ktPage.waitForTimeout(600)
+  check('a good key answers', ((await ktPage.textContent('.key-verdict')) ?? '').includes('answers'))
+  await ktPage.goto(`${BASE}/?keytest=bad#kit`)
+  await ktPage.reload()
+  await ktPage.waitForTimeout(600)
+  await ktPage.locator('.settings-btn').click()
+  await ktPage.waitForTimeout(300)
+  await ktPage.locator('.key-test-btn').click()
+  await ktPage.waitForTimeout(600)
+  check('a bad key gets the calm truth', ((await ktPage.textContent('.key-verdict')) ?? '').includes('did not work'))
+  await ktCtx.close()
+
   // the key must never be able to travel in a sync link
   const syncSrc = readFileSync('src/lib/sync.ts', 'utf8')
   check('the key never syncs', !syncSrc.includes('claude-key'))
