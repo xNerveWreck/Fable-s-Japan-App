@@ -53,14 +53,15 @@ also wakes on `tabi:ink-status` (create/join both announce it). Third run:
 all thirteen green — publish A→B, the vandal PATCH refused by RLS, the page
 surviving untouched, hearts realtime, eleven bad codes hitting the throttle.
 
-**Pick up here:** (1) **Cleanup, needs owner approval or the dashboard SQL
-editor** — three E2E test families to delete (cascade cleans members/posts/
-hearts; a few orphan `join_attempts` uid-rows are known and harmless;
-**never touch non-test rows — the real family lives in this project**):
-`delete from families where id in ('76fdfc8f-0967-4ef4-8f64-ee34aab04b4f',
-'6e87e7e6-b1eb-45e7-a6ee-6e82df9fcf21', '1999280c-c055-4e30-b838-c2067b6bc2b5');`
-(2) **Owner merges** `claude/v4.1.0-docs` then `claude/kairanban-feed`
-(stacked, in that order) → Pages deploys → phones refresh on Wi-Fi. (3)
+**Update: cleanup DONE (owner-approved, same night)** — the three test
+families deleted with select-before/after verification; the project holds
+exactly 1 family / 4 members / 1 state / 0 posts / 0 hearts. (Orphan
+`join_attempts` throttle rows age out within the hour and can never touch
+the real phones' uids.)
+
+**Pick up here:** (1) **Owner merges** `claude/v4.1.0-docs` then
+`claude/kairanban-feed` (stacked, in that order) → Pages deploys → phones
+refresh on Wi-Fi. (2)
 Owner-side after merge: re-paste a fresh Anthropic key (`sk-ant-api03-…`)
 and tap **test the brush** in Kit → Settings; then the field test — write a
 journal page on one phone, watch it appear on the other, heart it. (4) Tag
