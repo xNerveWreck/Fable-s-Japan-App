@@ -1155,6 +1155,32 @@
   margin-top: 2px;
 }
 
+/* ---------- the pace forecast (Kit → Spend) ---------- */
+
+.pace-card .pace-over { color: var(--vermillion); }
+
+.pace-days { margin-top: 10px; border-top: 1px solid var(--hairline); }
+.pace-day {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+.pace-day:last-child { border-bottom: none; }
+.pace-day-amount { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+
+.pace-ask { margin-top: 12px; }
+.pace-coach { margin-top: 8px; }
+.pace-coach .pace-verdict { font-weight: 600; margin: 8px 0 4px; }
+.pace-coach .pace-plan { color: var(--ink-soft); margin: 4px 0; }
+.pace-coach ul { margin: 6px 0 0; padding-left: 18px; }
+.pace-coach li { margin: 3px 0; color: var(--ink-soft); }
+
+.pace-budget-edit { margin-top: 12px; }
+
 /* ---------- vignettes ---------- */
 
 .vignette {

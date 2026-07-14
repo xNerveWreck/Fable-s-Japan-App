@@ -338,6 +338,9 @@ try {
 
   /* ---- 10. Family voice phrasebook: their own voices, kept ---- */
   const micBrowser = await chromium.launch({
+    // same system-chromium fallback as the main launch — a fresh container may
+    // carry a different playwright build than the downloaded browser set
+    ...(existsSync(SYSTEM_CHROMIUM) ? { executablePath: SYSTEM_CHROMIUM } : {}),
     args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'],
   })
   const micCtx = await micBrowser.newContext({
@@ -693,6 +696,56 @@ try {
   // the key must never be able to travel in a sync link
   const syncSrc = readFileSync('src/lib/sync.ts', 'utf8')
   check('the key never syncs', !syncSrc.includes('claude-key'))
+
+  // every runtime ask rides the fast brush — sonnet, not opus (DECISIONS #28)
+  const lensSrc = readFileSync('src/lib/lens.ts', 'utf8')
+  check('the brush is sonnet', lensSrc.includes("'claude-sonnet-5'") && !lensSrc.includes('claude-opus'))
+
+  /* ---- 15g. The spend pace: the pouch, the forecast, the coach ---- */
+  const spCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+  const spPage = await spCtx.newPage()
+  await spPage.goto(`${BASE}/#kit`)
+  // today becomes trip day 5 of 12 — the JST clock, same trap as always
+  await spPage.evaluate((dep) => localStorage.setItem('tabi:departure', JSON.stringify(dep)), shiftDate(jstToday(), -4))
+  await spPage.reload()
+  await spPage.waitForTimeout(600)
+  check('the pace card asks for a budget first', ((await spPage.textContent('.pace-card')) ?? '').includes('cash budget'))
+  await spPage.locator('.pace-card .pocket-add input').fill('240000')
+  await spPage.locator('.pace-card .key-save').click()
+  await spPage.waitForTimeout(300)
+  const paceText = (await spPage.textContent('.pace-card')) ?? ''
+  check('the forecast knows the day', paceText.includes('day 5 of 12'), paceText.slice(0, 100))
+  check('the whole pouch is still there', paceText.includes('¥240,000'))
+  await spPage.locator('.pace-card .pocket-add input').fill('12000')
+  await spPage.locator('.pace-card .key-save').click()
+  await spPage.waitForTimeout(300)
+  const paceAfter = (await spPage.textContent('.pace-card')) ?? ''
+  check('a logged day thins the pouch', paceAfter.includes('¥228,000'), paceAfter.slice(0, 140))
+  check('today gets its own line', paceAfter.includes('still fine to spend today'))
+  check('the day is inked into the log', (await spPage.locator('.pace-day').count()) === 1)
+  const logRaw = await spPage.evaluate(() => localStorage.getItem('tabi:spend-log'))
+  check('the spend log persists', (logRaw ?? '').includes('12000'), logRaw ?? 'null')
+
+  // no key: the coach points at Kit → Settings, calmly
+  await spPage.locator('.pace-ask').click()
+  await spPage.waitForTimeout(300)
+  check('coach with no key points at Kit', ((await spPage.textContent('.pace-card .lens-fail')) ?? '').includes('Kit'))
+
+  // with the fixture the coach answers, trip-aware
+  await spPage.goto(`${BASE}/?pace=ok#kit`)
+  await spPage.waitForTimeout(500)
+  await spPage.locator('.pace-ask').click()
+  await spPage.waitForTimeout(700)
+  check('the coach weighs the pouch', ((await spPage.textContent('.pace-verdict')) ?? '').includes('pace'))
+  check('the coach hands over a plan', ((await spPage.textContent('.pace-plan')) ?? '').includes('¥'))
+  await shot(spPage, 'spend-pace')
+
+  await spPage.goto(`${BASE}/?pace=offline#kit`)
+  await spPage.waitForTimeout(500)
+  await spPage.locator('.pace-ask').click()
+  await spPage.waitForTimeout(700)
+  check('coach offline gets a calm face', ((await spPage.textContent('.pace-card .lens-fail')) ?? '').includes('sky'))
+  await spCtx.close()
 
   /* ---- 16. The Treasures shelf: the collection moves out of Journey ---- */
   const shCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true })

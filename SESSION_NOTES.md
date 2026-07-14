@@ -6,6 +6,50 @@ sessions — never end a session without an entry here or a wrapped report.
 
 ---
 
+## 2026-07-14 (trip day three) — the Spend pace built; the brush switches to Sonnet
+
+**What happened (cloud session, branch `claude/pace-forecast-spend-api-7ave39`
+— pushed, awaiting owner merge → v4.3.0):** two owner asks, both landed:
+
+1. **The Spend pace** (DECISIONS #29): Kit's budget section became **Spend ·
+   予算** — set the trip's cash budget once, log what a day cost (per-JST-day
+   buckets in `tabi:spend-log`), and `src/lib/pace.ts` divides what's left
+   across the days that remain, fully offline: *left in the pouch · today's
+   share · each day ahead*. The **pace coach** button asks Claude to weigh the
+   pouch against the itinerary still ahead (the prompt carries the per-day log
+   AND the remaining day titles, so the advice knows USJ is coming) — same
+   BYO key as the lenses, `?pace=ok|offline` fixtures keep the suite dark.
+   Spend state is deliberately on-phone-only: per-day sums don't merge
+   monotonically, so it stays out of the live ink (#23) and the sync link.
+2. **Sonnet, not Opus** (DECISIONS #28): `decodeSign`, `decodeMenu`, and
+   `testKey` now ride `claude-sonnet-5` for faster answers at the counter —
+   with `thinking: {type: 'disabled'}` set *explicitly* (Sonnet 5 runs
+   adaptive thinking when the param is omitted, which would spend the latency
+   back) and max_tokens raised ~30% for Sonnet 5's tokenizer (sign 1536, menu
+   3072). The shared fetch became `askClaude(key, system, format, content,
+   maxTokens)` so the coach rides the same error faces. A suite tripwire pins
+   the model string.
+
+**Weird thing hit (gold for the next agent):** a fresh container's
+`npm install` pulled a newer playwright whose default browser build (1228)
+isn't in `/opt/pw-browsers` — the suite's *second* `chromium.launch` (the mic
+browser, story 10) didn't carry the `SYSTEM_CHROMIUM` executablePath fallback
+the main launch has. It does now; keep any future `chromium.launch` calls on
+that pattern.
+
+**Verified:** `npm run build` green; suite **156/156** (12 new checks: budget
+setup → log → forecast lines, the coach's verdict/plan, no-key and offline
+faces, the sonnet tripwire); pace card eyeballed at iPhone viewport in both
+day and `?clock=00:30` night — tokens carry both. New screenshot
+`docs/screens/spend-pace.png`.
+
+**Pick up here:** owner merges the branch (v4.3.0 per the tag ladder), then on
+the phones: Kit → Spend → set the real cash budget, log tonight's damage, tap
+**Ask Claude about the pace** with the saved key. If the coach's tone needs
+tuning, the system prompt lives in `src/lib/pace.ts` (`COACH_SYSTEM`).
+
+---
+
 ## 2026-07-14 (JST, past midnight) — v4.2.0 shipped: the Kairanban is live
 
 **What happened:** the owner merged **PR #26** (`claude/kairanban-feed`, atop
