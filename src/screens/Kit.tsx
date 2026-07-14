@@ -3,11 +3,14 @@ import {
   freshCode, familyId, getInkStatus, joinFamily, startFamily, turnOffInk, turnOnInk,
 } from '../lib/liveSync'
 import { allergens, budgetGuide, emergencyItems, packGroups } from '../data/kit'
+import { itinerary, TRIP_LENGTH } from '../data/itinerary'
 import { TravelersCard } from '../components/Travelers'
 import { Kamon } from '../art/Kamon'
 import type { Traveler } from '../data/travelers'
 import { useStored } from '../hooks/useStored'
-import { FAIL_FACE, testKey, type LensFail } from '../lib/lens'
+import { daysBetween, jstToday, shortDate } from '../lib/dates'
+import { FAIL_FACE, LensError, testKey, type LensFail } from '../lib/lens'
+import { coachPace, paceFixture, paceMath, type PaceCoach } from '../lib/pace'
 import { shareUrl, type Moment } from '../lib/sync'
 import { play, type SoundName } from '../lib/sound'
 import { CheckIcon, ChevronIcon, GearIcon, ShareIcon, TrashIcon } from '../art/icons'
@@ -35,7 +38,7 @@ export function Kit() {
 
       {showSettings && <KitSettings />}
       <Converter />
-      <BudgetGuide />
+      <Spend />
       <Packing />
       <Notes />
       <AllergyCard />
@@ -505,16 +508,18 @@ function Converter() {
   )
 }
 
-/* ---------- budget guide ---------- */
+/* ---------- spend: the pouch and its pace ---------- */
 
-function BudgetGuide() {
+function Spend() {
   return (
-    <section className="kit-section">
+    <section className="kit-section" data-testid="spend">
       <div className="section-title">
-        <h2>A day costs about…</h2>
+        <h2>Spend</h2>
         <span className="jp">予算</span>
       </div>
+      <PaceCard />
       <div className="card" style={{ padding: '6px 16px' }}>
+        <div className="t-kicker" style={{ paddingTop: 8 }}>A day costs about…</div>
         {budgetGuide.map((b) => (
           <div key={b.id} className="budget-line">
             <div className="grow">
@@ -526,6 +531,227 @@ function BudgetGuide() {
         ))}
       </div>
     </section>
+  )
+}
+
+/**
+ * The pace forecast. The math lives in lib/pace.ts and never needs the
+ * network; the coach button asks Claude (the family's own key, the fast
+ * brush) to weigh the pouch against the days still ahead.
+ */
+function PaceCard() {
+  const [budget, setBudget] = useStored<number>('budget-total', 0)
+  const [log, setLog] = useStored<Record<string, number>>('spend-log', {})
+  const [departure] = useStored<string>('departure', '')
+  const [key] = useStored<string>('claude-key', '')
+  const [budgetDraft, setBudgetDraft] = useState('')
+  const [editingBudget, setEditingBudget] = useState(false)
+  const [amount, setAmount] = useState('')
+  const [coach, setCoach] = useState<'idle' | 'asking' | 'done' | 'failed'>('idle')
+  const [coachSays, setCoachSays] = useState<PaceCoach | null>(null)
+  const [fail, setFail] = useState<LensFail>('offline')
+
+  const pace = paceMath(budget, log, departure)
+  const onTrip = pace.tripDay !== null && pace.tripDay >= 1 && pace.daysLeft > 0
+  const yen = (n: number) => `¥${n.toLocaleString()}`
+
+  const dayLabel = (date: string) => {
+    const n = departure ? daysBetween(departure, date) + 1 : 0
+    const day = itinerary[n - 1]
+    return day ? `Day ${n} · ${day.city}` : shortDate(date)
+  }
+
+  const saveBudget = () => {
+    const n = Math.round(parseFloat(budgetDraft))
+    if (!Number.isFinite(n) || n <= 0) return
+    setBudget(n)
+    setBudgetDraft('')
+    setEditingBudget(false)
+    setCoach('idle')
+  }
+
+  const addSpend = () => {
+    const n = Math.round(parseFloat(amount))
+    if (!Number.isFinite(n) || n <= 0) return
+    const today = jstToday()
+    setLog((l) => ({ ...l, [today]: (l[today] ?? 0) + n }))
+    setAmount('')
+    setCoach('idle')
+    play('tap')
+  }
+
+  const clearDay = (date: string) =>
+    setLog((l) => {
+      const next = { ...l }
+      delete next[date]
+      return next
+    })
+
+  const ask = async () => {
+    if (!key && !paceFixture()) {
+      setFail('no-key')
+      setCoach('failed')
+      return
+    }
+    setCoach('asking')
+    try {
+      setCoachSays(await coachPace(key, budget, log, departure))
+      setCoach('done')
+    } catch (e) {
+      setFail(e instanceof LensError ? e.kind : 'offline')
+      setCoach('failed')
+    }
+  }
+
+  if (budget <= 0 || editingBudget) {
+    return (
+      <div className="card pace-card" data-testid="pace-card">
+        <div className="t-kicker">Pace forecast</div>
+        <p className="pocket-hint" style={{ marginTop: 4 }}>
+          Set the trip’s cash budget once and Tabi divides what’s left across the days that remain —
+          log what a day cost and the pace keeps itself honest.
+        </p>
+        <div className="pocket-add" style={{ marginTop: 8 }}>
+          <input
+            inputMode="numeric"
+            placeholder="whole-trip budget, yen"
+            aria-label="Trip budget in yen"
+            value={budgetDraft}
+            onChange={(e) => setBudgetDraft(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && saveBudget()}
+          />
+          <button className="key-save" disabled={!(Math.round(parseFloat(budgetDraft)) > 0)} onClick={saveBudget}>
+            Set
+          </button>
+        </div>
+        {editingBudget && (
+          <button className="chip pace-budget-edit" onClick={() => setEditingBudget(false)}>
+            keep {yen(budget)}
+          </button>
+        )}
+      </div>
+    )
+  }
+
+  const loggedDates = Object.keys(log).sort().reverse()
+
+  return (
+    <div className="card pace-card" data-testid="pace-card">
+      <div className="t-kicker">Pace forecast</div>
+
+      <div className="budget-line">
+        <div className="grow">
+          <div className="label">Left in the pouch</div>
+          <div className="note">
+            {onTrip
+              ? `day ${pace.tripDay} of ${TRIP_LENGTH} · ${pace.daysLeft} days still to fund`
+              : pace.daysLeft === 0
+                ? `of ${yen(budget)} — the journey is home`
+                : `of ${yen(budget)} — the trip hasn’t started`}
+          </div>
+        </div>
+        <div className={`amount${pace.remaining < 0 ? ' pace-over' : ''}`}>{yen(pace.remaining)}</div>
+      </div>
+
+      {onTrip && (
+        <div className="budget-line">
+          <div className="grow">
+            <div className="label">Today</div>
+            <div className={`note${pace.todayLeft < 0 ? ' pace-over' : ''}`}>
+              {pace.todayLeft >= 0
+                ? `${yen(pace.todayLeft)} still fine to spend today`
+                : `${yen(-pace.todayLeft)} over today’s share`}
+            </div>
+          </div>
+          <div className="amount">{yen(pace.todaySpent)}</div>
+        </div>
+      )}
+
+      {onTrip && pace.daysLeft > 1 && (
+        <div className="budget-line">
+          <div className="grow">
+            <div className="label">Each day ahead</div>
+            <div className="note">{pace.daysLeft - 1} days after today, split evenly</div>
+          </div>
+          <div className={`amount${pace.perDayAhead < 0 ? ' pace-over' : ''}`}>{yen(pace.perDayAhead)}</div>
+        </div>
+      )}
+
+      {!onTrip && pace.daysLeft > 0 && (
+        <div className="budget-line">
+          <div className="grow">
+            <div className="label">Each day</div>
+            <div className="note">an even split across all {TRIP_LENGTH} days</div>
+          </div>
+          <div className="amount">{yen(Math.floor(budget / TRIP_LENGTH))}</div>
+        </div>
+      )}
+
+      <div className="pocket-add" style={{ marginTop: 4 }}>
+        <input
+          inputMode="numeric"
+          placeholder="add spend, yen"
+          aria-label="Add spending in yen"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && addSpend()}
+        />
+        <button className="key-save" disabled={!(Math.round(parseFloat(amount)) > 0)} onClick={addSpend}>
+          Add
+        </button>
+      </div>
+
+      {loggedDates.length > 0 && (
+        <div className="pace-days">
+          {loggedDates.map((date) => (
+            <div key={date} className="pace-day">
+              <span className="grow">{dayLabel(date)}</span>
+              <span className="pace-day-amount">{yen(log[date])}</span>
+              <button className="icon-btn small" aria-label={`Clear ${dayLabel(date)}`} onClick={() => clearDay(date)}>
+                <TrashIcon />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {coach === 'idle' && (
+        <button className="show-card-btn pressable pace-ask" onClick={() => void ask()}>
+          Ask Claude about the pace 🖌️
+        </button>
+      )}
+      {coach === 'asking' && <div className="lens-reading">Weighing the pouch…</div>}
+      {coach === 'failed' && (
+        <div className="lens-fail">
+          <p>{FAIL_FACE[fail]}</p>
+          <button className="lens-again" onClick={() => setCoach('idle')}>Try again</button>
+        </div>
+      )}
+      {coach === 'done' && coachSays && (
+        <div className="pace-coach">
+          <p className="pace-verdict">{coachSays.verdict}</p>
+          <p className="pace-plan">{coachSays.plan}</p>
+          {coachSays.advice.length > 0 && (
+            <ul>
+              {coachSays.advice.map((a, i) => (
+                <li key={i}>{a}</li>
+              ))}
+            </ul>
+          )}
+          <button className="lens-again" onClick={() => setCoach('idle')}>Ask again</button>
+        </div>
+      )}
+
+      <button
+        className="chip pace-budget-edit"
+        onClick={() => {
+          setBudgetDraft(String(budget))
+          setEditingBudget(true)
+        }}
+      >
+        change the {yen(budget)} budget
+      </button>
+    </div>
   )
 }
 

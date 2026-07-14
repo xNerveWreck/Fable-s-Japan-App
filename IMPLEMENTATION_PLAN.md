@@ -34,6 +34,7 @@ keep it updated, it is a rule here, not a nicety).
 | `2026-07-12-live-family-sync.md` (6 tasks, subagent-driven) | `2026-07-12-live-family-sync-design.md` | ✅ shipped (merged 2026-07-12, PR #20, tagged v4.0.0; field fix PR #22 tagged v4.0.1 the same night) |
 | Michizure batch (plan-mode session, built in-session, 2026-07-12 overnight) | `2026-07-12-menu-lens-kamon-sumi-design.md` | ✅ shipped (merged 2026-07-13, PR #24, tagged v4.1.0) |
 | Kairanban — the family journal feed (brainstormed + built in-session, 2026-07-13 evening) | `2026-07-13-kairanban-family-feed-design.md` | ✅ shipped (merged 2026-07-14 JST, PR #26, tagged v4.2.0; migration applied; live E2E 13/13) |
+| Soroban — the Spend pace + Sonnet brush switch (owner ask, built in-session 2026-07-14) | decisions in DECISIONS.md #28–#29 | 🖌️ built on `claude/pace-forecast-spend-api-7ave39` (156/156), awaiting owner merge → v4.3.0 |
 
 ## Hard invariants (bind every plan and every session)
 

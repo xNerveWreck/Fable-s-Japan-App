@@ -102,8 +102,17 @@ const FORMAT = {
   },
 } as const
 
-/** One photo in, one structured answer out — the call every lens shares. */
-async function lensCall(key: string, system: string, format: unknown, imageB64: string, ask: string, maxTokens: number): Promise<unknown> {
+/**
+ * The one brush every runtime-AI feature shares. Sonnet, not Opus, since
+ * 2026-07-14 (DECISIONS.md #28, revising #17's model pick): at a counter or a
+ * register, the answer that comes back in half the time wins. `thinking` is
+ * explicitly disabled — Sonnet 5 runs *adaptive* thinking when the param is
+ * omitted, which would spend the latency we just bought back.
+ */
+const MODEL = 'claude-sonnet-5'
+
+/** One structured ask — the call the lenses and the pace coach share. */
+export async function askClaude(key: string, system: string, format: unknown, content: unknown[], maxTokens: number): Promise<unknown> {
   let resp: Response
   try {
     resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -115,21 +124,12 @@ async function lensCall(key: string, system: string, format: unknown, imageB64: 
         'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: JSON.stringify({
-        // Owner decision (DECISIONS.md #17). No `thinking` param: on Opus 4.8
-        // omitting it runs without thinking — the right latency trade here.
-        model: 'claude-opus-4-8',
+        model: MODEL,
         max_tokens: maxTokens,
+        thinking: { type: 'disabled' },
         system,
         output_config: { format },
-        messages: [
-          {
-            role: 'user',
-            content: [
-              { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageB64 } },
-              { type: 'text', text: ask },
-            ],
-          },
-        ],
+        messages: [{ role: 'user', content }],
       }),
     })
   } catch {
@@ -158,7 +158,11 @@ export async function decodeSign(imageB64: string, key: string): Promise<LensRes
     return fx
   }
   if (!key) throw new LensError('no-key')
-  return (await lensCall(key, SYSTEM, FORMAT, imageB64, 'What does this say, and what should our family do?', 1024)) as LensResult
+  // 1536, not 1024: Sonnet 5's tokenizer spends ~30% more tokens on the same text
+  return (await askClaude(key, SYSTEM, FORMAT, [
+    { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageB64 } },
+    { type: 'text', text: 'What does this say, and what should our family do?' },
+  ], 1536)) as LensResult
 }
 
 /* ---------- the menu lens — the second eye on the same key ---------- */
@@ -277,8 +281,10 @@ export async function testKey(key: string): Promise<'ok' | LensFail> {
         'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-8',
+        // same model the lenses use, so the test proves the same door opens
+        model: MODEL,
         max_tokens: 1,
+        thinking: { type: 'disabled' },
         messages: [{ role: 'user', content: 'ping' }],
       }),
     })
@@ -299,5 +305,8 @@ export async function decodeMenu(imageB64: string, key: string, allergies: { en:
   }
   if (!key) throw new LensError('no-key')
   // menus run long — twice the sign budget
-  return (await lensCall(key, menuSystem(allergies), MENU_FORMAT, imageB64, 'Read this menu for our family.', 2048)) as MenuResult
+  return (await askClaude(key, menuSystem(allergies), MENU_FORMAT, [
+    { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageB64 } },
+    { type: 'text', text: 'Read this menu for our family.' },
+  ], 3072)) as MenuResult
 }
